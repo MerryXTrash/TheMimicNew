@@ -2173,6 +2173,16 @@ end
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 
+local function setHoldDurationForAllProximityPrompts()
+    for i, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
+    if v.ClassName == "ProximityPrompt" then
+        v.HoldDuration = 0
+    end
+end
+end
+
+setHoldDurationForAllProximityPrompts()
+
 local function fire()
     for _, descendant in ipairs(Workspace:GetDescendants()) do
         if descendant:IsA("ProximityPrompt") then
@@ -2319,6 +2329,60 @@ local function Autobtfs()
     end
 end
 
+function AutoArmors()
+    Freeze(true)
+    TP.HumanoidRootPart.CFrame = CFrame.new(706.4743041992188, 14.950273513793945, 1929.3958740234375)
+    for _, v in pairs(game:GetService("Workspace"):GetChildren()) do
+     if v.Name == "Texture" or v.Name == "MeshPart" or v.Name == "TreeMeshTop" then
+         v:Destroy()
+     end
+     end
+    wait(1)
+ local Part = game.Workspace.Well:WaitForChild("Burner")
+ 
+ -- Create a new Part
+ local Float = Instance.new("Part")
+ Float.Parent = game.Workspace
+ Float.Anchored = true
+ Float.Size = Vector3.new(30, 2, 30)
+ Float.CFrame = Part.CFrame * CFrame.new(0, 14, 0)  -- Offset the position of Float
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375)
+    fire()
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(839.8504028320312, 18.34674072265625, 2241.216552734375)
+    fire()
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(668.060791015625, 18.767614364624023, 2099.3955078125)
+    fire()
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(625.1378173828125, 17.63252830505371, 2345.30078125)
+    fire()
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(759.3781127929688, 15.417532920837402, 2531.548583984375)
+    fire()
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(864.6249389648438, 23.993000030517578, 2550.099853515625)
+    fire()
+    wait(0.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375)
+    fire()
+    wait(1.5)
+    TP.HumanoidRootPart.CFrame = CFrame.new(687.65673828125, 13.798624038696289, 2253.633544921875)
+    wait(0.5)
+    fire()
+    fire()
+    fire()
+    fire()
+    fire()
+    fire()
+    fire()
+    fire()
+    fire()
+    Freeze(false)
+ end
+
+
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2358,6 +2422,16 @@ MainSection:AddToggle('Auto Buttlefly Spirit', false, function(v)
             end
     else
         UnAutoWin2()
+    end
+end)
+end
+
+if id == 7265397072 or id == 7251867155 then
+MainSection:AddToggle('Auto Burn Armors', false, function(v)
+    if v then
+        AutoArmors()
+    else
+        print("NO")
     end
 end)
 end
