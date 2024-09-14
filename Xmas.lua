@@ -2381,7 +2381,7 @@ end
 local function grab()
     for i, v in pairs(game:Getservice("Workspace").GameAI.Krampus:GetChildren()) do
         if v.Name == "HumanoidRootPart" then
-            TP.HumanoidRootPart.CFrame = v.Cframe * CFrame.new(0, 0, 17)
+            TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 17)
             fire()
             fire()
             fire()
@@ -2401,6 +2401,7 @@ local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local MainSection = TabFunctions:AddSection('Function','Continue','Auto Win','log-out')
+local MainSection2 = TabFunctions:AddSection('Function','Continue','Auto Win','log-out')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
@@ -2416,7 +2417,7 @@ MainSection:AddButton('Auto Repair Sleigh',function(v)
     Xmas1()
 end)
 
-MainSection:AddButton('Grab Key from Krampus',function(v)
+MainSection2:AddButton('Grab Key from Krampus',function(v)
     setHoldDurationForAllProximityPrompts()
     grab()
 end)
