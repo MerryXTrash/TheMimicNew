@@ -2413,15 +2413,6 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
-MainSection:AddButton('Auto Repair Sleigh',function(v)
-    Xmas1()
-end)
-
-MainSection2:AddButton('Grab Key from Krampus',function(v)
-    setHoldDurationForAllProximityPrompts()
-    grab()
-end)
-
 MainSection:AddToggle('Auto Collect Toys', false, function(v)
     if v then
         setHoldDurationForAllProximityPrompts()
@@ -2436,6 +2427,15 @@ MainSection:AddToggle('Auto Collect Toys', false, function(v)
         _G.autotoy = false
         Freeze(false)
     end
+end)
+
+MainSection:AddButton('Auto Repair Sleigh',function(v)
+    Xmas1()
+end)
+
+MainSection2:AddButton('Grab Key from Krampus',function(v)
+    setHoldDurationForAllProximityPrompts()
+    grab()
 end)
 
 VisualSection:AddToggle('ESP Monster', false, function(v)
