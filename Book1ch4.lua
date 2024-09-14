@@ -2173,6 +2173,42 @@ end
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 
+local Workspace = game:GetService("Workspace")
+
+function nofall()
+   game.Workspace.Gravity = 0
+end
+
+function Unnofall()
+   game.Workspace.Gravity = 150
+end
+
+local currentTween
+
+function StopTweenAll()
+    if currentTween then
+        currentTween:Cancel()
+        NoClip = false
+        currentTween = nil
+    end
+end
+
+function Teleport(P)
+    local distance = (P.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+    local speed = distance >= 1 and 300 or 1
+    pcall(function()
+        currentTween = game:GetService("TweenService"):Create(
+            game.Players.LocalPlayer.Character.HumanoidRootPart,
+            TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+            {CFrame = P}
+        )
+        currentTween:Play()
+        NoClip = true
+        wait(distance / speed)
+        NoClip = false
+    end)
+end
+
 local function setHoldDurationForAllProximityPrompts()
     for i, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
     if v.ClassName == "ProximityPrompt" then
@@ -2189,19 +2225,6 @@ local function fire()
             fireproximityprompt(descendant)
         end
     end
-end
-
-_G.loopfirez = false
-
-local function startLoopfire()
-    while _G.loopfirez do
-        wait()
-        fire()
-    end
-end
-
-local function stopLoopfire()
-    _G.loopfirez = false
 end
 
 local folder = Instance.new("Folder")
@@ -2316,7 +2339,6 @@ _G.Auto2 = false
 local function UnAutoWin2()
     _G.Auto2 = false
     Freeze(false)
-    stopLoopfire()
 end
 
 local function Autobtfs()
@@ -2382,6 +2404,140 @@ function AutoArmors()
     Freeze(false)
  end
 
+ local Noclip = nil
+ local Clip = nil
+ 
+ function noclip()
+     Clip = false
+     local function Nocl()
+         if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+             for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                 if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+                     v.CanCollide = false
+                 end
+             end
+         end
+         wait(0.21) -- basic optimization
+     end
+     Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+ end
+ 
+ function clip()
+     if Noclip then Noclip:Disconnect() end
+     Clip = true
+end
+
+function PARTZ()
+    local gameHearts = game:GetService("Workspace").GameHearts
+     for _, v in pairs(gameHearts.Heart:GetChildren()) do
+         if v:IsA("Part") then
+             v.Rotation = Vector3.new(0, 0, 0)
+             v.CanCollide = true
+         end
+     end
+ end
+
+function toHeart()
+    local gameHearts = game:GetService("Workspace").GameHearts
+     for _, v in pairs(gameHearts.Heart:GetChildren()) do
+         if v:IsA("UnionOperation") then
+             v.Rotation = Vector3.new(0, 0, 0)
+             v.Size = Vector3.new(60, 60, 60)
+             local targetPositionTeleport = v.CFrame * CFrame.new(0, 20, -3)
+             Teleport(targetPositionTeleport)
+         end
+     end
+ end
+
+ function check()
+    local gameHearts = game:GetService("Workspace").GameHearts
+    local found = false
+    for _, v in pairs(gameHearts:GetChildren()) do
+        if v:IsA("Model") and v:FindFirstChildOfClass("BoolValue") then
+            found = true
+            v:Destroy()
+            break
+        end
+    end
+    if not found then
+        PARTZ()
+        toHeart()
+    end
+end
+
+local UserInputService = game:GetService("UserInputService")
+local VirtualUser = game:GetService("VirtualUser")
+
+function clickMiddleOfScreen()
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local centerX = screenSize.X / 2
+    local centerY = screenSize.Y / 2
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
+end
+
+_G.Ezclick = false
+
+function EquipOrClick()
+    CheckKatana()
+    clickMiddleOfScreen()
+end
+
+function UnEquipOrClick()
+    _G.Ezclick = false
+end
+
+
+local player = game:GetService("Players").LocalPlayer
+local backpack = player.Backpack
+local character = player.Character
+
+function CheckKatana()
+for i, v in pairs(character:GetChildren()) do
+    if v.Name == "Katana" then
+        return
+    end
+end
+
+for i, v in pairs(backpack:GetChildren()) do
+    if v.Name == "Katana" then
+        v.Parent = character
+        break
+    end
+end
+end
+
+function Hitboxz()
+    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
+        if v:IsA("Model") then
+            local spiderHitbox = v:FindFirstChild("SpiderHitbox")
+            if spiderHitbox then
+              spiderHitbox.Rotation = Vector3.new(0, 0, 0)
+              spiderHitbox.Size = Vector3.new(100, 30, 30)
+              spiderHitbox.Transparency = 0.1
+            end
+        end
+    end
+end
+
+function Saigomo()
+    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
+        if v:IsA("Model") then
+            local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
+            if spiderHitbox then
+            local Part = Instance.new("Part")
+            Part.Parent = game.Workspace
+            Part.Anchored = true
+            Part.Transparency = 1
+            Part.CanCollide = true
+            Part.Size = Vector3.new(30, 2, 30)
+            Part.CFrame = spiderHitbox.CFrame * CFrame.new(0, 20, 0)
+            local targetPositionTeleport = Part.CFrame * CFrame.new(0, 6, 0)
+            Teleport(targetPositionTeleport)
+            end
+        end
+    end
+end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
@@ -2413,12 +2569,14 @@ end
 if id == 7265396805 or id == 7251866503 then
 MainSection:AddToggle('Auto Buttlefly Spirit', false, function(v)
     if v then
+        TP.HumanoidRootPart.CFrame = CFrame.new(1099.39794921875, 3.135153293609619, 75.5241928100586)
+        wait(1)
         _G.Auto2 = true
         while _G.Auto2 do
-            wait(0.1)
+            wait(0)
             Freeze(true)
             Autobtfs()
-            startLoopfire()
+            fire()
             end
     else
         UnAutoWin2()
@@ -2436,6 +2594,47 @@ MainSection:AddToggle('Auto Burn Armors', false, function(v)
 end)
 end
 
+if id == 7265397848 or id == 7251867574 then
+MainSection:AddToggle('Auto Click', true, function(v)
+    if v then
+        EquipOrClick()
+    else
+        UnEquipOrClick()
+    end
+end)
+
+MainSection:AddToggle('Auto Destroy Heart', false, function(v)
+    if v then
+        Freeze(true)
+        noclip()
+        nofall()
+        _G.DestroyH = true
+        while _G.DestroyH do
+        wait(0)
+        CheckKatana()
+        check()
+        end
+    else
+        _G.DestroyH = false
+        StopTweenAll()
+        Freeze(false)
+        Unnofall()
+        clip()
+    end
+end)
+
+MainSection:AddToggle('[Beta]Auto Kill Saigomo(Turn On After Cutsene)', false, function(v)
+    if v then
+        Freeze(true)
+        Hitboxz()
+        wait(1)
+        Saigomo()
+    else
+        Freeze(false)
+    end
+end)
+end
+
 VisualSection:AddToggle('ESP Monster', false, function(v)
     if v then
         ESP()
@@ -2449,5 +2648,22 @@ VisualSection:AddToggle('ESP Player',false,function(v)
         ESPPlayers()
     else
         UnEspPlayers()
+    end
+end)
+
+VisualSection:AddButton('Fullbright',function(v)
+    local Lighting = game.Lighting
+    Lighting.ClockTime = 12
+    Lighting.Brightness = 2
+    Lighting.FogEnd = 100000
+    Lighting.GlobalShadows = false
+    Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+    wait(0.1)
+    local Lightingz game:GetService("Lighting")
+
+    for i, v in pairs(Lightingz:GetChildren()) do
+        if v.ClassName == "Atmosphere" then
+            v.Destroy()
+        end
     end
 end)
