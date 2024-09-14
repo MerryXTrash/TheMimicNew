@@ -2381,10 +2381,12 @@ end
 local function grab()
     for i, v in pairs(game:GetService("Workspace").GameAI.Krampus:GetChildren()) do
         if v.Name == "HumanoidRootPart" then
-            TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 17)
+            TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 15)
+            wait(0.2)
             fire()
             fire()
             fire()
+	    wait(0.2)
             TP.HumanoidRootPart.CFrame = CFrame.new(-251.05911254882812, -11.551362991333008, -66.66143798828125)
         end
     end
@@ -2434,6 +2436,11 @@ MainSection:AddButton('Auto Repair Sleigh',function(v)
 end)
 
 MainSection2:AddButton('Grab Key from Krampus',function(v)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-251.05911254882812, -11.551362991333008, -66.66143798828125)
+    wait(0.2)
+    fire()
+    fire()
+    wait(0.2)
     setHoldDurationForAllProximityPrompts()
     grab()
 end)
