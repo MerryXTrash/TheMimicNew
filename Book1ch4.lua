@@ -2597,7 +2597,7 @@ end
 if id == 7265397848 or id == 7251867574 then
 
 local autoClickActive = false
-MainSection:AddToggle('Auto Click', true, function(v)
+MainSection:AddToggle('Auto Click', false, function(v)
     if v then
         _G.EzClick = true
         autoClickActive = true
