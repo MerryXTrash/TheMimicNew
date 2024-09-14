@@ -2379,7 +2379,7 @@ function Toy()
 end
 
 local function grab()
-    for i, v in pairs(game:Getservice("Workspace").GameAI.Krampus:GetChildren()) do
+    for i, v in pairs(game:GetService("Workspace").GameAI.Krampus:GetChildren()) do
         if v.Name == "HumanoidRootPart" then
             TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 17)
             fire()
@@ -2388,7 +2388,7 @@ local function grab()
             TP.HumanoidRootPart.CFrame = CFrame.new(-251.05911254882812, -11.551362991333008, -66.66143798828125)
         end
     end
-    end
+end
 
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Christmas Trial','rbxassetid://134204200422920')
