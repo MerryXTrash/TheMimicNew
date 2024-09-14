@@ -2476,18 +2476,6 @@ function clickMiddleOfScreen()
     VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
 end
 
-_G.Ezclick = false
-
-function EquipOrClick()
-    CheckKatana()
-    clickMiddleOfScreen()
-end
-
-function UnEquipOrClick()
-    _G.Ezclick = false
-end
-
-
 local player = game:GetService("Players").LocalPlayer
 local backpack = player.Backpack
 local character = player.Character
@@ -2597,9 +2585,13 @@ end
 if id == 7265397848 or id == 7251867574 then
 MainSection:AddToggle('Auto Click', true, function(v)
     if v then
+        _G.AutoClick = true
+        while _G.AutoClick do
+        wait(0)
         EquipOrClick()
+        end
     else
-        UnEquipOrClick()
+        _G.AutoClick = false
     end
 end)
 
