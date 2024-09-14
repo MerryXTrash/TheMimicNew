@@ -2381,6 +2381,7 @@ end
 local function grab()
     for i, v in pairs(game:GetService("Workspace").GameAI.Krampus:GetChildren()) do
         if v.Name == "HumanoidRootPart" then
+	    Freeze(true)
             TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 15)
             wait(0.2)
             fire()
@@ -2388,6 +2389,9 @@ local function grab()
             fire()
 	    wait(0.2)
             TP.HumanoidRootPart.CFrame = CFrame.new(-251.05911254882812, -11.551362991333008, -66.66143798828125)
+	    fire()
+	    fire()
+	    Freeze(false)
         end
     end
 end
@@ -2440,7 +2444,7 @@ MainSection2:AddButton('Grab Key from Krampus',function(v)
     wait(0.2)
     fire()
     fire()
-    wait(0.2)
+    wait(5)
     setHoldDurationForAllProximityPrompts()
     grab()
 end)
