@@ -2319,16 +2319,6 @@ local function Autobtfs()
     end
 end
 
-
-local function Autowin2()
-    while _G.Auto2 do
-    wait()
-    Freeze(true)
-    Autobtfs()
-    startLoopfire()
-    end
-end
-
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2359,7 +2349,13 @@ end
 if id == 7265396805 or id == 7251866503 then
 MainSection:AddToggle('Auto Buttlefly Spirit', false, function(v)
     if v then
-        Autowin2()
+        _G.Auto2 = true
+        while _G.Auto2 do
+            wait(0.1)
+            Freeze(true)
+            Autobtfs()
+            startLoopfire()
+            end
     else
         UnAutoWin2()
     end
