@@ -2333,7 +2333,7 @@ function AutoOrbs()
     end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
+local Window = Alc:NewWindow('Overflow','The Mimic - Jigoku','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
