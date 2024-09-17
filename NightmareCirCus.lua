@@ -2323,6 +2323,7 @@ end
      Clip = true
 end
 
+local function show()
 local CardsFolder = game:GetService("Workspace").Section2.Objective.Cards
 
 -- รับ PlayerGui ของผู้เล่น
@@ -2337,7 +2338,6 @@ end
 -- สร้าง ScreenGui ใหม่
 local Screen = Instance.new("ScreenGui")
 Screen.Name = "CardScreenGui"
-Screen.Enabled = false
 Screen.Parent = game.CoreGui
 
 -- สร้าง Frame ใหม่
@@ -2414,18 +2414,13 @@ for _, card in pairs(cards) do
         end
     end
 end
-
-function onshow()
-    local screenGui = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
-    if screenGui then
-        screenGui.Enabled = true
-    end
 end
 
-function offshow()
-    local screenGui = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
-    if screenGui then
-        screenGui.Enabled = false
+local function hideCards()
+    local coreGui = game:GetService("CoreGui")
+    local existingScreenGui = coreGui:FindFirstChild("CardScreenGui")
+    if existingScreenGui then
+        existingScreenGui:Destroy()
     end
 end
 
@@ -2445,7 +2440,8 @@ newPart.Parent = game.Workspace
 newPart.Anchored = true
 newPart.CanCollide = true
 newPart.Size = Vector3.new(500, 2, 500)
-newPart.CFrame = CFrame.new(-2552.021728515625, -4, 439.0304260253906)
+newPart.CFrame = CFrame.new(-2552.021728515625, -3.5, 439.0304260253906)
+newPart.Transparency = 1
 end
 pathz()
 
@@ -2470,7 +2466,6 @@ end
 _G.Ezclick = false
 
 function EquipOrClick()
-    CheckKatana()
     clickMiddleOfScreen()
 end
 
@@ -2522,6 +2517,8 @@ end)
 MainSection:AddButton('Enter Zone',function(v)
     local trig = game.Workspace.Section1.Cutscene.Trigger
 	TP.HumanoidRootPart.CFrame = trig.CFrame
+	wait(1)
+	TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
 end)
 
 local autoClickActive = false
@@ -2562,9 +2559,9 @@ end)
 
 MainSection2:AddToggle('Show Card', false, function(v)
     if v then
-		onshow()
+		show()
     else
-        offshow()
+        hideCards()
     end
 end)
 
