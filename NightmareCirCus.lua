@@ -1306,7 +1306,7 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 					ButtonMainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 					ButtonMainFrame.BorderSizePixel = 0
 					ButtonMainFrame.Position = UDim2.new(0.5, 0, 0, 0)
-					ButtonMainFrame.Size = UDim2.new(0.949999988, 0, 1.5, 0)
+					ButtonMainFrame.Size = UDim2.new(0.949999988, 0, 1, 0)
 					ButtonMainFrame.ZIndex = 6
 
 					UICorner.CornerRadius = UDim.new(0, 3)
