@@ -2252,10 +2252,10 @@ if gameAI2 then
     end
 end
 
-local Sama1 = game.Workspace:WaitForChild("omukadeMAIN")
-setupHighlightForMob(Sama1)
-local Sama2 = game.Workspace.BossBattle:WaitForChild("Saigomo")
-setupHighlightForMob(Sama2)
+local Clown = game.Workspace.Section1.Monster:WaitForChild("Clown")
+setupHighlightForMob(Clown)
+local ring = game.Workspace.Section1.Monsters:WaitForChild("Yurei")
+setupHighlightForMob(ring)
 end
 
 function ESPPlayers()
@@ -2323,7 +2323,6 @@ end
      Clip = true
 end
 
--- รับโฟลเดอร์ของการ์ด
 local CardsFolder = game:GetService("Workspace").Section2.Objective.Cards
 
 -- รับ PlayerGui ของผู้เล่น
@@ -2417,18 +2416,19 @@ for _, card in pairs(cards) do
 end
 
 function onshow()
-	local ON = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
-	if ON then
-		ON.Enabled = true
-	end
+    local screenGui = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
+    if screenGui then
+        screenGui.Enabled = true
+    end
 end
 
 function offshow()
-	local OFF = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
-	if OFF then
-		OFF.Enabled = false
-	end
+    local screenGui = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
+    if screenGui then
+        screenGui.Enabled = false
+    end
 end
+
 
 function pathz()
 local Path = Instance.new("Part")
@@ -2437,15 +2437,15 @@ Path.Parent = game.Workspace
 Path.Anchored = true
 Path.CanCollide = true
 Path.Transparency = 1
-Path.Size = Vector3.new(10, 2, 10)
-Path.CFrame = CFrame.new(-1664.3475341796875, -64.2249755859375, -833.0429077148438)
+Path.Size = Vector3.new(25, 2, 25)
+Path.CFrame = CFrame.new(-1681.1553955078125, 5.599662780761719, -946.8074951171875)
 wait(0)
 local newPart = Instance.new("Part")
 newPart.Parent = game.Workspace
 newPart.Anchored = true
 newPart.CanCollide = true
-newPart.Size = Vector3.new(300, 2, 300)
-newPart.CFrame = CFrame.new(-2552.021728515625, -3, 439.0304260253906)
+newPart.Size = Vector3.new(500, 2, 500)
+newPart.CFrame = CFrame.new(-2552.021728515625, -4, 439.0304260253906)
 end
 pathz()
 
@@ -2454,6 +2454,28 @@ local TPPATH = game.Workspace:FindFirstChild("POS")
 if TPPATH then
 	TP.HumanoidRootPart.CFrame = TPPATH.CFrame * CFrame.new(0, 3, 0)
 end
+end
+
+local UserInputService = game:GetService("UserInputService")
+local VirtualUser = game:GetService("VirtualUser")
+
+function clickMiddleOfScreen()
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local centerX = screenSize.X / 2
+    local centerY = screenSize.Y / 2
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
+end
+
+_G.Ezclick = false
+
+function EquipOrClick()
+    CheckKatana()
+    clickMiddleOfScreen()
+end
+
+function UnEquipOrClick()
+    _G.Ezclick = false
 end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Nightmare Circus','rbxassetid://134204200422920')
@@ -2498,15 +2520,44 @@ MainSection:AddDropdown('Select Boxs', {'Box 1','Box 2','Box 3','Box 4','Box 5',
 end)
 
 MainSection:AddButton('Enter Zone',function(v)
-    tele()
+    local trig = game.Workspace.Section1.Cutsene.Trigger
+	TP.HumanoidRootPart.CFrame = trig.CFrame
+end)
+
+local autoClickActive = false
+MainSection3:AddToggle('Auto Click', false, function(v)
+    if v then
+        _G.EzClick = true
+        autoClickActive = true
+        coroutine.wrap(function()
+            while autoClickActive and _G.EzClick do
+                EquipOrClick()
+                wait(0.1)
+            end
+        end)()
+    else
+        autoClickActive = false
+        UnEquipOrClick()
+    end
+end)
+
+MainSection3:AddButton('Get Knife',function(v)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-1662.5625, -53.30085754394531, -924.8455810546875)
+	wait(0.1)
+	fire()
+	fire()
+	wait(0.1)
+	tele()
 end)
 
 MainSection3:AddButton('To Safe',function(v)
+	Freeze(true)
     tele()
 end)
 
 MainSection3:AddButton('To Arena',function(v)
-    tele()
+	Freeze(false)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-1662.5625, -53.30085754394531, -924.8455810546875)
 end)
 
 MainSection2:AddToggle('Show Card', false, function(v)
@@ -2515,6 +2566,10 @@ MainSection2:AddToggle('Show Card', false, function(v)
     else
         offshow()
     end
+end)
+
+MainSection:AddButton('Skip',function(v)
+    TP.HumanoidRootPart.CFrame = CFrame.new( -1100.885498046875, -85.93081665039062, 146.65823364257812)
 end)
 
 MainSection2:AddButton('Teleport to Card Zone',function(v)
