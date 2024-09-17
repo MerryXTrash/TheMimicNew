@@ -2323,77 +2323,111 @@ end
      Clip = true
 end
 
-local function showCards()
-    local coreGui = game:GetService("CoreGui")
-    local oldScreenGui = coreGui:FindFirstChild("CardScreenGui")
-    if oldScreenGui then
-        oldScreenGui:Destroy()
+-- รับโฟลเดอร์ของการ์ด
+local CardsFolder = game:GetService("Workspace").Section2.Objective.Cards
+
+-- รับ PlayerGui ของผู้เล่น
+local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- ลบ ScreenGui เก่า (ถ้ามี)
+local oldScreenGui = playerGui:FindFirstChild("CardScreenGui")
+if oldScreenGui then
+    oldScreenGui:Destroy()
+end
+
+-- สร้าง ScreenGui ใหม่
+local Screen = Instance.new("ScreenGui")
+Screen.Name = "CardScreenGui"
+Screen.Enabled = false
+Screen.Parent = game.CoreGui
+
+-- สร้าง Frame ใหม่
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(1, -20, 0, 100)
+Frame.Position = UDim2.new(0, 10, 0, 10)
+Frame.Parent = Screen
+
+-- ทำให้ Frame ล่องหน
+Frame.BackgroundTransparency = 1 -- ทำให้พื้นหลังของ Frame โปร่งใส
+
+-- เพิ่ม UIListLayout เข้าไปใน Frame
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.FillDirection = Enum.FillDirection.Horizontal
+uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Padding = UDim.new(0, 0)
+uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+uiListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+uiListLayout.Parent = Frame
+
+-- สร้างตารางการ์ดและจัดเรียงตามชื่อ
+local cards = {}
+for _, card in pairs(CardsFolder:GetChildren()) do
+    if card:IsA("Model") then
+        table.insert(cards, card)
     end
+end
 
-    local CardsFolder = game:GetService("Workspace").Section2.Objective.Cards
+-- เรียงลำดับการ์ดตามชื่อ (จากน้อยไปมาก)
+table.sort(cards, function(a, b)
+    return a.Name < b.Name
+end)
 
-    local Screen = Instance.new("ScreenGui")
-    Screen.Name = "CardScreenGui"
-    Screen.Parent = coreGui
+-- สีที่ต้องการ
+local borderColor = Color3.fromRGB(56, 182, 255) -- สีขอบ
+local textColor = Color3.fromRGB(56, 182, 255)   -- สีข้อความ
 
-    local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(1, -20, 0, 100)
-    Frame.Position = UDim2.new(0, 10, 0, 10)
-    Frame.Parent = Screen
-    Frame.BackgroundTransparency = 1
+-- แสดงการ์ดทั้งหมดใน CardsFolder
+local cardCount = 0
+for _, card in pairs(cards) do
+    for _, desc in pairs(card:GetDescendants()) do
+        if desc:IsA("MeshPart") and desc.TextureID then
+            local imageLabel = Instance.new("ImageLabel")
+            imageLabel.Parent = Frame
+            imageLabel.Size = UDim2.new(0, 50, 0, 75) -- ขนาดของการ์ด
+            imageLabel.Image = desc.TextureID
+            imageLabel.BackgroundTransparency = 1
 
-    local uiListLayout = Instance.new("UIListLayout")
-    uiListLayout.FillDirection = Enum.FillDirection.Horizontal
-    uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    uiListLayout.Padding = UDim.new(0, 0)
-    uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-    uiListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    uiListLayout.Parent = Frame
+            -- เพิ่มขอบให้กับ ImageLabel
+            imageLabel.BorderSizePixel = 2 -- ขนาดของขอบ
+            imageLabel.BorderColor3 = borderColor -- สีขอบ
 
-    local cards = {}
-    for _, card in pairs(CardsFolder:GetChildren()) do
-        if card:IsA("Model") then
-            table.insert(cards, card)
-        end
-    end
+            for _, child in pairs(card:GetDescendants()) do
+                if child:IsA("TextLabel") then
+                    local textLabel = Instance.new("TextLabel")
+                    textLabel.Parent = imageLabel
+                    textLabel.Size = UDim2.new(1, 0, 1, 0) -- ขนาดเต็มพื้นที่ของ ImageLabel
+                    textLabel.BackgroundTransparency = 1
+                    textLabel.Text = child.Text
+                    textLabel.TextScaled = true
+                    textLabel.TextColor3 = textColor -- สีข้อความ
+                    textLabel.TextStrokeTransparency = 0.5
+                    textLabel.TextXAlignment = Enum.TextXAlignment.Center
+                    textLabel.TextYAlignment = Enum.TextYAlignment.Center
 
-    table.sort(cards, function(a, b)
-        return a.Name < b.Name
-    end)
-
-    local borderColor = Color3.fromRGB(56, 182, 255)
-    local textColor = Color3.fromRGB(56, 182, 255)
-
-    local cardCount = 0
-    for _, card in pairs(cards) do
-        for _, desc in pairs(card:GetDescendants()) do
-            if desc:IsA("MeshPart") and desc.TextureID then
-                local imageLabel = Instance.new("ImageLabel")
-                imageLabel.Parent = Frame
-                imageLabel.Size = UDim2.new(0, 50, 0, 75)
-                imageLabel.Image = desc.TextureID
-                imageLabel.BackgroundTransparency = 1
-                imageLabel.BorderSizePixel = 2
-                imageLabel.BorderColor3 = borderColor
-
-                local textLabel = Instance.new("TextLabel")
-                textLabel.Parent = imageLabel
-                textLabel.Size = UDim2.new(1, 0, 1, 0)
-                textLabel.BackgroundTransparency = 1
-                textLabel.Text = card.Name
-                textLabel.TextScaled = true
-                textLabel.TextColor3 = textColor
-                textLabel.TextStrokeTransparency = 0.5
-                textLabel.TextXAlignment = Enum.TextXAlignment.Center
-                textLabel.TextYAlignment = Enum.TextYAlignment.Center
-
-                cardCount = cardCount + 1
-                if cardCount >= 6 then
-                    return
+                    break
                 end
+            end
+
+            cardCount = cardCount + 1
+            if cardCount >= 6 then
+                return
             end
         end
     end
+end
+
+function onshow()
+	local ON = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
+	if ON then
+		ON.Enabled = true
+	end
+end
+
+function offshow()
+	local OFF = game:GetService("CoreGui"):FindFirstChild("CardScreenGui")
+	if OFF then
+		OFF.Enabled = false
+	end
 end
 
 function pathz()
@@ -2404,6 +2438,7 @@ Path.Anchored = true
 Path.CanCollide = true
 Path.Transparency = 1
 Path.Size = Vector3.new(10, 2, 10)
+Path.CFrame = CFrame.new(-1664.3475341796875, -64.2249755859375, -833.0429077148438)
 wait(0)
 local newPart = Instance.new("Part")
 newPart.Parent = game.Workspace
@@ -2412,15 +2447,13 @@ newPart.CanCollide = true
 newPart.Size = Vector3.new(300, 2, 300)
 newPart.CFrame = CFrame.new(-2552.021728515625, -3, 439.0304260253906)
 end
-
 pathz()
 
-local function hideCards()
-    local coreGui = game:GetService("CoreGui")
-    local existingScreenGui = coreGui:FindFirstChild("CardScreenGui")
-    if existingScreenGui then
-        existingScreenGui:Destroy()
-    end
+function tele()
+local TPPATH = game.Workspace:FindFirstChild("POS")
+if TPPATH then
+	TP.HumanoidRootPart.CFrame = TPPATH.CFrame * CFrame.new(0, 3, 0)
+end
 end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Nightmare Circus','rbxassetid://134204200422920')
@@ -2464,16 +2497,23 @@ MainSection:AddDropdown('Select Boxs', {'Box 1','Box 2','Box 3','Box 4','Box 5',
     end
 end)
 
-
 MainSection:AddButton('Enter Zone',function(v)
-    Xmas1()
+    tele()
+end)
+
+MainSection3:AddButton('To Safe',function(v)
+    tele()
+end)
+
+MainSection3:AddButton('To Arena',function(v)
+    tele()
 end)
 
 MainSection2:AddToggle('Show Card', false, function(v)
     if v then
-		showCards()
+		onshow()
     else
-        hideCards()
+        offshow()
     end
 end)
 
@@ -2508,7 +2548,6 @@ VisualSection:AddButton('Fullbright',function(v)
     Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
     wait(0.1)
     local Lightingz game:GetService("Lighting")
-
     for i, v in pairs(Lightingz:GetChildren()) do
         if v.ClassName == "Atmosphere" then
             v.Destroy()
