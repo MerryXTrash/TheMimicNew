@@ -2520,7 +2520,7 @@ MainSection:AddDropdown('Select Boxs', {'Box 1','Box 2','Box 3','Box 4','Box 5',
 end)
 
 MainSection:AddButton('Enter Zone',function(v)
-    local trig = game.Workspace.Section1.Cutsene.Trigger
+    local trig = game.Workspace.Section1.Cutscene.Trigger
 	TP.HumanoidRootPart.CFrame = trig.CFrame
 end)
 
