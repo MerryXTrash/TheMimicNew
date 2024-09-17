@@ -2244,7 +2244,7 @@ end
 
 local Clown = game.Workspace.Section1.Monster:WaitForChild("Clown")
 setupHighlightForMob(Clown)
-local ring = game.Workspace.Section1.Monsters:WaitForChild("Yurei")
+local ring = game.Workspace.Section2.Monsters:WaitForChild("Yurei")
 setupHighlightForMob(ring)
 end
 
