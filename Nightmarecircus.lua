@@ -24,7 +24,7 @@ local Alc = {
 		local Table;
 
 		pcall(function()
-			Table = game:HttpGet("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")
+			Table = game:HttpGet("https://raw.githubusercontent.com/MerryXTrash/UI/refs/heads/main/icon.lua")
 		end)
 
 		if not Table then
@@ -2468,14 +2468,14 @@ local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
 local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
-local BossFunctions = MenuFunctions:AddTab('Boss','Function','home')
+local BossFunctions = MenuFunctions:AddTab('Boss','Function','Boss')
 local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
-local MainSection = TabFunctions:AddSection('Function','Boxs','Auto Win','log-out')
-local MainSection2 = TabFunctions:AddSection('Function','Card','Auto Win','log-out')
-local MainSection3 = BossFunctions:AddSection('Function','Boss','Auto Win','log-out')
+local MainSection = TabFunctions:AddSection('Function','Boxs','Auto Win','box')
+local MainSection2 = TabFunctions:AddSection('Function','Card','Auto Win','flame')
+local MainSection3 = BossFunctions:AddSection('Function','Boss','Auto Win','Boss')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
