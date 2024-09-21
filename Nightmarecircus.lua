@@ -2581,7 +2581,7 @@ MainSection3:AddButton('To Left Arm',function(v)
 	Freeze(false)
     local leftHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("LeftHitbox")
     if leftHitbox then
-        TP.HumanoidRootPart.CFrame = leftHitbox.CFrame * CFrame.new(0, 5, 0)
+        TP.HumanoidRootPart.CFrame = leftHitbox.CFrame * CFrame.new(7, 0, 0)
     end
 end)
 
@@ -2589,7 +2589,7 @@ MainSection3:AddButton('To Right Arm',function(v)
 	Freeze(false)
     local rightHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("RightHitbox")
     if rightHitbox then
-        TP.HumanoidRootPart.CFrame = rightHitbox.CFrame * CFrame.new(0, 5, 0)
+        TP.HumanoidRootPart.CFrame = rightHitbox.CFrame * CFrame.new(7, 0, 0)
     end
 end)
 
