@@ -2432,6 +2432,13 @@ newPart.CanCollide = true
 newPart.Size = Vector3.new(500, 2, 500)
 newPart.CFrame = CFrame.new(-2552.021728515625, -3.5, 439.0304260253906)
 newPart.Transparency = 1
+local part3 = Instance.new("Part")
+part3.Parent = game.Workspace
+part3.Anchored = true
+part3.CanCollide = true
+part3.CFrame = CFrame.new(-1674.7427978515625, -95.72181701660156, -850.0968627929688)
+part3.Size = Vector3.new(400, 5, 400)
+part3.Transparency = 1
 end
 pathz()
 
@@ -2581,7 +2588,7 @@ MainSection3:AddButton('To Left Arm',function(v)
 	Freeze(false)
     local leftHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("LeftHitbox")
     if leftHitbox then
-        TP.HumanoidRootPart.CFrame = leftHitbox.CFrame * CFrame.new(-15, 0, 0)
+        TP.HumanoidRootPart.CFrame = leftHitbox.CFrame * CFrame.new(-10, 0, 0)
     end
 end)
 
@@ -2589,7 +2596,7 @@ MainSection3:AddButton('To Right Arm',function(v)
 	Freeze(false)
     local rightHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("RightHitbox")
     if rightHitbox then
-        TP.HumanoidRootPart.CFrame = rightHitbox.CFrame * CFrame.new(0, 0, -15)
+        TP.HumanoidRootPart.CFrame = rightHitbox.CFrame * CFrame.new(0, 0, -10)
     end
 end)
 
