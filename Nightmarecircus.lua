@@ -2536,7 +2536,7 @@ end)
 
 MainSection3:AddButton('To Arena',function(v)
 	Freeze(false)
-    TP.HumanoidRootPart.CFrame = CFrame.new(2578.41845703125, 7.046874046325684, 426.1775817871094)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-1662.5625, -53.30085754394531, -924.8455810546875)
 end)
 
 MainSection2:AddToggle('Show Card', false, function(v)
