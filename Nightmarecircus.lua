@@ -2463,6 +2463,40 @@ function UnEquipOrClick()
     _G.Ezclick = false
 end
 
+function ARM()
+-- หา LeftHitbox และ RightHitbox
+local leftHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("LeftHitbox")
+local rightHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("RightHitbox")
+
+-- ฟังก์ชันในการสร้าง BillboardGUI
+local function createBillboard(hitbox, text, color)
+    local billboard = Instance.new("BillboardGui")
+    billboard.Parent = hitbox
+    billboard.Size = UDim2.new(0, 100, 0, 50)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Parent = billboard
+    textLabel.Text = text
+    textLabel.Size = UDim2.new(0.7, 0, 0.7, 0)
+    textLabel.TextColor3 = color
+    textLabel.BackgroundTransparency = 1
+    textLabel.Font = Enum.Font.SourceSans
+    textLabel.TextScaled = true
+end
+
+-- ตรวจสอบและสร้าง GUI สำหรับ LeftHitbox
+if leftHitbox then
+    createBillboard(leftHitbox, "Left", Color3.new(1, 0, 0)) -- สีแดง
+end
+
+-- ตรวจสอบและสร้าง GUI สำหรับ RightHitbox
+if rightHitbox then
+    createBillboard(rightHitbox, "Right", Color3.new(1, 0, 0)) -- สีแดง
+end
+end
+
 local Window = Alc:NewWindow('Overflow','The Mimic - Nightmare Circus','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2475,7 +2509,7 @@ local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local MainSection = TabFunctions:AddSection('Function','Boxs','Auto Win','box')
 local MainSection2 = TabFunctions:AddSection('Function','Card','Auto Win','flame')
-local MainSection3 = BossFunctions:AddSection('Function','Boss','Auto Win','Boss')
+local MainSection3 = BossFunctions:AddSection('Function','Boss','Warning - if You Click Wrong Button You Will Die','Boss')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
@@ -2529,6 +2563,10 @@ MainSection3:AddToggle('Auto Click', false, function(v)
     end
 end)
 
+MainSection3:AddButton('ESP Arm',function(v)
+    ARM()
+end)
+
 MainSection3:AddButton('To Safe',function(v)
 	Freeze(true)
     tele()
@@ -2536,7 +2574,23 @@ end)
 
 MainSection3:AddButton('To Arena',function(v)
 	Freeze(false)
-    TP.HumanoidRootPart.CFrame = CFrame.new(-1662.5625, -53.30085754394531, -924.8455810546875)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-1673.2999267578125, -65.22103118896484, -828.8462524414062)
+end)
+
+MainSection3:AddButton('To Left Arm',function(v)
+	Freeze(false)
+    local leftHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("LeftHitbox")
+    if leftHitbox then
+        TP.HumanoidRootPart.CFrame = leftHitbox.CFrame
+    end
+end)
+
+MainSection3:AddButton('To Right Arm',function(v)
+	Freeze(false)
+    local rightHitbox = game.Workspace.Section3.Boss.MagicianBoss:FindFirstChild("RightHitbox")
+    if rightHitbox then
+        TP.HumanoidRootPart.CFrame = rightHitbox.CFrame
+    end
 end)
 
 MainSection2:AddToggle('Show Card', false, function(v)
