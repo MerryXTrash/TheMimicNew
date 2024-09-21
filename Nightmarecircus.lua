@@ -2468,13 +2468,14 @@ local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
 local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
+local BossFunctions = MenuFunctions:AddTab('Boss','Function','home')
 local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local MainSection = TabFunctions:AddSection('Function','Boxs','Auto Win','log-out')
 local MainSection2 = TabFunctions:AddSection('Function','Card','Auto Win','log-out')
-local MainSection3 = TabFunctions:AddSection('Function','Boss','Auto Win','log-out')
+local MainSection3 = BossFunctions:AddSection('Function','Boss','Auto Win','log-out')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
@@ -2535,7 +2536,7 @@ end)
 
 MainSection3:AddButton('To Arena',function(v)
 	Freeze(false)
-    TP.HumanoidRootPart.CFrame = CFrame.new(-1662.5625, -53.30085754394531, -924.8455810546875)
+    TP.HumanoidRootPart.CFrame = CFrame.new(2578.41845703125, 7.046874046325684, 426.1775817871094)
 end)
 
 MainSection2:AddToggle('Show Card', false, function(v)
