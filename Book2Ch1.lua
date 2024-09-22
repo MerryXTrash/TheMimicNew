@@ -2455,7 +2455,7 @@ local function To(targetPosition)
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
     local originalGravity = workspace.Gravity
-    local speed = 20
+    local speed = 150
     local isTweening = true
 
     workspace.Gravity = 0
