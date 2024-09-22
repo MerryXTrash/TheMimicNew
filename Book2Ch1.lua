@@ -2479,7 +2479,7 @@ local function ToCFrame(targetPosition)
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
     local originalGravity = workspace.Gravity
-    local speed = 2000
+    local speed = 10000
     local isTweening = true
 
     workspace.Gravity = 0
