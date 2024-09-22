@@ -2321,23 +2321,27 @@ local function setPlayerSpeed(newSpeed)
     humanoid.WalkSpeed = newSpeed
 end
 
-function InsertPart(Name, CFrame)
+function InsertPart(Name, position)
     local part = Instance.new("Part")
     part.Name = Name
     part.Parent = game.Workspace
     part.Anchored = true
     part.CanCollide = true
     part.Transparency = 1
-    part.CFrame = CFrame * CFrame.new(0, -1, 0)
     part.Size = Vector3.new(10, 2, 10)
+    
+    -- Create a local CFrame using the position
+    local cframe = CFrame.new(position)
+    part.CFrame = cframe
 end
 
-InsertPart("House1", CFrame.new(-395.08563232421875, 3069.57568359375, 3891.535400390625))
-InsertPart("House2", CFrame.new(-4.784941673278809, 3067.82421875, 4712.5751953125))
-InsertPart("House3", CFrame.new(-246.92311096191406, 3068.64306640625, 4219.79248046875))
-InsertPart("House4", CFrame.new(595.481689453125, 3069.576416015625, 4422.1923828125))
-InsertPart("House5", CFrame.new(-676.0106811523438, 3069.525146484375, 5002.66357421875))
-InsertPart("Key", CFrame.new(-401.71002197265625, 3069.575927734375, 3867.829345703125))
+-- Inserting parts using Vector3 positions
+InsertPart("House1", Vector3.new(-395.0856, 3069.5757, 3891.5354))
+InsertPart("House2", Vector3.new(-4.7849, 3067.8242, 4712.5752))
+InsertPart("House3", Vector3.new(-246.9231, 3068.6431, 4219.7925))
+InsertPart("House4", Vector3.new(595.4817, 3069.5764, 4422.1924))
+InsertPart("House5", Vector3.new(-676.0107, 3069.5251, 5002.6636))
+InsertPart("Key", Vector3.new(-401.7100, 3069.5759, 3867.8293))
 
 local function countdown(time)
     local screenGui = Instance.new("ScreenGui")
