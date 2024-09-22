@@ -2170,11 +2170,11 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 	return WindowAlc
 end
 
-local function ResetGUI()
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 local Workspace = game:GetService("Workspace")
 
+function ResetGUI()
 
 local function fire()
     for _, descendant in ipairs(Workspace:GetDescendants()) do
@@ -2455,7 +2455,7 @@ local function To(targetPosition)
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
     local originalGravity = workspace.Gravity
-    local speed = 150
+    local speed = 200
     local isTweening = true
 
     workspace.Gravity = 0
@@ -2552,13 +2552,13 @@ end)
 
 
 --Village
-VillageSection:AddButton('Talk - Start',function(v)
+VillageSection:AddButton('Talk',function(v)
     TP.HumanoidRootPart.CFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
 	wait(0.2)
 	fire()
 end)
 
-VillageSection:AddDropdown('Select House', {'House 1','House 2','House 3 - Drawing','House 4','House 5'}, nil, 1, function(list, item)
+VillageSection:AddDropdown('Select House', {'House 1','House 2','Drawing House','House 4','House 5'}, nil, 1, function(list, item)
     if item == 'House 1' then
 		TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
 	elseif 'House2' then
@@ -2692,7 +2692,7 @@ local player = game.Players.LocalPlayer
 local hpPlayer = player.Character.Humanoid.Health
 
 while true do
-    if hpPlayer <= 0 then
+    if hpPlayer == 0 then
         local mainGUI = game:GetService("CoreGui"):FindFirstChild("Main")
         local toggleGUI = game:GetService("CoreGui"):FindFirstChild("Toggle")
 
