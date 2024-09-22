@@ -116,7 +116,11 @@ local function createUIContainer(text, placeId, imageId, index)
     button.Parent = imageLabel
 
     button.MouseButton1Click:Connect(function()
+            _G.tz = true
+            while _G.tz do
+                wait(0)
             TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+            end
             createTeleportUI()
     end)
 
