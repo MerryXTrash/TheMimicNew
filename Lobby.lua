@@ -180,9 +180,9 @@ end)
 
 -- สร้าง 3 UI Container พร้อม placeId ที่แตกต่างกันและ Image ID ที่แตกต่างกัน
 local buttons = {
-    {text = "Jigoku", placeId = 12345678, imageId = "rbxassetid://12345678"},
-    {text = "Gamemode", placeId = 23456789, imageId = "rbxassetid://23456789"},
-    {text = "Classic", placeId = 34567890, imageId = "rbxassetid://34567890"}
+    {text = "Jigoku", placeId = 12345678, imageId = "rbxassetid://86908192888417"},
+    {text = "Gamemode", placeId = 23456789, imageId = "rbxassetid://111930875771722"},
+    {text = "Classic", placeId = 34567890, imageId = "rbxassetid://95356967293561"}
 }
 
 for index, btn in ipairs(buttons) do
