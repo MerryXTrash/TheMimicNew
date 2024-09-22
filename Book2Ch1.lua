@@ -2475,6 +2475,32 @@ local function To(targetPosition)
     end)
 end
 
+local function ToCFrame(targetPosition)
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local originalGravity = workspace.Gravity
+    local speed = 1000
+    local isTweening = true
+
+    workspace.Gravity = 0
+	noclip()
+
+    RunService.RenderStepped:Connect(function(deltaTime)
+        if isTweening then
+            local direction = (targetPosition - humanoidRootPart.Position).unit
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
+
+            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
+                isTweening = false
+                workspace.Gravity = originalGravity
+				clip()
+            end
+        end
+    end)
+	end
+
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
