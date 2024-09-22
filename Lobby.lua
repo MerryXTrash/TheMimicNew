@@ -13,8 +13,6 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
 mainFrame.BackgroundTransparency = 1
 mainFrame.Visible = false
 mainFrame.Parent = screenGui
-mainFrame.Active = true
-mainFrame.Draggable = true
 
 -- ฟังก์ชันสร้างกล่อง UI
 local function createUIContainer(text, placeId, imageId, index)
@@ -68,22 +66,21 @@ local toggleButton = Instance.new("ImageButton")
 toggleButton.Size = UDim2.new(0.07, 0, 0.15, 0)
 toggleButton.Position = UDim2.new(0.5, -50, 0, 0)
 toggleButton.AnchorPoint = Vector2.new(0.5, 0)
-toggleButton.BackgroundTransparency = 1
-toggleButton.Image = "rbxassetid://134204200422920"
-toggleButton.ImageTransparency = 0
-toggleButton.BorderSizePixel = 0
-toggleButton.Active = true
-toggleButton.Draggable = true
+toggleButton.BackgroundTransparency = 1  -- โปร่งใส
+toggleButton.Image = "rbxassetid://134204200422920"  -- Asset ID ของรูปภาพที่ต้องการใช้
+toggleButton.ImageTransparency = 0  -- ตั้งให้ภาพไม่โปร่งใส
+toggleButton.BorderSizePixel = 0  -- ไม่มีขอบ
+toggleButton.Parent = screenGui
 
 -- เพิ่มขอบให้ปุ่ม
 local buttonStroke = Instance.new("UIStroke")
 buttonStroke.Thickness = 2
-buttonStroke.Color = Color3.fromRGB(128, 128, 128)
+buttonStroke.Color = Color3.fromRGB(128, 128, 128)  -- ขอบสีเทา
 buttonStroke.Parent = toggleButton
 
 -- ทำให้ขอบปุ่มมน
 local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, 8)
+buttonCorner.CornerRadius = UDim.new(0, 8)  -- รัศมีขอบมน
 buttonCorner.Parent = toggleButton
 
 local function toggleUI()
@@ -117,6 +114,69 @@ local function toggleUI()
 end
 
 toggleButton.MouseButton1Click:Connect(toggleUI)
+
+-- สร้างฟังก์ชันลาก
+local dragging, dragInput, mousePos, startPos
+
+local function updateDrag()
+    local delta = mousePos - startPos
+    mainFrame.Position = UDim2.new(mainFrame.Position.X.Scale, mainFrame.Position.X.Offset + delta.X, mainFrame.Position.Y.Scale, mainFrame.Position.Y.Offset + delta.Y)
+end
+
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        startPos = input.Position
+        mousePos = input.Position
+    end
+end)
+
+mainFrame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        mousePos = input.Position
+        updateDrag()
+    end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+-- ทำให้ปุ่มเปิดปิดสามารถลากได้ด้วย
+toggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        startPos = input.Position
+        mousePos = input.Position
+    end
+end)
+
+toggleButton.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        mousePos = input.Position
+        updateDrag()
+    end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
 
 -- สร้าง 3 UI Container พร้อม placeId ที่แตกต่างกันและ Image ID ที่แตกต่างกัน
 local buttons = {
