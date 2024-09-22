@@ -2520,7 +2520,7 @@ local function ToCFrame(targetPosition)
 	end
 
 
-
+local targetCFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
 local targetCFrame1 = CFrame.new(-395.08563232421875, 3069.57568359375, 3891.535400390625)
 local targetCFrame2 = CFrame.new(-4.784941673278809, 3067.82421875, 4712.5751953125)
 local targetCFrame3 = CFrame.new(-246.92311096191406, 3068.64306640625, 4219.79248046875)
@@ -2531,6 +2531,7 @@ local Door = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.98413085937
 local Book = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
 local EspcapeRin = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
 local Office = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375)
+local OX = CFrame.new(-6066.32763671875, 546.6655883789062, 7172.89501953125)
 
 --lowerfloor
 local Candle11 = CFrame.new(-5453.7373046875, 461.4326171875, 6514.80859375)
@@ -2547,6 +2548,17 @@ local Candle31 = CFrame.new(-6808.1669921875, 758.5756225585938, 6414.2978515625
 local Candle32 = CFrame.new(-6820.96728515625, 746.4933471679688, 6258.71044921875)
 local Candle33 = CFrame.new(-6822.0380859375, 746.42431640625, 6173.79296875)
 
+--pic
+local blue = CFrame.new(209.63929748535156, 3084.15478515625, 3832.36279296875)
+local red = CFrame.new(152.81671142578125, 3060.99365234375, 3861.497802734375)
+local man = CFrame.new(210.2085418701172, 3060.99365234375, 3819.75439453125)
+local Chicken = CFrame.new(237.98187255859375, 3072.503662109375, 3878.86181640625)
+local Momson = CFrame.new(168.0010223388672, 3072.5048828125, 3830.942626953125)
+local UM = CFrame.new(190.3834991455078, 3084.15478515625, 3903.572998046875)
+local fox = CFrame.new(247.91357421875, 3061.43408203125, 3851.5556640625)
+local flute = CFrame.new(184.19967651367188, 3072.50390625, 3925.464111328125)
+local love = CFrame.new(182.9803009033203, 3060.994140625, 3923.0703125)
+local ORB = CFrame.new(191.37278747558594, 3061.04443359375, 3891.880126953125)
 
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxassetid://134204200422920')
@@ -2630,7 +2642,6 @@ end)
 
 --Village
 VillageSection:AddButton('Talk',function(v)
-	local targetCFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
 	tweenCharacterToCFrame(targetCFrame, 0)
 	wait(0.5)
 	fire()
@@ -2667,17 +2678,37 @@ end)
 
 --village2
 VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl','Umbrella Girl', 'Mother and Child', 'Old Man', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
-    if item == 'House 1' then
-		TP.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
+    if item == 'Blue Samurai' then
+		tweenCharacterToCFrame(blue, 0)
+	elseif item == 'Red Samarai' then
+		tweenCharacterToCFrame(red, 0)
+	elseif item == 'Fox Girl' then
+	    tweenCharacterToCFrame(fox, 0)
+	elseif item == 'Umbrella Girl' then
+	    tweenCharacterToCFrame(UM, 0)
+	elseif item == 'Mother and Child' then
+		tweenCharacterToCFrame(Momson, 0)
+	elseif item == 'Old Man' then
+		tweenCharacterToCFrame(man, 0)
+	elseif item == 'Hustband and Wife' then
+		tweenCharacterToCFrame(love, 0)
+	elseif item == 'Girl and Chicken' then
+		tweenCharacterToCFrame(Chicken, 0)
+	elseif item == 'Girl and Flute' then
+		tweenCharacterToCFrame(flute, 0)
     end
 end)
 
-VillageSection2:AddButton('To Safe',function(v)
-    
-end)
-
 VillageSection2:AddButton('Get Orb and Give Orb',function(v)
-    
+    tweenCharacterToCFrame(ORB, 0)
+	wait(0.2)
+	fire()
+	fire()
+	wait(0.2)
+	tweenCharacterToCFrame(targetCFrame, 0)
+	wait(0.2)
+	fire()
+	fire()
 end)
 
 
