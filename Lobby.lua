@@ -1,11 +1,4 @@
 local TweenService = game:GetService("TweenService")
-function tp()
-_G.tz = true
-            while _G.tz do
-                wait(0)
-            TeleportService:Teleport(placeId, game.Players.LocalPlayer)
-end
-end
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -62,7 +55,11 @@ local function createUIContainer(text, placeId, imageId, index)
     button.Parent = imageLabel
 
     button.MouseButton1Click:Connect(function()
-            tp()
+            _G.auto = true
+            while _G.auto do
+            wait(0)
+            TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+            end
     end)
 
     imageLabel.Parent = frame
