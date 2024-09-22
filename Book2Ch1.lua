@@ -2708,5 +2708,5 @@ while true do
         ResetGUI()
         break
     end
-    wait(1)
+    wait(0.25)
 end
