@@ -1,8 +1,73 @@
+local TweenService = game:GetService("TweenService")
+
+-- สร้าง GUI และจัดการทั้งหมดในฟังก์ชันเดียว
+local function createTeleportUI()
+    -- สร้าง ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "TeleportScreen"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    -- สร้าง Frame สีดำ
+    local blackFrame = Instance.new("Frame")
+    blackFrame.Size = UDim2.new(1, 0, 1, 0)
+    blackFrame.Position = UDim2.new(0, 0, 0, 0)
+    blackFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+    blackFrame.BackgroundTransparency = 1
+    blackFrame.BorderSizePixel = 0
+    blackFrame.ZIndex = 1
+    blackFrame.Parent = screenGui
+
+    -- ฟังก์ชันสำหรับทำการลดความโปร่งใสของ Frame
+    local function fadeInFrame()
+        local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+        local tween = TweenService:Create(blackFrame, tweenInfo, {BackgroundTransparency = 0})
+        tween:Play()
+        tween.Completed:Wait()
+    end
+
+    -- สร้าง TextLabel
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Position = UDim2.new(0, 0, 0, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.Font = Enum.Font.SourceSans
+    textLabel.TextSize = 50
+    textLabel.Text = "Teleport."
+    textLabel.TextStrokeTransparency = 0.5
+    textLabel.ZIndex = 2
+    textLabel.Parent = screenGui
+
+    -- ฟังก์ชันสำหรับเปลี่ยนข้อความ
+    local function changeText()
+        local texts = {"Teleport.", "Teleport..", "Teleport..."}
+        local index = 1
+
+        while true do
+            textLabel.Text = texts[index]
+            index = index + 1
+            
+            if index > #texts then
+                index = 1 -- กลับไปที่ข้อความแรก
+            end
+            
+            wait(0.5) -- รอ 0.5 วินาที
+        end
+    end
+
+    -- เรียกใช้ฟังก์ชัน
+    fadeInFrame()
+    changeText()
+end
+
+-- เรียกใช้ฟังก์ชันสร้าง UI
+createTeleportUI()
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local TeleportService = game:GetService("TeleportService")
-local TweenService = game:GetService("TweenService")
 local isOpen = false
 
 -- สร้าง Container สำหรับกล่อง UI ทั้งหมด
@@ -55,6 +120,7 @@ local function createUIContainer(text, placeId, imageId, index)
 
     button.MouseButton1Click:Connect(function()
         TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+        createTeleportUI()
     end)
 
     imageLabel.Parent = frame
