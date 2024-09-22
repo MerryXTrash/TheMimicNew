@@ -26,7 +26,7 @@ local function createUIContainer(text, placeId, imageId, index)
     imageLabel.Size = UDim2.new(1, 0, 1, 0)
     imageLabel.BackgroundTransparency = 1
     imageLabel.Image = imageId
-    imageLabel.ImageTransparency = 0.7
+    imageLabel.ImageTransparency = 0.4
     imageLabel.ScaleType = Enum.ScaleType.Stretch
 
     local imageStroke = Instance.new("UIStroke")
