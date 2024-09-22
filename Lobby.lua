@@ -61,9 +61,6 @@ local function createTeleportUI()
     changeText()
 end
 
--- เรียกใช้ฟังก์ชันสร้าง UI
-createTeleportUI()
-
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -119,8 +116,8 @@ local function createUIContainer(text, placeId, imageId, index)
     button.Parent = imageLabel
 
     button.MouseButton1Click:Connect(function()
+            createTeleportUI()
         TeleportService:Teleport(placeId, game.Players.LocalPlayer)
-        createTeleportUI()
     end)
 
     imageLabel.Parent = frame
