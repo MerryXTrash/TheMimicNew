@@ -2413,8 +2413,6 @@ function Rat()
 end
 
 function Ratfind()
-    local TP = game.Players.LocalPlayer.Character
-
     for _, rat in ipairs(game:GetService("Workspace"):GetDescendants()) do
         if rat:IsA("MeshPart") then
             if rat.TextureID == "rbxassetid://8569135832" then
