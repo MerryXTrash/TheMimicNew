@@ -2342,6 +2342,7 @@ InsertPart("House3", Vector3.new(-246.9231, 3068.6431, 4219.7925))
 InsertPart("House4", Vector3.new(595.4817, 3069.5764, 4422.1924))
 InsertPart("House5", Vector3.new(-676.0107, 3069.5251, 5002.6636))
 InsertPart("Key", Vector3.new(-401.7100, 3069.5759, 3867.8293))
+InsertPart("Office", Vector3.new(-1778.0726318359375, 9.717201232910156, -4295.62109375))
 
 local function countdown(time)
     local screenGui = Instance.new("ScreenGui")
@@ -2395,6 +2396,19 @@ local function countdown(time)
     textLabel:Destroy()
 end
 
+function Rat()
+    local player = game:GetService("Players").LocalPlayer
+    local backpack = player.Backpack
+	local character = player.Character
+
+    for i, item in pairs(backpack:GetChildren()) do
+        if item.Name == "Poisoned Rat" then
+            item.Parent = character
+            break
+        end
+    end
+end
+
 function Ratfind()
     local TP = game.Players.LocalPlayer.Character
 
@@ -2439,7 +2453,7 @@ if id == 8056702588 then
 local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
 local OfficeSec = OfficeFunctions:AddSection('Function','Enter','Auto Win','home')
 OfficeSec:AddButton('Enter Office',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375)
+	TP.HumanoidRootPart.CFrame = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375) * CFrame.new(0, 3, 0)
 end)
 end
 
