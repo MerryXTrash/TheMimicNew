@@ -119,7 +119,7 @@ local function createUIContainer(text, placeId, imageId, index)
             createTeleportUI()
             _G.tz = true
             while _G.tz do
-                wait(1)
+                wait(0.3)
             TeleportService:Teleport(placeId, game.Players.LocalPlayer)
             end
     end)
