@@ -2689,11 +2689,10 @@ end
 ResetGUI()
 
 local player = game.Players.LocalPlayer
-local hpPlayer = player.Character.Humanoid.Health
 
-while true do
-    if hpPlayer == 0 then
-        local mainGUI = game:GetService("CoreGui"):FindFirstChild("Main")
+-- ฟังก์ชันที่ทำงานเมื่อผู้เล่นเกิดใหม่
+local function onCharacterAdded(character)
+    local mainGUI = game:GetService("CoreGui"):FindFirstChild("Main")
         local toggleGUI = game:GetService("CoreGui"):FindFirstChild("Toggle")
 
         if mainGUI then
@@ -2702,11 +2701,10 @@ while true do
 
         if toggleGUI then
             toggleGUI:Destroy()
-        end
-
-        wait(1)
-        ResetGUI()
-        break
-    end
-    wait(0.25)
+	end
+	wait(1)
+	ResetGUI()
 end
+
+-- เรียกใช้งานเมื่อผู้เล่นเกิดใหม่
+player.CharacterAdded:Connect(onCharacterAdded)
