@@ -2173,7 +2173,7 @@ end
 local id = game.PlaceId
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
-local TP = char:WaitForChild("HumanoidRootPart")
+local TP = char:WaitForChild("Head")
 local Workspace = game:GetService("Workspace")
 
 local function fire()
