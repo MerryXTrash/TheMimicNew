@@ -2692,10 +2692,17 @@ local player = game.Players.LocalPlayer
 local hpPlayer = player.Character.Humanoid.Health
 
 player.Character.Humanoid.Died:Connect(function()
-	local Reset = game:GetService("CoreGui"):FindFirstChild("Main")
-	if Reset then
-		Reset:Destroy()
-		wait(1)
-		ResetGUI()
-	end
+    local mainGUI = game:GetService("CoreGui"):FindFirstChild("Main")
+    local toggleGUI = game:GetService("CoreGui"):FindFirstChild("Toggle")
+    
+    if mainGUI then
+        mainGUI:Destroy()
+    end
+    
+    if toggleGUI then
+        toggleGUI:Destroy()
+    end
+    
+    wait(1)
+    ResetGUI()
 end)
