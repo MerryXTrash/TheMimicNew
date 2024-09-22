@@ -2171,7 +2171,9 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 end
 
 local id = game.PlaceId
-local TP = game.Players.LocalPlayer.Character
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local TP = char:WaitForChild("HumanoidRootPart")
 local Workspace = game:GetService("Workspace")
 
 function ResetGUI()
@@ -2419,25 +2421,25 @@ function Ratfind()
                 local proximityPrompt = rat:FindFirstChildOfClass("ProximityPrompt")
                 if proximityPrompt then
                     proximityPrompt.HoldDuration = 0
-                    TP.HumanoidRootPart.CFrame = rat.CFrame
+                    TP.CFrame = rat.CFrame
                     wait(0.2)
                     fire()
                     fire()
                     fire()
                     wait(0.2)
-                    TP.HumanoidRootPart.CFrame = CFrame.new(-1539.063, -30.171, -3543.718)
+                    TP.CFrame = CFrame.new(-1539.063, -30.171, -3543.718)
                     wait(0.1)
                     Rat()
                     wait(0.1)
                     fire()
                     fire()
                     wait(5)
-                    TP.HumanoidRootPart.CFrame = CFrame.new(-1563.528, -28.910, -3408.718)
+                    TP.CFrame = CFrame.new(-1563.528, -28.910, -3408.718)
                     wait(0.2)
                     fire()
                     fire()
                     wait(0.2)
-                    TP.HumanoidRootPart.CFrame = CFrame.new(-1674.827, -21.010, -3402.391)
+                    TP.CFrame = CFrame.new(-1674.827, -21.010, -3402.391)
                     countdown(25)
                     break
                 end
@@ -2483,7 +2485,7 @@ if id == 8056702588 then
 local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
 local OfficeSec = OfficeFunctions:AddSection('Function','Enter','Auto Win','home')
 OfficeSec:AddButton('Enter Office',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375) * CFrame.new(0, 3, 0)
+	TP.CFrame = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375) * CFrame.new(0, 3, 0)
 end)
 end
 
@@ -2519,7 +2521,7 @@ end)
 
 --Mio and rin
 MioSection:AddButton('Read Book',function(v)
-TP.HumanoidRootPart.CFrame = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
+TP.CFrame = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
 wait(0.2)
 fire()
 fire()
@@ -2529,7 +2531,7 @@ MioSection:AddButton('Auto Rat',function(v)
 end)
 
 MioSection:AddButton('Escape',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
+	TP.CFrame = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
 	wait(0.2)
 	fire()
 end)
@@ -2553,27 +2555,27 @@ end)
 
 --Village
 VillageSection:AddButton('Talk',function(v)
-    TP.HumanoidRootPart.CFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
+    TP.CFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
 	wait(0.2)
 	fire()
 end)
 
 VillageSection:AddDropdown('Select House', {'House 1','House 2','Drawing House','House 4','House 5'}, nil, 1, function(list, item)
     if item == 'House 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
+		TP.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
 	elseif 'House2' then
 
     end
 end)
 
 VillageSection:AddButton('Unlock House',function(v)
-    TP.HumanoidRootPart.CFrame = CFrame.new(-401.7100, 3069.5759, 3867.8293) * CFrame.new(0, 2, 0)
+    TP.CFrame = CFrame.new(-401.7100, 3069.5759, 3867.8293) * CFrame.new(0, 2, 0)
     wait(0.2)
     fire()
     fire()
     fire()
     wait(0.2)
-    TP.HumanoidRootPart.CFrame = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
+    TP.CFrame = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
     wait(0.2)
     fire()
     fire()
@@ -2588,7 +2590,7 @@ end)
 --village2
 VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl','Umbrella Girl', 'Mother and Child', 'Old Man', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
     if item == 'House 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
+		TP.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
     end
 end)
 
@@ -2609,31 +2611,31 @@ end)
 
 ShipSection:AddDropdown('Middle Floor', {'Candle 1'}, nil, 1, function(list, item)
     if item == 'Candle 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-6065.1728515625, 547.58154296875, 7319.21923828125)
+		TP.CFrame = CFrame.new(-6065.1728515625, 547.58154296875, 7319.21923828125)
     end
 end)
 
 ShipSection:AddDropdown('Upper Floor', {'Candle 1', 'Candle 2', 'Candle 3'}, nil, 1, function(list, item)
     if item == 'Candle 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-6808.1669921875, 758.5756225585938, 6414.2978515625)
+		TP.CFrame = CFrame.new(-6808.1669921875, 758.5756225585938, 6414.2978515625)
 	elseif item == 'Candle 2' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-6820.96728515625, 746.4933471679688, 6258.71044921875)
+		TP.CFrame = CFrame.new(-6820.96728515625, 746.4933471679688, 6258.71044921875)
 	elseif item == 'Candle 3' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-6822.0380859375, 746.42431640625, 6173.79296875)
+		TP.CFrame = CFrame.new(-6822.0380859375, 746.42431640625, 6173.79296875)
     end
 end)
 
 ShipSection:AddDropdown('Lower Floor', {'Candle 1', 'Candle 2', 'Candle 3', 'Candle 4', 'Candle 5'}, nil, 1, function(list, item)
 	if item == 'Candle 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-5453.7373046875, 461.4326171875, 6514.80859375)
+		TP.CFrame = CFrame.new(-5453.7373046875, 461.4326171875, 6514.80859375)
 	elseif item == 'Candle 2' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-5435.24755859375, 462.03277587890625, 6351.935546875)
+		TP.CFrame = CFrame.new(-5435.24755859375, 462.03277587890625, 6351.935546875)
 	elseif item == 'Candle 3' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-5444.45654296875, 462.0570373535156, 6254.01611328125)
+		TP.CFrame = CFrame.new(-5444.45654296875, 462.0570373535156, 6254.01611328125)
 	elseif item == 'Candle 2' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-5467.76318359375, 462.39044189453125, 6260.67236328125)
+		TP.CFrame = CFrame.new(-5467.76318359375, 462.39044189453125, 6260.67236328125)
 	elseif item == 'Candle 3' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-5453.34912109375, 461.8515930175781, 6101.9853515625)
+		TP.CFrame = CFrame.new(-5453.34912109375, 461.8515930175781, 6101.9853515625)
     end
 end)
 
