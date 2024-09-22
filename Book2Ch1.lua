@@ -2170,6 +2170,7 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 	return WindowAlc
 end
 
+local function ResetGUI()
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 local Workspace = game:GetService("Workspace")
@@ -2331,7 +2332,7 @@ function InsertPart(Name, position)
     part.Size = Vector3.new(10, 2, 10)
     
     -- Create a local CFrame using the position
-    local cframe = CFrame.new(position)
+    local cframe = CFrame.new(position) * CFrame.new(0, -2, 0)
     part.CFrame = cframe
 end
 
@@ -2445,6 +2446,35 @@ function Ratfind()
     end
 end
 
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local function To(targetPosition)
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local originalGravity = workspace.Gravity
+    local speed = 20
+    local isTweening = true
+
+    workspace.Gravity = 0
+	noclip()
+
+    RunService.RenderStepped:Connect(function(deltaTime)
+        if isTweening then
+            local direction = (targetPosition - humanoidRootPart.Position).unit
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
+
+            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
+                isTweening = false
+                workspace.Gravity = originalGravity
+				clip()
+            end
+        end
+    end)
+end
+
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2500,40 +2530,44 @@ end)
 
 MioSection:AddButton('Escape',function(v)
 	TP.HumanoidRootPart.CFrame = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
+	wait(0.2)
+	fire()
 end)
 
 MioSection:AddButton('Run Away from Mio',function(v)
-    
+    To(Vector3.new(-961.4176635742188, -46.48267364501953, -3601.613525390625))
 end)
 end)
 
 
 --Nagisa
 NagisaSection:AddButton('Enter to Cave',function(v)
-    
+    To(Vector3.new(583.685546875, 567.3634643554688, -365.7061462402344))
 end)
 
 NagisaSection:AddButton('Run Away from Nagisa',function(v)
-    
+    To(Vector3.new(3866.74462890625, 140.48388671875, 10.994720458984375))
 end)
 
 
 
 --Village
 VillageSection:AddButton('Talk - Start',function(v)
-    
+    TP.HumanoidRootPart.CFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
+	wait(0.2)
+	fire()
 end)
 
 VillageSection:AddDropdown('Select House', {'House 1','House 2','House 3 - Drawing','House 4','House 5'}, nil, 1, function(list, item)
     if item == 'House 1' then
 		TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
+	elseif 'House2' then
+
     end
 end)
 
 VillageSection:AddButton('Unlock House',function(v)
-    local autokey = game:GetService("Workspace"):FindFirstChild("Key")
-    if autokey then
-    TP.HumanoidRootPart.CFrame = autokey.CFrame * CFrame.new(0, 2, 0)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-401.7100, 3069.5759, 3867.8293) * CFrame.new(0, 2, 0)
     wait(0.2)
     fire()
     fire()
@@ -2543,7 +2577,6 @@ VillageSection:AddButton('Unlock House',function(v)
     wait(0.2)
     fire()
     fire()
-end
 end)
 
 VillageSection:AddButton('Candle Picture House',function(v)
@@ -2650,4 +2683,19 @@ VisualSection:AddButton('Fullbright',function(v)
             v.Destroy()
         end
     end
+end)
+end
+
+ResetGUI()
+
+local player = game.Players.LocalPlayer
+local hpPlayer = player.Character.Humanoid.Health
+
+player.Character.Humanoid.Died:Connect(function()
+	local Reset = game:GetService("CoreGui"):FindFirstChild("Main")
+	if Reset then
+		Reset:Destroy()
+		wait(1)
+		ResetGUI()
+	end
 end)
