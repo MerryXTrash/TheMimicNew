@@ -88,4 +88,43 @@ buttonCorner.Parent = toggleButton
 
 local function toggleUI()
     isOpen = not isOpen
-    local targetSize = isOpen and UDim2.new(
+    local targetSize = isOpen and UDim2.new(0, 200, 0, 200) or UDim2.new(0, 0, 0, 0)
+    
+    mainFrame.Visible = true
+
+    local tweenSize = TweenService:Create(mainFrame, TweenInfo.new(0.5), {
+        Size = targetSize,
+        Position = UDim2.new(0.5, -100, 0.6, -100)
+    })
+    tweenSize:Play()
+
+    tweenSize.Completed:Connect(function()
+        if not isOpen then
+            mainFrame.Visible = false
+        end
+    end)
+
+    -- ปรับสถานะของ TextLabel
+    for _, child in ipairs(mainFrame:GetChildren()) do
+        if child:IsA("Frame") then
+            for _, lbl in ipairs(child:GetChildren()) do
+                if lbl:IsA("TextLabel") then
+                    lbl.Visible = isOpen
+                end
+            end
+        end
+    end
+end
+
+toggleButton.MouseButton1Click:Connect(toggleUI)
+
+-- สร้าง 3 UI Container พร้อม placeId ที่แตกต่างกันและ Image ID ที่แตกต่างกัน
+local buttons = {
+    {text = "Jigoku", placeId = 12345678, imageId = "rbxassetid://12345678"},
+    {text = "Gamemode", placeId = 23456789, imageId = "rbxassetid://23456789"},
+    {text = "Classic", placeId = 34567890, imageId = "rbxassetid://34567890"}
+}
+
+for index, btn in ipairs(buttons) do
+    createUIContainer(btn.text, btn.placeId, btn.imageId, index - 1)
+end
