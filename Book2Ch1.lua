@@ -2321,9 +2321,115 @@ local function setPlayerSpeed(newSpeed)
     humanoid.WalkSpeed = newSpeed
 end
 
+function InsertPart(Name, CFrame)
+    local part = Instance.new("Part")
+    part.Name = Name
+    part.Parent = game.Workspace
+    part.Anchored = true
+    part.CanCollide = true
+    part.Transparency = 1
+    part.CFrame = CFrame * CFrame.new(0, -1, 0)
+    part.Size = Vector3.new(10, 2, 10)
+end
+
+InsertPart("House1", CFrame.new(-395.08563232421875, 3069.57568359375, 3891.535400390625))
+InsertPart("House2", CFrame.new(-4.784941673278809, 3067.82421875, 4712.5751953125))
+InsertPart("House3", CFrame.new(-246.92311096191406, 3068.64306640625, 4219.79248046875))
+InsertPart("House4", CFrame.new(595.481689453125, 3069.576416015625, 4422.1923828125))
+InsertPart("House5", CFrame.new(-676.0106811523438, 3069.525146484375, 5002.66357421875))
+InsertPart("Key", CFrame.new(-401.71002197265625, 3069.575927734375, 3867.829345703125))
+
+local function countdown(time)
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "CountdownGui"
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Name = "CountdownLabel"
+    textLabel.Size = UDim2.new(0.3, 0, 0.15, 0)
+    textLabel.Position = UDim2.new(0.35, 0, 0.4, 0)
+    textLabel.TextSize = 200
+    textLabel.TextStrokeTransparency = 0
+    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextScaled = false
+    textLabel.Parent = screenGui
+
+    local countdownTime = time
+
+    local function formatTime(seconds)
+        return tostring(seconds)
+    end
+
+    local function getTextColor(seconds)
+        if seconds > 7 then
+            return Color3.fromRGB(255, 0, 0)
+        elseif seconds > 3 then
+            return Color3.fromRGB(255, 255, 0)
+        else
+            return Color3.fromRGB(56, 182, 255)
+        end
+    end
+
+    -- Display the countdown time
+    textLabel.Text = formatTime(countdownTime)
+    textLabel.TextColor3 = getTextColor(countdownTime)
+    wait(1)
+    
+    -- Wait for the countdown to complete
+    while countdownTime > 1 do
+        countdownTime = countdownTime - 1
+        textLabel.Text = formatTime(countdownTime)
+        textLabel.TextColor3 = getTextColor(countdownTime)
+        wait(1)
+    end
+
+    -- When countdown reaches 0
+    textLabel.Text = "0"
+    textLabel.TextColor3 = Color3.fromRGB(56, 182, 255)
+    wait(1)
+    textLabel:Destroy()
+end
+
+function Ratfind()
+    local TP = game.Players.LocalPlayer.Character
+
+    for _, rat in ipairs(game:GetService("Workspace"):GetDescendants()) do
+        if rat:IsA("MeshPart") then
+            if rat.TextureID == "rbxassetid://8569135832" then
+                local proximityPrompt = rat:FindFirstChildOfClass("ProximityPrompt")
+                if proximityPrompt then
+                    proximityPrompt.HoldDuration = 0
+                    TP.HumanoidRootPart.CFrame = rat.CFrame
+                    wait(0.2)
+                    fire()
+                    fire()
+                    fire()
+                    wait(0.2)
+                    TP.HumanoidRootPart.CFrame = CFrame.new(-1539.063, -30.171, -3543.718)
+                    wait(0.1)
+                    Rat()
+                    wait(0.1)
+                    fire()
+                    fire()
+                    wait(5)
+                    TP.HumanoidRootPart.CFrame = CFrame.new(-1563.528, -28.910, -3408.718)
+                    wait(0.2)
+                    fire()
+                    fire()
+                    wait(0.2)
+                    TP.HumanoidRootPart.CFrame = CFrame.new(-1674.827, -21.010, -3402.391)
+                    countdown(25)
+                    break
+                end
+            end
+        end
+    end
+end
+
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
-local UpdateFunctions = Window:AddMenu('Update',"Update Log",'','tab')
+local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
 if id == 8056702588 then
 local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
@@ -2348,6 +2454,7 @@ local NagisaSection = NagisaFunctions:AddSection('Function','Nagisa','Auto Win',
 local VillageSection = VillageFunctions:AddSection('Function','Village','Auto Win','list')
 local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Auto Win','list')
 local ShipSection = ShipFunctions:AddSection('Function','Ship','Auto Win','list')
+local SeaSection = SeaFunctions:AddSection('Function','Sea','Auto Win','list')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 
@@ -2363,11 +2470,14 @@ end)
 
 
 --Mio and rin
+MioSection:AddButton('Read Book',function(v)
+TP.HumanoidRootPart.CFrame = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
+wait(0.2)
+fire()
+fire()
+wait(1)
 MioSection:AddButton('Auto Rat',function(v)
-    local trig = game.Workspace.Section1.Cutscene.Trigger
-	TP.HumanoidRootPart.CFrame = trig.CFrame
-	wait(1)
-	TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
+	Ratfind()
 end)
 
 MioSection:AddButton('Escape',function(v)
@@ -2377,7 +2487,7 @@ end)
 MioSection:AddButton('Run Away from Mio',function(v)
     
 end)
-
+end)
 
 
 --Nagisa
@@ -2392,18 +2502,30 @@ end)
 
 
 --Village
-VillageSection:AddButton('Talk(Start)',function(v)
+VillageSection:AddButton('Talk - Start',function(v)
     
 end)
 
-VillageSection:AddDropdown('Select House', {'House 1','House 2','House 3(Drawing)','House 4','House 5'}, nil, 1, function(list, item)
+VillageSection:AddDropdown('Select House', {'House 1','House 2','House 3 - Drawing','House 4','House 5'}, nil, 1, function(list, item)
     if item == 'House 1' then
 		TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
     end
 end)
 
 VillageSection:AddButton('Unlock House',function(v)
-    
+    local autokey = game:GetService("Workspace"):FindFirstChild("Key")
+    if autokey then
+    TP.HumanoidRootPart.CFrame = autokey.CFrame * CFrame.new(0, 2, 0)
+    wait(0.2)
+    fire()
+    fire()
+    fire()
+    wait(0.2)
+    TP.HumanoidRootPart.CFrame = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
+    wait(0.2)
+    fire()
+    fire()
+end
 end)
 
 VillageSection:AddButton('Candle Picture House',function(v)
@@ -2465,6 +2587,10 @@ ShipSection:AddDropdown('Lower Floor', {'Candle 1', 'Candle 2', 'Candle 3', 'Can
 end)
 
 ShipSection:AddButton('Run Away Tenome',function(v)
+    
+end)
+
+SeaSection:AddButton('Run Away Tenome',function(v)
     
 end)
 
