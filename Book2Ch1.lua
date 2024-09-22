@@ -2243,32 +2243,6 @@ local function setupHighlightForPlayer(player)
     playerHighlight.Parent = character
 end
 
-local function ESP()
-local gameAI1 = game:GetService("Workspace"):FindFirstChild("GameAI")
-local gameAI2 = game:GetService("Workspace"):FindFirstChild("GameAI2")
-
-if gameAI1 then
-    for i, v in pairs(gameAI1:GetChildren()) do
-        if v:IsA("BasePart") or v:IsA("Model") or v:IsA("Part") then
-            setupHighlightForMob(v)
-        end
-    end
-end
-
-if gameAI2 then
-    for i, v in pairs(gameAI2:GetChildren()) do
-        if v:IsA("BasePart") or v:IsA("Model") or v:IsA("Part") then
-            setupHighlightForMob(v)
-        end
-    end
-end
-
-local Clown = game.Workspace.Section1.Monster:WaitForChild("Clown")
-setupHighlightForMob(Clown)
-local ring = game.Workspace.Section2.Monsters:WaitForChild("Yurei")
-setupHighlightForMob(ring)
-end
-
 function ESPPlayers()
 local Players = game.Players
 for _, player in pairs(Players:GetPlayers()) do
@@ -2282,7 +2256,7 @@ end)
 end
 
 local function UnEspMob()
-    for i, v in ipairs(game:GetService("Workspace").GameAI:GetDescendants()) do
+    for i, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
     if v.ClassName == "Highlight" then
         v:Destroy()
     end
@@ -2519,6 +2493,26 @@ local function ToCFrame(targetPosition)
     end)
 	end
 
+
+function ESP()
+for _, model in ipairs(game:GetService("Workspace"):GetDescendants()) do
+    if model:IsA("Model") then
+        for _, model1 in ipairs(model:GetDescendants()) do
+            if model1:IsA("MeshPart") then
+                local textureID = model1.TextureID
+                if textureID == "rbxassetid://8210027978" or 
+                   textureID == "rbxassetid://8028359449" or 
+                   textureID == "rbxassetid://8985801399" or 
+                   textureID == "rbxassetid://9036476435" or 
+                   textureID == "rbxassetid://8208335769" or 
+                   textureID == "rbxassetid://9104396416" then
+                    setupHighlightForMob(model)
+                end
+            end
+        end
+    end
+end
+end
 
 local targetCFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
 local targetCFrame1 = CFrame.new(-395.08563232421875, 3069.57568359375, 3891.535400390625)
