@@ -2520,7 +2520,38 @@ function Hitboxz()
     end
 end
 
-function Saigomo()
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local function To(targetPosition)
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local originalGravity = workspace.Gravity
+    local speed = 350
+    local isTweening = true
+
+    workspace.Gravity = 0
+    noclip()
+
+    local connection
+    connection = RunService.RenderStepped:Connect(function(deltaTime)
+        if isTweening then
+            local direction = (targetPosition - humanoidRootPart.Position).unit
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
+
+            if (humanoidRootPart.Position - targetPosition).magnitude < 3 then
+                isTweening = false
+                workspace.Gravity = originalGravity
+                clip()
+                connection:Disconnect()
+            end
+        end
+    end)
+end
+
+function Saigomo1()
     for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
         if v:IsA("Model") then
             local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
@@ -2538,6 +2569,26 @@ function Saigomo()
         end
     end
 end
+
+function Saigomo()
+    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
+        if v:IsA("Model") then
+            local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
+            if spiderHitbox then
+                spiderHitbox.CFrame = CFrame.new(spiderHitbox.Position) * CFrame.Angles(0, math.rad(0), 0)
+                local back = Vector3.new(0, 0, -20)
+                To(spiderHitbox.Position + back)
+            end
+        end
+    end
+end
+
+local function t(id)
+    local teleportService = game:GetService("TeleportService")
+    local Tl = id
+    teleportService:Teleport(Tl, game.Players.LocalPlayer)
+    end
+
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
@@ -2564,6 +2615,12 @@ if id == 7265396387 or id == 7251865082 then
 MainSection:AddButton('Skip',function(v)
 	TP.HumanoidRootPart.CFrame = CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125)
 end)
+end
+
+if id == 7265396387 or id == 7251865082 then
+    MainSection:AddButton('Skip to Boss',function(v)
+        t(7265397848)
+    end)
 end
 
 if id == 7265396805 or id == 7251866503 then
@@ -2633,12 +2690,26 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     end
 end)
 
-MainSection:AddToggle('[Beta]Auto Kill Saigomo(Turn On After Cutsene)', false, function(v)
+MainSection:AddToggle('Auto Kill Saigomo - Multiplayer', false, function(v)
+    if v then
+        _G.Sai = true
+        while _G.Sai do
+        wait(0)
+        Saigomo()
+        Freeze(true)
+        end
+    else
+        Freeze(false)
+    end
+end)
+end
+
+MainSection:AddToggle('Auto Kill Saigomo - Solo', false, function(v)
     if v then
         Freeze(true)
         Hitboxz()
         wait(1)
-        Saigomo()
+        Saigomo1()
     else
         Freeze(false)
     end
