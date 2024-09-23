@@ -1306,7 +1306,7 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 					ButtonMainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 					ButtonMainFrame.BorderSizePixel = 0
 					ButtonMainFrame.Position = UDim2.new(0.5, 0, 0, 0)
-					ButtonMainFrame.Size = UDim2.new(0.949999988, 0, 1.5, 0)
+					ButtonMainFrame.Size = UDim2.new(0.949999988, 0, 1, 0)
 					ButtonMainFrame.ZIndex = 6
 
 					UICorner.CornerRadius = UDim.new(0, 3)
@@ -2527,12 +2527,9 @@ local function To(targetPosition)
     local player = Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-    local originalGravity = workspace.Gravity
-    local speed = 350
+    local speed = 40
     local isTweening = true
 
-    workspace.Gravity = 0
     noclip()
 
     local connection
@@ -2541,14 +2538,22 @@ local function To(targetPosition)
             local direction = (targetPosition - humanoidRootPart.Position).unit
             humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
 
-            if (humanoidRootPart.Position - targetPosition).magnitude < 3 then
+            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
                 isTweening = false
-                workspace.Gravity = originalGravity
-                clip()
                 connection:Disconnect()
             end
         end
     end)
+end
+
+function Saigomo()
+    for _, v in pairs(workspace.BossBattle:GetChildren()) do
+        if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
+            local spiderHitbox = v.HumanoidRootPart
+            local back = spiderHitbox.Position + Vector3.new(-5, 0, 30)
+            To(back)
+        end
+    end
 end
 
 function Saigomo1()
@@ -2575,8 +2580,8 @@ function Saigomo()
         if v:IsA("Model") then
             local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
             if spiderHitbox then
-                spiderHitbox.CFrame = CFrame.new(spiderHitbox.Position) * CFrame.Angles(0, math.rad(0), 0)
-                local back = Vector3.new(0, 0, -20)
+                spiderHitbox.Rotation = Vector3.new(0, 0, 0)
+                local back = Vector3.new(-5, 0, 20)
                 To(spiderHitbox.Position + back)
             end
         end
