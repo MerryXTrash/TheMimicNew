@@ -2567,25 +2567,44 @@ function Saigomo1()
     end
 end
 
-function Saigomo()
-    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
-        if v:IsA("Model") then
-            local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
-            if spiderHitbox then
-                spiderHitbox.Rotation = Vector3.new(0, 0, 0)
-                local back = Vector3.new(-5, 0, 50)
-                To(spiderHitbox.Position * back)
-            end
-        end
-    end
-end
-
 local function t(id)
     local teleportService = game:GetService("TeleportService")
     local Tl = id
     teleportService:Teleport(Tl, game.Players.LocalPlayer)
     end
 
+local MOB = game.Workspace.BossBattle.Saigomo.SpiderHitbox
+local offset = Vector3.new(20, 0, 0) -- Define your offset here
+local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
+
+local Sound = game.Workspace.BossBattle.Saigomo.HumanoidRootPart.roar
+local HumanoidRootPart = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
+local Players = game.Players
+local isTeleporting = false
+
+local function teleportPlayersToBoss()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character.HumanoidRootPart.CFrame = HumanoidRootPart.CFrame
+        end
+    end
+end
+
+local function checkSoundAndTeleport()
+    while true do
+        if Sound.IsPlaying and not isTeleporting then
+            isTeleporting = true
+	    StopTweenAll()
+            teleportPlayersToBoss()
+        elseif not Sound.IsPlaying and isTeleporting then
+            isTeleporting = false
+	    Teleport(targetPositionTeleport)
+        end
+        wait(0)
+    end
+end
+
+checkSoundAndTeleport()
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
