@@ -2336,7 +2336,7 @@ InsertPart("House2", Vector3.new(-4.7849, 3067.8242, 4712.5752))
 InsertPart("House3", Vector3.new(-246.9231, 3068.6431, 4219.7925))
 InsertPart("House4", Vector3.new(595.4817, 3069.5764, 4422.1924))
 InsertPart("House5", Vector3.new(-676.0107, 3069.5251, 5002.6636))
-InsertPart("Key", Vector3.new(-401.7100, 3069.5759, 3867.8293))
+InsertPart("Key", Vector3.new(-401.71002197265625, 3065.575927734375, 3867.829345703125))
 InsertPart("Office", Vector3.new(-1778.0726318359375, 9.717201232910156, -4295.62109375))
 
 local function countdown(time)
