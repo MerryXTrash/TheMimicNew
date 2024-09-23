@@ -2644,20 +2644,20 @@ end)
 VillageSection:AddDropdown('Select House', {'House 1','House 2','Drawing House','House 4','House 5'}, nil, 1, function(list, item)
     if item == 'House 1' then
 		tweenCharacterToCFrame(targetCFrame1, 0)
-	elseif item == 'House2' then
+	elseif item == 'House 2' then
 		tweenCharacterToCFrame(targetCFrame2, 0)
 	elseif item == 'Drawing House' then
 		tweenCharacterToCFrame(targetCFrame3, 0)
-	elseif item == 'House4' then
+	elseif item == 'House 4' then
 		tweenCharacterToCFrame(targetCFrame4, 0)
-	elseif item == 'House5' then
+	elseif item == 'House 5' then
 		tweenCharacterToCFrame(targetCFrame5, 0)
     end
 end)
 
 VillageSection:AddButton('Unlock House',function(v)
     tweenCharacterToCFrame(KeyCFrame, 0)
-    wait(0.2)
+    wait(1)
     fire()
     fire()
     fire()
@@ -2700,7 +2700,7 @@ VillageSection2:AddButton('Get Orb and Give Orb',function(v)
 	fire()
 	wait(0.2)
 	tweenCharacterToCFrame(targetCFrame, 0)
-	wait(0.2)
+	wait(0.8)
 	fire()
 	fire()
 end)
