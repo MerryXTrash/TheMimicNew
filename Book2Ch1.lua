@@ -2526,7 +2526,6 @@ local Book = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140
 local EspcapeRin = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
 local Office = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375)
 local OX = CFrame.new(-6066.32763671875, 546.6655883789062, 7172.89501953125)
-local Ship = CFrame.new(-1250.797119140625, 4.000001430511475, 6282.77197265625)
 
 --lowerfloor
 local Candle11 = CFrame.new(-5453.7373046875, 461.4326171875, 6514.80859375)
@@ -2672,18 +2671,18 @@ end)
 
 
 --village2
-VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl','Umbrella Girl', 'Mother and Child', 'Old Man', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
+VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl(Dont Safe)','Umbrella Girl', 'Mother and Child', 'Old Man(Dont Safe)', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
     if item == 'Blue Samurai' then
 		tweenCharacterToCFrame(blue, 0)
 	elseif item == 'Red Samarai' then
 		tweenCharacterToCFrame(red, 0)
-	elseif item == 'Fox Girl' then
+	elseif item == 'Fox Girl(Dont Safe)' then
 	    tweenCharacterToCFrame(fox, 0)
 	elseif item == 'Umbrella Girl' then
 	    tweenCharacterToCFrame(UM, 0)
 	elseif item == 'Mother and Child' then
 		tweenCharacterToCFrame(Momson, 0)
-	elseif item == 'Old Man' then
+	elseif item == 'Old Man(Dont Safe)' then
 		tweenCharacterToCFrame(man, 0)
 	elseif item == 'Hustband and Wife' then
 		tweenCharacterToCFrame(love, 0)
@@ -2710,7 +2709,11 @@ end)
 
 --Ship
 ShipSection:AddButton('Enter Ship',function(v)
-    
+    To(Vector3.new(-1250.797119140625, 4.000001430511475, 6282.77197265625))
+end)
+
+ShipSection:AddButton('To Oxygen - Safe',function(v)
+    tweenCharacterToCFrame(OX, 0)
 end)
 
 ShipSection:AddDropdown('Middle Floor', {'Candle 1'}, nil, 1, function(list, item)
@@ -2744,19 +2747,11 @@ ShipSection:AddDropdown('Lower Floor', {'Candle 1', 'Candle 2', 'Candle 3', 'Can
 end)
 
 ShipSection:AddButton('Run Away Tenome',function(v)
-    
+    To(Vector3.new(-6318.65966796875, 419.03302001953125, 6330.75830078125))
 end)
 
 SeaSection:AddButton('Enter Zone',function(v)
-    
-end)
-
-VisualSection:AddToggle('Insert Speed Player(Dont Work)',false,function(v)
-	if v then
-        setPlayerSpeed(55)
-    else
-        setPlayerSpeed(21)
-    end
+    To(Vector3.new(-9612.390625, 450.2228088378906, 7150.53125))
 end)
 
 VisualSection:AddToggle('ESP Monster - If dont Work, Off and On Again.', false, function(v)
