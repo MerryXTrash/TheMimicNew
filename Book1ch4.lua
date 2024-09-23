@@ -2700,7 +2700,6 @@ MainSection:AddToggle('Auto Kill Saigomo - Multiplayer', false, function(v)
         Freeze(false)
     end
 end)
-end
 
 MainSection:AddToggle('Auto Kill Saigomo - Solo', false, function(v)
     if v then
