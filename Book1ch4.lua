@@ -2594,17 +2594,17 @@ local function checkSoundAndTeleport()
     while true do
         if Sound.IsPlaying and not isTeleporting then
             isTeleporting = true
+	    Freeze(true)
 	    StopTweenAll()
             teleportPlayersToBoss()
         elseif not Sound.IsPlaying and isTeleporting then
+	    Freeze(true)
             isTeleporting = false
 	    Teleport(targetPositionTeleport)
         end
         wait(0)
     end
 end
-
-checkSoundAndTeleport()
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
@@ -2709,10 +2709,10 @@ MainSection:AddToggle('Auto Kill Saigomo - Multiplayer', false, function(v)
         _G.Sai = true
         while _G.Sai do
         wait(0)
-        Saigomo()
-        Freeze(true)
+        checkSoundAndTeleport()
         end
     else
+	_G.Sai = false		
         Freeze(false)
     end
 end)
@@ -2721,7 +2721,7 @@ MainSection:AddToggle('Auto Kill Saigomo - Solo', false, function(v)
     if v then
         Freeze(true)
         Hitboxz()
-        wait(1)
+        wait(0.3)
         Saigomo1()
     else
         Freeze(false)
