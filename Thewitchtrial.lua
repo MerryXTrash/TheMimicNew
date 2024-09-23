@@ -2374,3 +2374,20 @@ VisualSection:AddToggle('ESP Player',false,function(v)
         UnEspPlayers()
     end
 end)
+
+VisualSection:AddButton('Fullbright',function(v)
+    local Lighting = game.Lighting
+    Lighting.ClockTime = 12
+    Lighting.Brightness = 2
+    Lighting.FogEnd = 100000
+    Lighting.GlobalShadows = false
+    Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+    wait(0.1)
+    local Lightingz game:GetService("Lighting")
+
+    for i, v in pairs(Lightingz:GetChildren()) do
+        if v.ClassName == "Atmosphere" then
+            v.Destroy()
+        end
+    end
+end)
