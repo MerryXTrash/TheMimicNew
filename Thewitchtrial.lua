@@ -2183,6 +2183,21 @@ local function Skip()
     end
 end
 
+local function fire()
+    for _, descendant in ipairs(Workspace:GetDescendants()) do
+        if descendant:IsA("ProximityPrompt") then
+            fireproximityprompt(descendant)
+        end
+    end
+end
+
+function Auto()
+   TP.HumanoidRootPart.CFrame = CFrame.new()
+   wait(0.2)
+	fire()
+   wait(0.2)
+end
+
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
 folder.Parent = game.Workspace
@@ -2281,11 +2296,13 @@ local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
 local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
+local TabFunctions2 = MenuFunctions:AddTab('Help Friends','Function','list')
 local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local MainSection = TabFunctions:AddSection('Skip','Continue','Skip this Part for next Part','log-out')
+local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
@@ -2298,6 +2315,10 @@ DiscordSection:AddButton('Copy',function(v)
 end)
 
 MainSection:AddButton('Skip',function(v)
+	Skip()
+end)
+
+MainSection2:AddButton('End Quest',function(v)
 	Skip()
 end)
 
