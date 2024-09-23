@@ -2192,10 +2192,11 @@ local function fire()
 end
 
 function Auto()
-   TP.HumanoidRootPart.CFrame = CFrame.new()
+   TP.HumanoidRootPart.CFrame = CFrame.new(959.8117065429688, 115.29686737060547, 246.41030883789062)
    wait(0.2)
 	fire()
    wait(0.2)
+   
 end
 
 local folder = Instance.new("Folder")
@@ -2302,7 +2303,14 @@ local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local MainSection = TabFunctions:AddSection('Skip','Continue','Skip this Part for next Part','log-out')
+
+if id == 7068740106 or id == 7068952294 then
 local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
+	MainSection2:AddButton('End Quest',function(v)
+	Skip()
+end)
+end
+
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
@@ -2315,10 +2323,6 @@ DiscordSection:AddButton('Copy',function(v)
 end)
 
 MainSection:AddButton('Skip',function(v)
-	Skip()
-end)
-
-MainSection2:AddButton('End Quest',function(v)
 	Skip()
 end)
 
