@@ -2323,7 +2323,7 @@ local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
 
 if id == 7068740106 or id == 7068952294 then
 local TabFunctions2 = MenuFunctions:AddTab('Help Friends','Function','list')
-
+local MainSection2 = TabFunctions2:AddSection('Skip','Continue','Skip this Part for next Part','log-out')
 MainSection2:AddDropdown('Select Puzzle', {'Puzzle 1', 'Puzzle 2'}, nil, 1, function(list, item)
     if item == 'Puzzle 1' then
 		TP.HumanoidRootPart.CFrame = CFrame.new(1785.614501953125, 24.871353149414062, 199.4203643798828)
