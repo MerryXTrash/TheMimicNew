@@ -2615,12 +2615,10 @@ if id == 7265396387 or id == 7251865082 then
 MainSection:AddButton('Skip',function(v)
 	TP.HumanoidRootPart.CFrame = CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125)
 end)
-end
 
-if id == 7265396387 or id == 7251865082 then
-    MainSection:AddButton('Skip to Boss',function(v)
+MainSection:AddButton('Skip to Boss',function(v)
         t(7265397848)
-    end)
+end)
 end
 
 if id == 7265396805 or id == 7251866503 then
