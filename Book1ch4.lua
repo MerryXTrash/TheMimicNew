@@ -2546,15 +2546,7 @@ local function To(targetPosition)
     end)
 end
 
-function Saigomo()
-    for _, v in pairs(workspace.BossBattle:GetChildren()) do
-        if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
-            local spiderHitbox = v.HumanoidRootPart
-            local back = spiderHitbox.Position + Vector3.new(0, 30, -50)
-            To(back)
-        end
-    end
-end
+
 
 function Saigomo1()
     for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
@@ -2581,8 +2573,8 @@ function Saigomo()
             local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
             if spiderHitbox then
                 spiderHitbox.Rotation = Vector3.new(0, 0, 0)
-                local back = Vector3.new(-5, 0, 20)
-                To(spiderHitbox.Position + back)
+                local back = Vector3.new(-5, 0, 50)
+                To(spiderHitbox.Position * back)
             end
         end
     end
