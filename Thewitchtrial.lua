@@ -2324,17 +2324,17 @@ local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
 if id == 7068740106 or id == 7068952294 then
 local TabFunctions2 = MenuFunctions:AddTab('Help Friends','Function','list')
 
-local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
-	MainSection2:AddButton('End Quest',function(v)
-	Auto()
-end)
-
 MainSection2:AddDropdown('Select Puzzle', {'Puzzle 1', 'Puzzle 2'}, nil, 1, function(list, item)
     if item == 'Puzzle 1' then
 		TP.HumanoidRootPart.CFrame = CFrame.new(1785.614501953125, 24.871353149414062, 199.4203643798828)
 	elseif item == 'Puzzle 2' then
 		TP.HumanoidRootPart.CFrame = CFrame.new(2145.393798828125, 25.907682418823242, 775.2923583984375)
     end
+end)
+
+local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
+	MainSection2:AddButton('End Quest',function(v)
+	Auto()
 end)
 
 end
