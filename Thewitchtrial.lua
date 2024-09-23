@@ -2258,10 +2258,11 @@ if gameAI2 then
     end
 end
 
-local Sama1 = game.Workspace:WaitForChild("omukadeMAIN")
-setupHighlightForMob(Sama1)
-local Sama2 = game.Workspace.BossBattle:WaitForChild("Saigomo")
-setupHighlightForMob(Sama2)
+for _, ai in ipairs(game:GetService("Workspace"):GetDescendants()) do
+    if ai.Name == "AI" then
+        setupHighlightForMob(ai)
+    end
+end
 end
 
 function ESPPlayers()
