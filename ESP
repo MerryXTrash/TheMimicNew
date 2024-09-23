@@ -1,3 +1,32 @@
+local folder = Instance.new("Folder")
+folder.Name = "HighlightsFolder"
+folder.Parent = game.Workspace
+
+local highlightTemplate = Instance.new("Highlight")
+highlightTemplate.Name = "HighlightTemplate"
+highlightTemplate.Enabled = true
+highlightTemplate.FillTransparency = 0.5
+highlightTemplate.OutlineTransparency = 0
+highlightTemplate.Parent = folder
+
+local function applyHighlight(instance)
+    local highlight = highlightTemplate:Clone()
+    highlight.Name = instance.Name .. "Highlight"
+    highlight.FillColor = Color3.fromRGB(255, 0, 0)
+    highlight.FillTransparency = 0.8
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    highlight.Parent = instance
+end
+
+local function setupHighlightForMob(mob)
+    local mobHighlight = highlightTemplate:Clone()
+    mobHighlight.Name = "MobESP"
+    mobHighlight.FillColor = Color3.fromRGB(255, 0, 0)
+    mobHighlight.FillTransparency = 0.8
+    mobHighlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    mobHighlight.Parent = mob
+end
+
 for _, model in ipairs(game:GetService("Workspace"):GetDescendants()) do
     if model:IsA("Model") then
         for _, model1 in ipairs(model:GetDescendants()) do
