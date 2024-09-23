@@ -2573,9 +2573,6 @@ local function t(id)
     teleportService:Teleport(Tl, game.Players.LocalPlayer)
     end
 
-local MOB = game.Workspace.BossBattle.Saigomo.SpiderHitbox
-local offset = Vector3.new(20, 0, 0) -- Define your offset here
-local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
 
 local Sound = game.Workspace.BossBattle.Saigomo.HumanoidRootPart.roar
 local HumanoidRootPart = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
@@ -2591,6 +2588,9 @@ local function teleportPlayersToBoss()
 end
 
 local function checkSoundAndTeleport()
+local MOB = game.Workspace.BossBattle.Saigomo.SpiderHitbox
+local offset = Vector3.new(20, 0, 0) -- Define your offset here
+local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
     while true do
         if Sound.IsPlaying and not isTeleporting then
             isTeleporting = true
