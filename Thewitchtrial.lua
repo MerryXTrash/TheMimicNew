@@ -2263,6 +2263,11 @@ for _, ai in ipairs(game:GetService("Workspace"):GetDescendants()) do
         setupHighlightForMob(ai)
     end
 end
+
+local AI1 = game.Workspace:WaitForChild("SamaAI")
+local AI2 = game.Workspace:WaitForChild("CrawlAI")
+setupHighlightForMob(AI1)
+setupHighlightForMob(AI2)
 end
 
 function ESPPlayers()
