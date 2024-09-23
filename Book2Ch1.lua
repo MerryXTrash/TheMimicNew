@@ -2559,13 +2559,11 @@ local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxasset
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
-if id == 8056702588 then
 local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
 local OfficeSec = OfficeFunctions:AddSection('Function','Enter','Auto Win','home')
 OfficeSec:AddButton('Enter Office',function(v)
 	tweenCharacterToCFrame(Office, 0)
 end)
-end
 
 local MioFunctions = MenuFunctions:AddTab('Rin and Mio','Function','menu')
 local NagisaFunctions = MenuFunctions:AddTab('Nagisa','Function','menu')
