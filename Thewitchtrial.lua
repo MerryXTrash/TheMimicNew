@@ -2191,12 +2191,29 @@ local function fire()
     end
 end
 
+function Ep()
+local player = game:GetService("Players").LocalPlayer
+local backpack = player.Backpack
+local character = player.Character or player.CharacterAdded:Wait()
+for _, item in pairs(backpack:GetChildren()) do
+    if item.Name == "Spirit" or item.Name == "Spirit2" then
+        item.Parent = character
+    end
+	end
+end
+
 function Auto()
    TP.HumanoidRootPart.CFrame = CFrame.new(959.8117065429688, 115.29686737060547, 246.41030883789062)
    wait(0.2)
 	fire()
-   wait(0.2)
-   
+   wait(0.5)
+   Ep()
+   wait(0.3)
+   TP.HumanoidRootPart.CFrame = CFrame.new(2618.1943359375, 109.63508605957031, 1453.0906982421875)
+   wait(0.4)
+   TP.HumanoidRootPart.CFrame = CFrame.new(2426.927734375, 183.68484497070312, 1454.0548095703125)
+   wait(0.3)
+   TP.HumanoidRootPart.CFrame = CFrame.new(1785.614501953125, 24.871353149414062, 199.4203643798828)
 end
 
 local folder = Instance.new("Folder")
@@ -2303,20 +2320,19 @@ local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
 local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
+
+if id == 7068740106 or id == 7068952294 then
 local TabFunctions2 = MenuFunctions:AddTab('Help Friends','Function','list')
+local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
+	MainSection2:AddButton('End Quest',function(v)
+	Auto()
+end)
+
 local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local MainSection = TabFunctions:AddSection('Skip','Continue','Skip this Part for next Part','log-out')
-
-if id == 7068740106 or id == 7068952294 then
-local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
-	MainSection2:AddButton('End Quest',function(v)
-	Skip()
-end)
-end
-
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 local oneSection = TabUpdate:AddSection('','+[Add]','Book 1 Chater 4[Beta]','plus')
