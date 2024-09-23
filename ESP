@@ -1,0 +1,17 @@
+for _, model in ipairs(game:GetService("Workspace"):GetDescendants()) do
+    if model:IsA("Model") then
+        for _, model1 in ipairs(model:GetDescendants()) do
+            if model1:IsA("MeshPart") then
+                local textureID = model1.TextureID
+                if textureID == "rbxassetid://8210027978" or 
+                   textureID == "rbxassetid://8028359449" or 
+                   textureID == "rbxassetid://8985801399" or 
+                   textureID == "rbxassetid://9036476435" or 
+                   textureID == "rbxassetid://8208335769" or 
+                   textureID == "rbxassetid://9104396416" then
+                    setupHighlightForMob(model)
+                end
+            end
+        end
+    end
+end
