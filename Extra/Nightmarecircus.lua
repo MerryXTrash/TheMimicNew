@@ -2504,7 +2504,7 @@ if rightHitbox then
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Nightmare Circus','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Nightmare Circus','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
@@ -2514,7 +2514,6 @@ local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
-local MainSection = TabFunctions:AddSection('Function','Boxs','Auto Win','box')
 local MainSection2 = TabFunctions:AddSection('Function','Card','Auto Win','flame')
 local MainSection3 = BossFunctions:AddSection('Function','Boss','Warning - if You Click Wrong Button You Will Die','Boss')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
@@ -2526,31 +2525,6 @@ local DiscordSection = TabUpdate:AddSection('Support','Discord','Click Copy to c
 DiscordSection:AddButton('Copy',function(v)
     local copy = "https://discord.gg/AXvTNJdGCz"
 	setclipboard(tostring(copy))
-end)
-
-MainSection:AddDropdown('Select Boxs', {'Box 1','Box 2','Box 3','Box 4','Box 5','Box 6','Box 7'}, nil, 1, function(list, item)
-    if item == 'Box 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
-    elseif item == 'Box 2' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2501.155029296875, -0.921890377998352, 320.94677734375)
-	elseif item == 'Box 3' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2548.565673828125, -1.9218904972076416, 536.6804809570312)
-	elseif item == 'Box 4' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2380.673095703125, -0.9218902587890625, 487.1125793457031)
-	elseif item == 'Box 5' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2551.619140625, -1.9218900203704834, 412.9603271484375)
-	elseif item == 'Box 6' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-2591.26416015625, -1.921891450881958, 329.8985900878906)
-	elseif item == 'Box 7' then
-	    TP.HumanoidRootPart.CFrame = CFrame.new(-2438.81982421875, -0.9218902587890625, 570.1264038085938)
-    end
-end)
-
-MainSection:AddButton('Enter Zone',function(v)
-    local trig = game.Workspace.Section1.Cutscene.Trigger
-	TP.HumanoidRootPart.CFrame = trig.CFrame
-	wait(1)
-	TP.HumanoidRootPart.CFrame = CFrame.new(-2454.953369140625, -1.9218900203704834, 375.8285217285156)
 end)
 
 local autoClickActive = false
@@ -2606,10 +2580,6 @@ MainSection2:AddToggle('Show Card', false, function(v)
     else
         hideCards()
     end
-end)
-
-MainSection:AddButton('Skip',function(v)
-    TP.HumanoidRootPart.CFrame = CFrame.new( -1100.885498046875, -85.93081665039062, 146.65823364257812)
 end)
 
 MainSection2:AddButton('Teleport to Card Zone',function(v)
