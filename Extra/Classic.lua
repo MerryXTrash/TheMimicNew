@@ -2170,22 +2170,40 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 	return WindowAlc
 end
 
+local function t(id)
+    local teleportService = game:GetService("TeleportService")
+    local Tl = id
+    teleportService:Teleport(Tl, game.Players.LocalPlayer)
+end
+
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 
 local function Skip()
-    if id == 15996404472 or id == 15996407335 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(3507.028564453125, 43.13663864135742, -1541.9735107421875) -- b1c1p1
+    if id == 15996404472 then --1
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        t(15996407335)
+	end
+    elseif id == 15996407335 then
+	TP.HumanoidRootPart.CFrame = CFrame.new(1272.7239990234375, 200.04153442382812, -2537.25) --end 1
     elseif id == 15996410294 or id == 15996411979 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(64.74767303466797, 60.94379806518555, -1622.5250244140625) -- b1c2p1
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        t(15996413469)
+	end
     elseif id == 15996413469 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(1055.5179443359375, 78.26939392089844, -351.45831298828125) -- b1c2p3
+        TP.HumanoidRootPart.CFrame = CFrame.new(1055.5179443359375, 78.26939392089844, -351.45831298828125) --end2
     elseif id == 15996414738 or id == 15996416081 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(2411.138916015625, -23.03112030029297, 2267.944580078125) -- b1c3p1
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        t(15996417416)
+	end
     elseif id == 15996417416 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(431.4171142578125, 17.476003646850586, -846.1138916015625) -- b1c3p3
-    elseif id == 7265396387 or id == 7251865082 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125) -- b1c4p1
+        TP.HumanoidRootPart.CFrame = CFrame.new(431.4171142578125, 17.476003646850586, -846.1138916015625) --end3
     end
 end
 
