@@ -2326,11 +2326,19 @@ end
 function AutoOrbs()
     for _, v in pairs(workspace.GameAI.Souls:GetChildren()) do
         if v.Name == "Orb" then
-            TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 0)
+            TP.HumanoidRootPart.CFrame = v.CFrame
         else
             TP.HumanoidRootPart.CFrame = CFrame.new(601.8018, 111.0565, 836.9151)
         end
     end
+end
+
+function orb()
+   _G.auto = true
+   while _G.auto do
+   wait(0)
+   AutoOrbs()
+   fire()
 end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Jigoku','rbxassetid://134754092492795')
@@ -2354,26 +2362,13 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
-MainSection:AddButton('Auto Repair Sleigh',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(607.1366, 17.5699, 1087.6727)
+MainSection:AddButton('Auto win',function(v)
+    TP.HumanoidRootPart.CFrame = CFrame.new(607.1366, 17.5699, 1087.6727)
     wait(1)
     TP.HumanoidRootPart.CFrame = CFrame.new(601.8018, 111.0565, 83)
-end)
-
-MainSection:AddToggle('Auto Collect Toys', false, function(v)
-    if v then
-        setHoldDurationForAllProximityPrompts()
-        Freeze(true)
-        _G.autoOBS = true
-        while _G.autoOBS do wait()
-        wait(0)
-        AutoOrbs()
-        fire()
-        end
-    else
-        _G.autoOBS = false
-        Freeze(false)
-    end
+    Freeze(true)
+    wait(10)
+    orb()
 end)
 
 VisualSection:AddToggle('ESP Monster', false, function(v)
