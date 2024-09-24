@@ -2339,105 +2339,6 @@ InsertPart("House5", Vector3.new(-676.0107, 3069.5251, 5002.6636))
 InsertPart("Key", Vector3.new(-401.71002197265625, 3065.575927734375, 3867.829345703125))
 InsertPart("Office", Vector3.new(-1778.0726318359375, 9.717201232910156, -4295.62109375))
 
-local function countdown(time)
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "CountdownGui"
-    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-    local textLabel = Instance.new("TextLabel")
-    textLabel.Name = "CountdownLabel"
-    textLabel.Size = UDim2.new(0.3, 0, 0.15, 0)
-    textLabel.Position = UDim2.new(0.35, 0, 0.4, 0)
-    textLabel.TextSize = 200
-    textLabel.TextStrokeTransparency = 0
-    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    textLabel.BackgroundTransparency = 1
-    textLabel.TextScaled = false
-    textLabel.Parent = screenGui
-
-    local countdownTime = time
-
-    local function formatTime(seconds)
-        return tostring(seconds)
-    end
-
-    local function getTextColor(seconds)
-        if seconds > 7 then
-            return Color3.fromRGB(255, 0, 0)
-        elseif seconds > 3 then
-            return Color3.fromRGB(255, 255, 0)
-        else
-            return Color3.fromRGB(56, 182, 255)
-        end
-    end
-
-    -- Display the countdown time
-    textLabel.Text = formatTime(countdownTime)
-    textLabel.TextColor3 = getTextColor(countdownTime)
-    wait(1)
-    
-    -- Wait for the countdown to complete
-    while countdownTime > 1 do
-        countdownTime = countdownTime - 1
-        textLabel.Text = formatTime(countdownTime)
-        textLabel.TextColor3 = getTextColor(countdownTime)
-        wait(1)
-    end
-
-    -- When countdown reaches 0
-    textLabel.Text = "0"
-    textLabel.TextColor3 = Color3.fromRGB(56, 182, 255)
-    wait(1)
-    textLabel:Destroy()
-end
-
-function Rat()
-    local player = game:GetService("Players").LocalPlayer
-    local backpack = player.Backpack
-	local character = player.Character
-
-    for i, item in pairs(backpack:GetChildren()) do
-        if item.Name == "Poisoned Rat" then
-            item.Parent = character
-            break
-        end
-    end
-end
-
-function Ratfind()
-    for _, rat in ipairs(game:GetService("Workspace"):GetDescendants()) do
-        if rat:IsA("MeshPart") then
-            if rat.TextureID == "rbxassetid://8569135832" then
-                local proximityPrompt = rat:FindFirstChildOfClass("ProximityPrompt")
-                if proximityPrompt then
-                    proximityPrompt.HoldDuration = 0
-                    TP.CFrame = rat.CFrame
-                    wait(0.2)
-                    fire()
-                    fire()
-                    fire()
-                    wait(0.2)
-                    TP.CFrame = CFrame.new(-1539.063, -30.171, -3543.718)
-                    wait(0.1)
-                    Rat()
-                    wait(0.1)
-                    fire()
-                    fire()
-                    wait(5)
-                    TP.CFrame = CFrame.new(-1563.528, -28.910, -3408.718)
-                    wait(0.2)
-                    fire()
-                    fire()
-                    wait(0.2)
-                    TP.CFrame = CFrame.new(-1674.827, -21.010, -3402.391)
-                    countdown(25)
-                    break
-                end
-            end
-        end
-    end
-end
-
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -2522,9 +2423,6 @@ local targetCFrame4 = CFrame.new(595.481689453125, 3069.576416015625, 4422.19238
 local targetCFrame5 = CFrame.new(-676.0106811523438, 3069.525146484375, 5002.66357421875)
 local KeyCFrame = CFrame.new(-401.7100, 3069.5759, 3867.8293)
 local Door = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
-local Book = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
-local EspcapeRin = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
-local Office = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375)
 local OX = CFrame.new(-6066.32763671875, 546.6655883789062, 7172.89501953125)
 
 --lowerfloor
@@ -2555,18 +2453,10 @@ local love = CFrame.new(182.9803009033203, 3060.994140625, 3923.0703125)
 local ORB = CFrame.new(191.37278747558594, 3061.04443359375, 3891.880126953125)
 
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 2 Chapter 1','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
-local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
-local OfficeSec = OfficeFunctions:AddSection('Function','Enter','Auto Win','home')
-OfficeSec:AddButton('Enter Office',function(v)
-	tweenCharacterToCFrame(Office, 0)
-end)
-
-local MioFunctions = MenuFunctions:AddTab('Rin and Mio','Function','menu')
-local NagisaFunctions = MenuFunctions:AddTab('Nagisa','Function','menu')
 local VillageFunctions = MenuFunctions:AddTab('Village','Function','menu')
 local ShipFunctions = MenuFunctions:AddTab('Ship','Function','menu')
 local SeaFunctions = MenuFunctions:AddTab('Sea','Function','menu')
@@ -2592,45 +2482,6 @@ DiscordSection:AddButton('Copy',function(v)
     local copy = "https://discord.gg/AXvTNJdGCz"
 	setclipboard(tostring(copy))
 end)
-
-
-
---Mio and rin
-MioSection:AddButton('Read Book',function(v)
-tweenCharacterToCFrame(Book, 0)
-wait(0.2)
-fire()
-fire()
-end)
-
-MioSection:AddButton('Auto Rat',function(v)
-	Ratfind()
-end)
-
-MioSection:AddButton('Escape',function(v)
-	tweenCharacterToCFrame(EspcapeRin, 0)
-	wait(0.2)
-	fire()
-end)
-
-MioSection:AddButton('Run Away from Mio',function(v)
-    To(Vector3.new(-961.4176635742188, -46.48267364501953, -3601.613525390625))
-end)
-
-
-
-
---Nagisa
-NagisaSection:AddButton('Enter to Cave',function(v)
-    To(Vector3.new(583.685546875, 567.3634643554688, -365.7061462402344))
-end)
-
-NagisaSection:AddButton('Run Away from Nagisa',function(v)
-    To(Vector3.new(3866.74462890625, 140.48388671875, 10.994720458984375))
-end)
-
-
-
 
 --Village
 VillageSection:AddButton('Talk',function(v)
