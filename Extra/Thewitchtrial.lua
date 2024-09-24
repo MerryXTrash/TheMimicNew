@@ -2174,12 +2174,8 @@ local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 
 local function Skip()
-    if id == 7068738088 or id == 7068951438 then
-		TP.HumanoidRootPart.CFrame = CFrame.new(2528.98681640625, 8.164044380187988, -1184.1917724609375) -- twt1
-	elseif id == 7068951914 or id == 7068739000 then
-		TP.HumanoidRootPart.CFrame = CFrame.new(-439.1501770019531, 21.252744674682617, -1455.9263916015625) -- twt2
-	elseif id == 7068740106 or id == 7068952294 then
-		TP.HumanoidRootPart.CFrame = CFrame.new(2690.99169921875, 9.297460556030273, 649.3221435546875) -- twt3
+    if id == 7068738088 or id == 7068951438 or id == 7068951914 or id == 7068739000 or id == 7068740106 or id == 7068952294 then
+	t(7069191531)
     end
 end
 
@@ -2189,31 +2185,6 @@ local function fire()
             fireproximityprompt(descendant)
         end
     end
-end
-
-function Ep()
-local player = game:GetService("Players").LocalPlayer
-local backpack = player.Backpack
-local character = player.Character or player.CharacterAdded:Wait()
-for _, item in pairs(backpack:GetChildren()) do
-    if item.Name == "Spirit" or item.Name == "Spirit2" then
-        item.Parent = character
-    end
-	end
-end
-
-function Auto()
-   TP.HumanoidRootPart.CFrame = CFrame.new(959.8117065429688, 115.29686737060547, 246.41030883789062)
-   wait(0.2)
-	fire()
-   wait(0.5)
-   Ep()
-   wait(0.3)
-   TP.HumanoidRootPart.CFrame = CFrame.new(2618.1943359375, 109.63508605957031, 1453.0906982421875)
-   wait(0.4)
-   TP.HumanoidRootPart.CFrame = CFrame.new(2426.927734375, 183.68484497070312, 1454.0548095703125)
-   wait(0.3)
-   TP.HumanoidRootPart.CFrame = CFrame.new(1785.614501953125, 24.871353149414062, 199.4203643798828)
 end
 
 local folder = Instance.new("Folder")
@@ -2315,29 +2286,11 @@ local function UnEspPlayers()
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - The Witch Trial','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - The Witch Trial','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
 local TabFunctions = MenuFunctions:AddTab('Main','Function','home')
-
-if id == 7068740106 or id == 7068952294 then
-local TabFunctions2 = MenuFunctions:AddTab('Help Friends','Function','list')
-local MainSection2 = TabFunctions2:AddSection('Skip','Continue','Skip this Part for next Part','log-out')
-MainSection2:AddDropdown('Select Puzzle', {'Puzzle 1', 'Puzzle 2'}, nil, 1, function(list, item)
-    if item == 'Puzzle 1' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(1785.614501953125, 24.871353149414062, 199.4203643798828)
-	elseif item == 'Puzzle 2' then
-		TP.HumanoidRootPart.CFrame = CFrame.new(2145.393798828125, 25.907682418823242, 775.2923583984375)
-    end
-end)
-
-local MainSection2 = TabFunctions2:AddSection('Help','Continue','Help Friends','list')
-	MainSection2:AddButton('End Quest',function(v)
-	Auto()
-end)
-
-end
 
 local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
@@ -2356,7 +2309,7 @@ DiscordSection:AddButton('Copy',function(v)
 end)
 
 MainSection:AddButton('Skip',function(v)
-	Skip()
+	7068952294
 end)
 
 VisualSection:AddToggle('ESP Monster', false, function(v)
