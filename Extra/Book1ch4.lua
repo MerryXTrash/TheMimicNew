@@ -2566,9 +2566,13 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
-if id == 7265396387 or id == 7251865082 then
+if id == 7265396387 or id == 7251865082 or id == 7265396805 or id == 7251866503 or id == 7265397072 or id == 7251867155 then
 MainSection:AddButton('Skip to Boss',function(v)
-        t(7265397848)
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        
+	end
 end)
 end
 
