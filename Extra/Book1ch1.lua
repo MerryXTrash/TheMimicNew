@@ -2283,7 +2283,7 @@ end
 end
 
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 1','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 1 Chapter 1','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
