@@ -48,7 +48,7 @@ local function createUIContainer(text, placeId, imageId, index)
     button.Text = "Teleport"
     button.Size = UDim2.new(0.25, 0, 0.5, 0)
     button.Position = UDim2.new(0.70, 0, 0.25, 0)
-    button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    button.BackgroundColor3 = Color3.fromRGB(85, 0, 255)
     button.Font = Enum.Font.SourceSansBold
     button.TextScaled = true
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
