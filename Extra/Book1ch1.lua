@@ -2179,9 +2179,13 @@ local TP = game.Players.LocalPlayer.Character
 
 local function Skip()
     if id == 6296321810 or id == 6479231833 then
+	_G.skip = true
+	while _G.skip do
+	wait(0)
         ipt(6480994221)
+	end
     elseif id == 6301638949 or id == 6480994221 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(1272.7239990234375, 200.04153442382812, -2537.25) -- b1c1p2
+        TP.HumanoidRootPart.CFrame = CFrame.new(2139.293212890625, 257.12353515625, -2795.9365234375) -- b1c1p2
     end
 end
 
