@@ -2286,6 +2286,12 @@ local function UnEspPlayers()
 end
 end
 
+local function t(id)
+    local teleportService = game:GetService("TeleportService")
+    local Tl = id
+    teleportService:Teleport(Tl, game.Players.LocalPlayer)
+    end
+
 local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - The Witch Trial','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2309,7 +2315,11 @@ DiscordSection:AddButton('Copy',function(v)
 end)
 
 MainSection:AddButton('Skip',function(v)
-	7068952294
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        t(7068952294)
+	end
 end)
 
 VisualSection:AddToggle('ESP Monster', false, function(v)
