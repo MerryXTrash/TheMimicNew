@@ -2354,15 +2354,14 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
-MainSection:AddButton('Auto Repair Sleigh',function(v)
+MainSection:AddButton('Enter Zone',function(v)
 	TP.HumanoidRootPart.CFrame = CFrame.new(607.1366, 17.5699, 1087.6727)
     wait(1)
     TP.HumanoidRootPart.CFrame = CFrame.new(601.8018, 111.0565, 83)
 end)
 
-MainSection:AddToggle('Auto Collect Toys', false, function(v)
+MainSection:AddToggle('Auto Orbs', false, function(v)
     if v then
-        setHoldDurationForAllProximityPrompts()
         Freeze(true)
         _G.autoOBS = true
         while _G.autoOBS do wait()
