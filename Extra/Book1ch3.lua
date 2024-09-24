@@ -2286,7 +2286,7 @@ local function UnEspPlayers()
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 3','rbxassetid://134204200422920')
+local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 3','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
