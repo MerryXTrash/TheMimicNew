@@ -2571,7 +2571,7 @@ MainSection:AddButton('Skip to Boss',function(v)
 	_G.skip = true
 	while _G.skip do
 	wait(0)
-        t(7251867574)
+        t(7265397848)
 	end
 end)
 end
