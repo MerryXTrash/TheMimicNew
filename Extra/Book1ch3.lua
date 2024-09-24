@@ -2173,23 +2173,20 @@ end
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 
+function itp(Ip)
+local teleportService = game:GetService("TeleportService")
+teleportService:Teleport(Ip, game.Players.LocalPlayer)
+end
+
 local function Skip()
-    if id == 6296321810 or id == 6479231833 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(3507.028564453125, 43.13663864135742, -1541.9735107421875) -- b1c1p1
-    elseif id == 6301638949 or id == 6480994221 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(1272.7239990234375, 200.04153442382812, -2537.25) -- b1c1p2
-    elseif id == 6373539583 or id == 6485055338 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(64.74767303466797, 60.94379806518555, -1622.5250244140625) -- b1c2p1
-    elseif id == 6406571212 or id == 6485055836 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(232.6605987548828, 100.84130096435547, -595.3074951171875) -- b1c2p2
-    elseif id == 6425178683 or id == 6485056556 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(1055.5179443359375, 78.26939392089844, -351.45831298828125) -- b1c2p3
-    elseif id == 6472459099 or id == 6688734180 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(2416.63671875, -23.031118392944336, 2294.332275390625) -- b1c3p1
-    elseif id == 6682163754 or id == 6688734313 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(241.43087768554688, 33.24515914916992, 450.21502685546875) -- b1c3p2
+    if id == 6472459099 or id == 6688734180 or id == 6682163754 or id == 6688734313 then
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        itp(6688734395)
+	end
     elseif id == 6682164423 or id == 6688734395 then
-        TP.HumanoidRootPart.CFrame = CFrame.new(-654.1986694335938, 648.9832153320312, -1012.5780029296875) -- b1c3p3
+        TP.HumanoidRootPart.CFrame = CFrame.new(-654.1986694335938, 648.9832153320312, -1012.5780029296875)
     end
 end
 
@@ -2286,7 +2283,7 @@ local function UnEspPlayers()
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 3','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 1 Chapter 3','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
