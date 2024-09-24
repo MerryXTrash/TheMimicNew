@@ -2180,7 +2180,11 @@ local TP = game.Players.LocalPlayer.Character
 
 local function Skip()
     if id == 6373539583 or id == 6485055338 or id == 6406571212 or id == 6485055836 then
-	itp(6485056556)
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        itp(6485056556)
+	end
     elseif id == 6425178683 or id == 6485056556 then
         TP.HumanoidRootPart.CFrame = CFrame.new(1055.5179443359375, 78.26939392089844, -351.45831298828125)
     end
@@ -2279,7 +2283,7 @@ local function UnEspPlayers()
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 2','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 1 Chapter 2','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
