@@ -32,7 +32,7 @@ local function createUIContainer(text, placeId, imageId, index)
 
     local imageStroke = Instance.new("UIStroke")
     imageStroke.Thickness = 2
-    imageStroke.Color = Color3.fromRGB(0, 170, 255)
+    imageStroke.Color = Color3.fromRGB(85, 0, 255)
     imageStroke.Parent = imageLabel
 
     local textLabel = Instance.new("TextLabel")
