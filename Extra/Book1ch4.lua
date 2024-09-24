@@ -2520,34 +2520,6 @@ function Hitboxz()
     end
 end
 
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
-local function To(targetPosition)
-    local player = Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local speed = 40
-    local isTweening = true
-
-    noclip()
-
-    local connection
-    connection = RunService.RenderStepped:Connect(function(deltaTime)
-        if isTweening then
-            local direction = (targetPosition - humanoidRootPart.Position).unit
-            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
-
-            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
-                isTweening = false
-                connection:Disconnect()
-            end
-        end
-    end)
-end
-
-
-
 function Saigomo1()
     for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
         if v:IsA("Model") then
@@ -2573,40 +2545,7 @@ local function t(id)
     teleportService:Teleport(Tl, game.Players.LocalPlayer)
     end
 
-
-local Sound = game.Workspace.BossBattle.Saigomo.HumanoidRootPart.roar
-local HumanoidRootPart = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
-local Players = game.Players
-local isTeleporting = false
-
-local function teleportPlayersToBoss()
-    for _, player in pairs(Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            player.Character.HumanoidRootPart.CFrame = HumanoidRootPart.CFrame
-        end
-    end
-end
-
-local function checkSoundAndTeleport()
-local MOB = game.Workspace.BossBattle.Saigomo.SpiderHitbox
-local offset = Vector3.new(20, 0, 0) -- Define your offset here
-local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
-    while true do
-        if Sound.IsPlaying and not isTeleporting then
-            isTeleporting = true
-	    Freeze(true)
-	    StopTweenAll()
-            teleportPlayersToBoss()
-        elseif not Sound.IsPlaying and isTeleporting then
-	    Freeze(true)
-            isTeleporting = false
-	    Teleport(targetPositionTeleport)
-        end
-        wait(0)
-    end
-end
-
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 1 Chapter 4','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
@@ -2628,44 +2567,10 @@ DiscordSection:AddButton('Copy',function(v)
 end)
 
 if id == 7265396387 or id == 7251865082 then
-MainSection:AddButton('Skip',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125)
-end)
-
 MainSection:AddButton('Skip to Boss',function(v)
         t(7265397848)
 end)
 end
-
-if id == 7265396805 or id == 7251866503 then
-MainSection:AddToggle('Auto Buttlefly Spirit', false, function(v)
-    if v then
-        TP.HumanoidRootPart.CFrame = CFrame.new(1099.39794921875, 3.135153293609619, 75.5241928100586)
-        wait(1)
-        _G.Auto2 = true
-        while _G.Auto2 do
-            wait(0)
-            Freeze(true)
-            Autobtfs()
-            fire()
-            end
-    else
-        UnAutoWin2()
-    end
-end)
-end
-
-if id == 7265397072 or id == 7251867155 then
-MainSection:AddToggle('Auto Burn Armors', false, function(v)
-    if v then
-        AutoArmors()
-    else
-        print("NO")
-    end
-end)
-end
-
-if id == 7265397848 or id == 7251867574 then
 
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
@@ -2704,20 +2609,7 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     end
 end)
 
-MainSection:AddToggle('Auto Kill Saigomo - Multiplayer', false, function(v)
-    if v then
-        _G.Sai = true
-        while _G.Sai do
-        wait(0)
-        checkSoundAndTeleport()
-        end
-    else
-	_G.Sai = false		
-        Freeze(false)
-    end
-end)
-
-MainSection:AddToggle('Auto Kill Saigomo - Solo', false, function(v)
+MainSection:AddToggle('Auto Kill Saigomo - Extra Version', false, function(v)
     if v then
         Freeze(true)
         Hitboxz()
