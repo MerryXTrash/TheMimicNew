@@ -2464,9 +2464,6 @@ local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
-
-local MioSection = MioFunctions:AddSection('Function','Rin and Mio','Auto Win','list')
-local NagisaSection = NagisaFunctions:AddSection('Function','Nagisa','Auto Win','list')
 local VillageSection = VillageFunctions:AddSection('Function','Village','Auto Win','list')
 local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Auto Win','list')
 local ShipSection = ShipFunctions:AddSection('Function','Ship','Auto Win','list')
