@@ -2282,7 +2282,7 @@ local function UnEspPlayers()
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Classic','rbxassetid://134754092492795')
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Classic','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
@@ -2320,5 +2320,21 @@ VisualSection:AddToggle('ESP Player',false,function(v)
         ESPPlayers()
     else
         UnEspPlayers()
+    end
+end)
+
+VisualSection:AddButton('Fullbright',function(v)
+    local Lighting = game.Lighting
+    Lighting.ClockTime = 12
+    Lighting.Brightness = 2
+    Lighting.FogEnd = 100000
+    Lighting.GlobalShadows = false
+    Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+    wait(0.1)
+    local Lightingz game:GetService("Lighting")
+    for i, v in pairs(Lightingz:GetChildren()) do
+        if v.ClassName == "Atmosphere" then
+            v.Destroy()
+        end
     end
 end)
