@@ -36,4 +36,5 @@ elseif currentPlaceId == 7618863566 then
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Jigoku.lua'))()
 else
      notify("Not Support", "Script not Support it Game.", 5)
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/NotSupport.lua"))()
 end
