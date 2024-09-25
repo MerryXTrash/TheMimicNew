@@ -2186,7 +2186,7 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
 
     local tweenInfo = TweenInfo.new(
         duration, -- Duration in seconds
-        Enum.EasingStyle.Linear, -- Easing style
+        Enum.EasingStyle.Exponential, -- Easing style
         Enum.EasingDirection.Out -- Easing direction
     )
 
