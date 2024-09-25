@@ -2339,6 +2339,7 @@ function orb()
    wait(0)
    AutoOrbs()
    fire()
+   end
 end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Jigoku','rbxassetid://134754092492795')
