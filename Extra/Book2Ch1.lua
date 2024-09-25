@@ -2465,7 +2465,7 @@ local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 local VillageSection = VillageFunctions:AddSection('Function','Village','Auto Win','list')
-local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Auto Win','list')
+local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Teleport and Auto Light Up Candle','list')
 local ShipSection = ShipFunctions:AddSection('Function','Ship','Auto Win','list')
 local SeaSection = SeaFunctions:AddSection('Function','Sea','Auto Win','list')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
@@ -2520,22 +2520,40 @@ end)
 VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl(Dont Safe)','Umbrella Girl', 'Mother and Child', 'Old Man(Dont Safe)', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
     if item == 'Blue Samurai' then
 		tweenCharacterToCFrame(blue, 0)
+		wait(0.3)
+	        fire()
 	elseif item == 'Red Samarai' then
 		tweenCharacterToCFrame(red, 0)
+		wait(0.3)
+	        fire()
 	elseif item == 'Fox Girl(Dont Safe)' then
 	    tweenCharacterToCFrame(fox, 0)
+	    wait(0.3)
+	    fire()
 	elseif item == 'Umbrella Girl' then
 	    tweenCharacterToCFrame(UM, 0)
+	    wait(0.3)
+	    fire()
 	elseif item == 'Mother and Child' then
 		tweenCharacterToCFrame(Momson, 0)
+		wait(0.3)
+	        fire()
 	elseif item == 'Old Man(Dont Safe)' then
 		tweenCharacterToCFrame(man, 0)
+	        wait(0.3)
+	        fire()
 	elseif item == 'Hustband and Wife' then
 		tweenCharacterToCFrame(love, 0)
+		wait(0.3)
+	        fire()
 	elseif item == 'Girl and Chicken' then
 		tweenCharacterToCFrame(Chicken, 0)
+		wait(0.3)
+	        fire()
 	elseif item == 'Girl and Flute' then
 		tweenCharacterToCFrame(flute, 0)
+		wait(0.3)
+	        fire()
     end
 end)
 
