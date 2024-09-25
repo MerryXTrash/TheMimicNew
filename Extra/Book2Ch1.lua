@@ -2524,12 +2524,16 @@ VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox
 		tweenCharacterToCFrame(red, 0)
 	elseif item == 'Fox Girl(Dont Safe)' then
 	    tweenCharacterToCFrame(fox, 0)
+			wait(0.5)
+			fire()
 	elseif item == 'Umbrella Girl' then
 	    tweenCharacterToCFrame(UM, 0)
 	elseif item == 'Mother and Child' then
 		tweenCharacterToCFrame(Momson, 0)
 	elseif item == 'Old Man(Dont Safe)' then
 		tweenCharacterToCFrame(man, 0)
+			wait(0.5)
+			fire()
 	elseif item == 'Hustband and Wife' then
 		tweenCharacterToCFrame(love, 0)
 	elseif item == 'Girl and Chicken' then
