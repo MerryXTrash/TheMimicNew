@@ -1,5 +1,13 @@
 local currentPlaceId = game.PlaceId
 
+function notify(Section, Description, num)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = Section;
+        Text = Description;
+        Duration = num;
+    })
+end
+
 if currentPlaceId == 6296321810 or currentPlaceId == 6479231833 or currentPlaceId == 6301638949 or currentPlaceId == 6480994221 then
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Book1ch1.lua'))()
 elseif currentPlaceId == 6373539583 or currentPlaceId == 6485055338 or currentPlaceId == 6406571212 or currentPlaceId == 6485055836 or currentPlaceId == 6425178683 or currentPlaceId == 6485056556 then
@@ -26,4 +34,6 @@ elseif currentPlaceId == 11126398230 then
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Nightmarecircus.lua'))()
 elseif currentPlaceId == 7618863566 then
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Jigoku.lua'))()
+else
+     notify("Not Support", "Script not Support it Game.", 5)
 end
