@@ -2191,6 +2191,38 @@ local function fire()
     end
 end
 
+local currentTween
+local isTeleporting = false
+                
+local function StopTweenAll()
+if currentTween then
+currentTween:Cancel()
+currentTween = nil
+end
+end
+
+local function Teleport(P)
+local player = Players.LocalPlayer
+if player.Character then
+local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                        
+        if humanoidRootPart then
+                local distance = (P.Position - humanoidRootPart.Position).Magnitude
+                local speed = distance >= 1 and 300 or 1
+                pcall(function()
+                StopTweenAll()
+                                currentTween = TweenService:Create(
+                                    humanoidRootPart,
+                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+                                    {CFrame = P}
+                                )
+                                currentTween:Play()
+                                wait(distance / speed)
+                            end)
+                        end
+                    end
+                end
+
 if id == 7265397848 or id == 7251867574 then
     local Players = game:GetService("Players")
     local TweenService = game:GetService("TweenService")
@@ -2215,38 +2247,6 @@ if id == 7265397848 or id == 7251867574 then
                     for _, v in pairs(Workspace:GetChildren()) do
                         if v.Name == "WebTrap" then
                             v:Destroy()
-                        end
-                    end
-                end
-                
-                local currentTween
-                local isTeleporting = false
-                
-                local function StopTweenAll()
-                    if currentTween then
-                        currentTween:Cancel()
-                        currentTween = nil
-                    end
-                end
-
-                local function Teleport(P)
-                    local player = Players.LocalPlayer
-                    if player.Character then
-                        local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-                        
-                        if humanoidRootPart then
-                            local distance = (P.Position - humanoidRootPart.Position).Magnitude
-                            local speed = distance >= 1 and 300 or 1
-                            pcall(function()
-                                StopTweenAll()
-                                currentTween = TweenService:Create(
-                                    humanoidRootPart,
-                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
-                                    {CFrame = P}
-                                )
-                                currentTween:Play()
-                                wait(distance / speed)
-                            end)
                         end
                     end
                 end
