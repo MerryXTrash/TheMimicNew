@@ -2183,30 +2183,152 @@ function Unnofall()
    game.Workspace.Gravity = 150
 end
 
-local currentTween
-
-function StopTweenAll()
-    if currentTween then
-        currentTween:Cancel()
-        NoClip = false
-        currentTween = nil
+local function fire()
+    for _, descendant in ipairs(Workspace:GetDescendants()) do
+        if descendant:IsA("ProximityPrompt") then
+            fireproximityprompt(descendant)
+        end
     end
 end
 
-function Teleport(P)
-    local distance = (P.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-    local speed = distance >= 1 and 300 or 1
-    pcall(function()
-        currentTween = game:GetService("TweenService"):Create(
-            game.Players.LocalPlayer.Character.HumanoidRootPart,
-            TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
-            {CFrame = P}
-        )
-        currentTween:Play()
-        NoClip = true
-        wait(distance / speed)
-        NoClip = false
-    end)
+if id == 7265397848 or id == 7251867574 then
+    local Players = game:GetService("Players")
+    local TweenService = game:GetService("TweenService")
+    local Workspace = game:GetService("Workspace")
+
+    local BossBattle = Workspace:FindFirstChild("BossBattle")
+    if BossBattle then
+        local Saigomo
+        for i, v in pairs(BossBattle:GetChildren()) do
+            if v.ClassName == "Model" then
+                Saigomo = v
+                break
+            end
+        end
+
+        if Saigomo then
+            local HumanoidRootPartz = Saigomo:FindFirstChild("HumanoidRootPart")
+            if HumanoidRootPartz then
+                local Sound = HumanoidRootPartz:FindFirstChild("roar")
+
+                local function web()
+                    for _, v in pairs(Workspace:GetChildren()) do
+                        if v.Name == "WebTrap" then
+                            v:Destroy()
+                        end
+                    end
+                end
+                
+                local currentTween
+                local isTeleporting = false
+                
+                local function StopTweenAll()
+                    if currentTween then
+                        currentTween:Cancel()
+                        currentTween = nil
+                    end
+                end
+
+                local function Teleport(P)
+                    local player = Players.LocalPlayer
+                    if player.Character then
+                        local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                        
+                        if humanoidRootPart then
+                            local distance = (P.Position - humanoidRootPart.Position).Magnitude
+                            local speed = distance >= 1 and 300 or 1
+                            pcall(function()
+                                StopTweenAll()
+                                currentTween = TweenService:Create(
+                                    humanoidRootPart,
+                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+                                    {CFrame = P}
+                                )
+                                currentTween:Play()
+                                wait(distance / speed)
+                            end)
+                        end
+                    end
+                end
+
+                local function checkAndTeleport()
+                    local player = Players.LocalPlayer
+                    if player.Character then
+                        local humanoid = player.Character:FindFirstChild("Humanoid")
+                        if humanoid and humanoid.Health <= 75 then
+                            for _, part in pairs(Workspace.Butterflies:GetDescendants()) do
+                                if part:IsA("MeshPart") and part.Transparency == 0 then
+                                    StopTweenAll()
+                                    player.Character.HumanoidRootPart.CFrame = part.CFrame
+				    fire()
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end
+
+                local function checkSoundAndTeleport()
+                    local player = Players.LocalPlayer
+                    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                        local offset = CFrame.new(30, 0, 15)
+                        local targetPositionTeleport = HumanoidRootPartz.CFrame * offset
+
+                        if Sound and Sound.IsPlaying then
+                            isTeleporting = true
+                            StopTweenAll()
+                            player.Character.HumanoidRootPart.CFrame = HumanoidRootPartz.CFrame
+                        elseif Sound and not Sound.IsPlaying and isTeleporting then
+                            player.Character.HumanoidRootPart.CFrame = HumanoidRootPartz.CFrame * offset
+                            isTeleporting = false
+                            Teleport(targetPositionTeleport)
+                        end
+                    end
+                end
+
+                local function checkPlayerHealth()
+                    local player = Players.LocalPlayer
+                    if player.Character then
+                        local humanoid = player.Character:FindFirstChild("Humanoid")
+                        if humanoid then
+                            if humanoid.Health <= 75 then
+                                StopTweenAll()
+                                checkAndTeleport()
+                            else
+                                checkSoundAndTeleport()
+                            end
+                        end
+                    end
+                end
+
+                local autoLoop
+
+                local function StartAuto()
+                    if not _G.Auto2 then
+                        _G.Auto2 = true
+                        autoLoop = coroutine.create(function()
+                            while _G.Auto2 do
+                                checkPlayerHealth()
+                                web()
+                                wait(0)
+                            end
+                        end)
+                        coroutine.resume(autoLoop)
+                    end
+                end
+
+                local function StopAuto()
+                    if _G.Auto2 then
+                        _G.Auto2 = false
+                        StopTweenAll()
+                    end
+                end
+
+                _G.StartAuto = StartAuto
+                _G.StopAuto = StopAuto
+            end
+        end
+    end
 end
 
 local function setHoldDurationForAllProximityPrompts()
@@ -2218,14 +2340,6 @@ end
 end
 
 setHoldDurationForAllProximityPrompts()
-
-local function fire()
-    for _, descendant in ipairs(Workspace:GetDescendants()) do
-        if descendant:IsA("ProximityPrompt") then
-            fireproximityprompt(descendant)
-        end
-    end
-end
 
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
@@ -2514,7 +2628,7 @@ function Hitboxz()
             if spiderHitbox then
               spiderHitbox.Rotation = Vector3.new(0, 0, 0)
               spiderHitbox.Size = Vector3.new(100, 30, 30)
-              spiderHitbox.Transparency = 0.1
+              spiderHitbox.Transparency = 0.9
             end
         end
     end
@@ -2688,27 +2802,11 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     end
 end)
 
-MainSection:AddToggle('Auto Kill Saigomo - Multiplayer', false, function(v)
+MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
-        _G.Sai = true
-        while _G.Sai do
-        wait(0)
-        checkSoundAndTeleport()
-        end
+	_G.StartAuto()
     else
-	_G.Sai = false		
-        Freeze(false)
-    end
-end)
-
-MainSection:AddToggle('Auto Kill Saigomo - Solo', false, function(v)
-    if v then
-        Freeze(true)
-        Hitboxz()
-        wait(0.3)
-        Saigomo1()
-    else
-        Freeze(false)
+	_G.StopAuto()
     end
 end)
 end
