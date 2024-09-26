@@ -2172,6 +2172,7 @@ end
 
 local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
+local Players = game:GetService("Players")
 
 local Workspace = game:GetService("Workspace")
 
@@ -2224,7 +2225,6 @@ local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
                 end
 
 if id == 7265397848 or id == 7251867574 then
-    local Players = game:GetService("Players")
     local TweenService = game:GetService("TweenService")
     local Workspace = game:GetService("Workspace")
 
