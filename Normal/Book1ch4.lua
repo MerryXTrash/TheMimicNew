@@ -2546,9 +2546,18 @@ local function To(targetPosition)
     end)
 end
 
-local Sound = game.Workspace.BossBattle.Saigomo.HumanoidRootPart.roar
-local HumanoidRootPart = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
-HumanoidRootPart.Rotation = Vector3.new(0, 0, 0)
+local BossBattle = game:GetService("Workspace"):FindFirstChild("BossBattle")
+if BossBattle then
+    local Saigomo = BossBattle:FindFirstChild("Saigomo")
+    if Saigomo then
+        local HumanoidRootPart = Saigomo:FindFirstChild("HumanoidRootPart")
+        if HumanoidRootPart then
+            local Sound = HumanoidRootPart:FindFirstChild("roar")
+        end
+    end
+end
+
+
 local Players = game.Players
 local isTeleporting = false
 
