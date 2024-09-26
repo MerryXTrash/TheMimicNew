@@ -2546,36 +2546,9 @@ local function To(targetPosition)
     end)
 end
 
-
-
-function Saigomo1()
-    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
-        if v:IsA("Model") then
-            local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
-            if spiderHitbox then
-            local Part = Instance.new("Part")
-            Part.Parent = game.Workspace
-            Part.Anchored = true
-            Part.Transparency = 1
-            Part.CanCollide = true
-            Part.Size = Vector3.new(30, 2, 30)
-            Part.CFrame = spiderHitbox.CFrame * CFrame.new(0, 20, 0)
-            local targetPositionTeleport = Part.CFrame * CFrame.new(0, 6, 0)
-            Teleport(targetPositionTeleport)
-            end
-        end
-    end
-end
-
-local function t(id)
-    local teleportService = game:GetService("TeleportService")
-    local Tl = id
-    teleportService:Teleport(Tl, game.Players.LocalPlayer)
-    end
-
-
 local Sound = game.Workspace.BossBattle.Saigomo.HumanoidRootPart.roar
 local HumanoidRootPart = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
+HumanoidRootPart.Rotation = Vector3.new(0, 0, 0)
 local Players = game.Players
 local isTeleporting = false
 
@@ -2587,9 +2560,17 @@ local function teleportPlayersToBoss()
     end
 end
 
+local function teleportPlayersToBoss2()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character.HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.new(33, 0, 0)
+        end
+    end
+end
+
 local function checkSoundAndTeleport()
-local MOB = game.Workspace.BossBattle.Saigomo.SpiderHitbox
-local offset = Vector3.new(20, 0, 0) -- Define your offset here
+local MOB = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
+local offset = Vector3.new(33, 0, 0) -- Define your offset here
 local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
     while true do
         if Sound.IsPlaying and not isTeleporting then
@@ -2598,11 +2579,10 @@ local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
 	    StopTweenAll()
             teleportPlayersToBoss()
         elseif not Sound.IsPlaying and isTeleporting then
-	    Freeze(true)
+	    teleportPlayersToBoss2()
             isTeleporting = false
 	    Teleport(targetPositionTeleport)
         end
-        wait(0)
     end
 end
 
@@ -2623,17 +2603,12 @@ local twoSection = TabUpdate:AddSection('','+[Add]','Christmas Trial','plus')
 local DiscordSection = TabUpdate:AddSection('Support','Discord','Click Copy to copy Link Discord','link')
 
 DiscordSection:AddButton('Copy',function(v)
-    local copy = "https://discord.gg/AXvTNJdGCz"
-	setclipboard(tostring(copy))
+	setclipboard("https://discord.gg/AXvTNJdGCz")
 end)
 
 if id == 7265396387 or id == 7251865082 then
 MainSection:AddButton('Skip',function(v)
 	TP.HumanoidRootPart.CFrame = CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125)
-end)
-
-MainSection:AddButton('Skip to Boss',function(v)
-        t(7265397848)
 end)
 end
 
