@@ -2318,7 +2318,7 @@ MainSection:AddButton('Skip',function(v)
 	_G.skip = true
 	while _G.skip do
 	wait(0)
-        t(7068952294)
+        t(7069191531)
 	end
 end)
 
