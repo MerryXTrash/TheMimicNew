@@ -2171,9 +2171,7 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 end
 
 local id = game.PlaceId
-local TP = game.Players.LocalPlayer.Character
 local Players = game:GetService("Players")
-
 local Workspace = game:GetService("Workspace")
 
 function nofall()
@@ -2182,6 +2180,10 @@ end
 
 function Unnofall()
    game.Workspace.Gravity = 150
+end
+
+function TP(p)
+	game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(p)
 end
 
 local function fire()
@@ -2261,6 +2263,8 @@ local function PerformActions()
                 if part:IsA("MeshPart") or part:IsA("Part") then
                     part.CanCollide = false
                     part.CanTouch = false
+                else
+                    tap:Destroy()
                 end
             end
         end
@@ -2275,7 +2279,7 @@ local function PerformActions()
                 if roar.IsPlaying then
                     StopTweenAll()
                     wait(0.2)
-                    player.Character.HumanoidRootPart.CFrame = roar.Parent.CFrame
+                    TP(humanoidRootPart.CFrame)
                 else
                     if humanoidRootPart then
                         local targetPosition = humanoidRootPart.CFrame * CFrame.new(30, 0, 0)
@@ -2288,7 +2292,7 @@ local function PerformActions()
                 for _, re in ipairs(workspace.butterflies:GetDescendants()) do
                     if re:IsA("MeshPart") and re.Transparency == 0 then
                         StopTweenAll()
-                        player.Character.HumanoidRootPart.CFrame = re.CFrame
+                        TP(re.CFrame)
                         fire()
                     end
                 end
@@ -2424,7 +2428,7 @@ end
 local function Autobtfs()
     for _, v in pairs(workspace.Butterflies:GetChildren()) do
         if v:IsA("BasePart") then
-            TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 0)
+            TP(v.CFrame * CFrame.new(0, 0, 0))
         else
             UnAutoWin2()
         end
@@ -2433,7 +2437,7 @@ end
 
 function AutoArmors()
     Freeze(true)
-    TP.HumanoidRootPart.CFrame = CFrame.new(706.4743041992188, 14.950273513793945, 1929.3958740234375)
+    TP(CFrame.new(706.4743041992188, 14.950273513793945, 1929.3958740234375))
     for _, v in pairs(game:GetService("Workspace"):GetChildren()) do
      if v.Name == "Texture" or v.Name == "MeshPart" or v.Name == "TreeMeshTop" then
          v:Destroy()
@@ -2449,28 +2453,28 @@ function AutoArmors()
  Float.Size = Vector3.new(30, 2, 30)
  Float.CFrame = Part.CFrame * CFrame.new(0, 14, 0)  -- Offset the position of Float
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375)
+    TP(CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375))
     fire()
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(839.8504028320312, 18.34674072265625, 2241.216552734375)
+    TP(CFrame.new(839.8504028320312, 18.34674072265625, 2241.216552734375))
     fire()
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(668.060791015625, 18.767614364624023, 2099.3955078125)
+    TP(CFrame.new(668.060791015625, 18.767614364624023, 2099.3955078125))
     fire()
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(625.1378173828125, 17.63252830505371, 2345.30078125)
+    TP(CFrame.new(625.1378173828125, 17.63252830505371, 2345.30078125))
     fire()
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(759.3781127929688, 15.417532920837402, 2531.548583984375)
+    TP(CFrame.new(759.3781127929688, 15.417532920837402, 2531.548583984375))
     fire()
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(864.6249389648438, 23.993000030517578, 2550.099853515625)
+    TP(CFrame.new(864.6249389648438, 23.993000030517578, 2550.099853515625))
     fire()
     wait(0.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375)
+    TP(CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375))
     fire()
     wait(1.5)
-    TP.HumanoidRootPart.CFrame = CFrame.new(687.65673828125, 13.798624038696289, 2253.633544921875)
+    TP(CFrame.new(687.65673828125, 13.798624038696289, 2253.633544921875))
     wait(0.5)
     fire()
     fire()
@@ -2648,14 +2652,14 @@ end)
 
 if id == 7265396387 or id == 7251865082 then
 MainSection:AddButton('Skip',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125)
+	TP(CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125))
 end)
 end
 
 if id == 7265396805 or id == 7251866503 then
 MainSection:AddToggle('Auto Buttlefly Spirit', false, function(v)
     if v then
-        TP.HumanoidRootPart.CFrame = CFrame.new(1099.39794921875, 3.135153293609619, 75.5241928100586)
+        TP(CFrame.new(1099.39794921875, 3.135153293609619, 75.5241928100586))
         wait(1)
         _G.Auto2 = true
         while _G.Auto2 do
