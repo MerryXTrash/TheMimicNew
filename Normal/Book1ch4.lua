@@ -2277,36 +2277,42 @@ local function moveAroundTarget()
 end
 
 local function re()
-    pcall(function()
-        for i, b in ipairs(game:GetService("Workspace").Buttleflies:GetDescendants()) do
-            if player.Character.Humanoid.Health >= 70 then
-                if b.ClassName == "MeshPart" and b.Transparency == 0 then
-                    humanoidRootPart.CFrame = b.CFrame
-                    fire()
-                end
-            end
+    local meshParts = {}
+    local workspaceButterflies = game:GetService("Workspace").Buttleflies:GetDescendants()
+    
+    for _, b in ipairs(workspaceButterflies) do
+        if b:IsA("MeshPart") and b.Transparency == 0 then
+            table.insert(meshParts, b)
         end
-    end)
+    end
+
+    if #meshParts > 0 and player.Character.Humanoid.Health >= 70 then
+        local randomPart = meshParts[math.random(1, #meshParts)]
+        humanoidRootPart.CFrame = randomPart.CFrame
+        fire()
+    end
 end
 
 local function TeleportOn()
     moving = true
-    pcall(function()
-        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-            if v.Name == "SpiderHitbox" and v:IsA("Part") then
-                targetPart = v
-                break
+    targetPart = nil
+
+    local bossBattleParts = game:GetService("Workspace").BossBattle:GetDescendants()
+    for _, v in ipairs(bossBattleParts) do
+        if v.Name == "SpiderHitbox" and v:IsA("Part") then
+            targetPart = v
+            break
+        end
+    end
+
+    if targetPart and not heartbeatConnection then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving then
+                moveAroundTarget()
+                re()
             end
-        end
-        if targetPart then
-            heartbeatConnection = RunService.Heartbeat:Connect(function()
-                if moving then
-                    moveAroundTarget()
-                    re()
-                end
-            end)
-        end
-    end)
+        end)
+    end
 end
 
 local function TeleportOff()
@@ -2318,21 +2324,23 @@ local function TeleportOff()
 end
 
 local function checkAndTeleport()
-    pcall(function()
-        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-            if v.Name == "HumanoidRootPart" then
-                local sound = v:FindFirstChild("roar")
-                if sound and sound:IsA("Sound") then
-                    if sound.IsPlaying then
-                        TeleportOff()
-                        humanoidRootPart.CFrame = v.CFrame
-                    else
-                        TeleportOn()
-                    end
+    local bossBattleParts = game:GetService("Workspace").BossBattle:GetDescendants()
+    for _, v in ipairs(bossBattleParts) do
+        if v.Name == "HumanoidRootPart" then
+            local sound = v:FindFirstChild("roar")
+            if sound and sound:IsA("Sound") then
+                if sound.IsPlaying then
+                    TeleportOff()
+                    humanoidRootPart.CFrame = v.CFrame
+                    return
                 end
             end
         end
-    end)
+    end
+
+    if not moving then
+        TeleportOn()
+    end
 end
 
 local function toggleTeleporting()
@@ -2414,9 +2422,9 @@ if gameAI2 then
     end
 end
 
-local Sama1 = game.Workspace:WaitForChild("omukadeMAIN")
+local Sama1 = game.Workspace.omukadeMAIN
 setupHighlightForMob(Sama1)
-local Sama2 = game.Workspace.BossBattle:WaitForChild("Saigomo")
+local Sama2 = game.Workspace.BossBattle.Saigomo
 setupHighlightForMob(Sama2)
 end
 
