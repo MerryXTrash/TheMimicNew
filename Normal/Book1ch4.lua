@@ -2226,80 +2226,54 @@ local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
                     end
                 end
 
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local player = Players.LocalPlayer
-
-local currentTween
-
-local function StopTweenAll()
-    if currentTween then
-        currentTween:Cancel()
-    end
-end
-
-local function Teleport(targetPosition)
-    if player.Character then
-        local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-        if humanoidRootPart then
-            local distance = (targetPosition.Position - humanoidRootPart.Position).Magnitude
-            local speed = distance >= 1 and 300 or 1
-            StopTweenAll()
-            currentTween = TweenService:Create(
-                humanoidRootPart,
-                TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
-                {CFrame = targetPosition}
-            )
-            currentTween:Play()
-            wait(distance / speed)
-        end
-    end
-end
-
-local function PerformActions()
-    for _, tap in ipairs(workspace:GetDescendants()) do
-        if tap.Name == "WebTrab" then
-            for _, part in ipairs(tap:GetChildren()) do
-                if part:IsA("MeshPart") or part:IsA("Part") then
-                    part.CanCollide = false
-                    part.CanTouch = false
-                else
-                    tap:Destroy()
-                end
-            end
-        end
-    end
-
-    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
-        if v:IsA("Model") then
-            local humanoidRootPart = v:FindFirstChild("HumanoidRootPart")
-            local roar = v:FindFirstChild("roar")
-
-            if roar and roar:IsA("Sound") then
-                if roar.IsPlaying then
-                    StopTweenAll()
-                    wait(0.2)
-                    TP(humanoidRootPart.CFrame)
-                else
-                    if humanoidRootPart then
-                        local targetPosition = humanoidRootPart.CFrame * CFrame.new(30, 0, 0)
-                        Teleport(targetPosition)
-                    end
-                end
-            end
-
-            if player.Character.Humanoid.Health >= 75 then
-                for _, re in ipairs(workspace.butterflies:GetDescendants()) do
-                    if re:IsA("MeshPart") and re.Transparency == 0 then
-                        StopTweenAll()
-                        TP(re.CFrame)
-                        fire()
-                    end
-                end
-            end
-        end
-    end
-end
+				local RunService = game:GetService("RunService")
+				local player = game.Players.LocalPlayer
+				local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
+				
+				local moving = false
+				local targetPart = nil
+				local speed = 2
+				local radius = 20
+				local angle = 0
+				local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
+				
+				local function moveAroundTarget()
+					angle = angle + speed * RunService.Heartbeat:Wait()
+				
+					local xOffset = math.cos(angle) * radius
+					local zOffset = math.sin(angle) * radius
+				
+					local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+					
+					humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
+				end
+				
+				local function TeleportOn()
+					moving = true
+					for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+						if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
+							targetPart = v
+							break
+						end
+					end
+				
+					if targetPart then
+						heartbeatConnection = RunService.Heartbeat:Connect(function()
+							if moving then
+								moveAroundTarget()
+							end
+						end)
+					end
+				end
+				
+				local function TeleportOff()
+					moving = false
+					if heartbeatConnection then
+						heartbeatConnection:Disconnect() -- ยกเลิกการเชื่อมต่อ
+						heartbeatConnection = nil -- รีเซ็ตการเชื่อมต่อ
+					end
+				end
+				
 
 local function setHoldDurationForAllProximityPrompts()
     for i, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
@@ -2725,13 +2699,9 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
-	_G.Sai = true
-    while _G.Sai do
-        wait(0)
-        PerformActions()
-    end
+        TeleportOn()
     else
-	_G.Sai = false
+	    TeleportOff()
     end
 end)
 end
