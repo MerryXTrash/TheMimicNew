@@ -2265,11 +2265,10 @@ local targetPart = nil
 local speed = 2
 local radius = 25
 local angle = 0
-local heartbeatConnection
 local isTeleportingActive = false
 
 local function moveAroundTarget()
-    angle = angle + speed * RunService.Heartbeat:Wait()
+    angle = angle + speed * 0.1
     local xOffset = math.cos(angle) * radius
     local zOffset = math.sin(angle) * radius
     local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
@@ -2277,19 +2276,12 @@ local function moveAroundTarget()
 end
 
 local function re()
-    local meshParts = {}
-    local workspaceButterflies = game:GetService("Workspace").Buttleflies:GetDescendants()
-    
-    for _, b in ipairs(workspaceButterflies) do
-        if b:IsA("MeshPart") and b.Transparency == 0 then
-            table.insert(meshParts, b)
+    for _, b in ipairs(game:GetService("Workspace").Buttleflies:GetDescendants()) do
+        if b:IsA("MeshPart") and b.Transparency == 0 and player.Character.Humanoid.Health >= 70 then
+            humanoidRootPart.CFrame = b.CFrame
+            fire()
+            break  -- Exit the loop after teleporting to the first visible MeshPart
         end
-    end
-
-    if #meshParts > 0 and player.Character.Humanoid.Health >= 70 then
-        local randomPart = meshParts[math.random(1, #meshParts)]
-        humanoidRootPart.CFrame = randomPart.CFrame
-        fire()
     end
 end
 
@@ -2297,35 +2289,28 @@ local function TeleportOn()
     moving = true
     targetPart = nil
 
-    local bossBattleParts = game:GetService("Workspace").BossBattle:GetDescendants()
-    for _, v in ipairs(bossBattleParts) do
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
         if v.Name == "SpiderHitbox" and v:IsA("Part") then
             targetPart = v
             break
         end
     end
 
-    if targetPart and not heartbeatConnection then
-        heartbeatConnection = RunService.Heartbeat:Connect(function()
-            if moving then
-                moveAroundTarget()
-                re()
-            end
-        end)
+    if targetPart then
+        while moving do
+            moveAroundTarget()
+            re()
+            wait(0.1)  -- Delay between movements
+        end
     end
 end
 
 local function TeleportOff()
     moving = false
-    if heartbeatConnection then
-        heartbeatConnection:Disconnect()
-        heartbeatConnection = nil
-    end
 end
 
 local function checkAndTeleport()
-    local bossBattleParts = game:GetService("Workspace").BossBattle:GetDescendants()
-    for _, v in ipairs(bossBattleParts) do
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
         if v.Name == "HumanoidRootPart" then
             local sound = v:FindFirstChild("roar")
             if sound and sound:IsA("Sound") then
@@ -2346,8 +2331,10 @@ end
 local function toggleTeleporting()
     isTeleportingActive = not isTeleportingActive
     if isTeleportingActive then
-        RunService.Heartbeat:Connect(checkAndTeleport)
-        TeleportOn()
+        while isTeleportingActive do
+            checkAndTeleport()
+            wait(0.3)  -- Check every second
+        end
     else
         TeleportOff()
     end
