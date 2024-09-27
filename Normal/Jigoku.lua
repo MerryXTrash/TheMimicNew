@@ -2355,8 +2355,8 @@ DiscordSection:AddButton('Copy',function(v)
 end)
 
 MainSection:AddButton('Enter Zone',function(v)
-	TP.HumanoidRootPart.CFrame = CFrame.new(607.1366, 17.5699, 1087.6727)
-    wait(1)
+	TP.HumanoidRootPart.CFrame = CFrame.new(610.8300170898438, 11.908462524414062, 1083.3406982421875)
+    wait(1.5)
     TP.HumanoidRootPart.CFrame = CFrame.new(601.8018, 111.0565, 83)
 end)
 
