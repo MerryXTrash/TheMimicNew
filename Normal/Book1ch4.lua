@@ -2348,10 +2348,6 @@ local function checkAndTeleport()
     end
 end
 
-RunService.Heartbeat:Connect(function()
-    checkAndTeleport()
-end)
-
 local function turnOff()
     isActive = false
     teleportOff()
@@ -2750,7 +2746,6 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         end
     else
         _G.DestroyH = false
-        StopTweenAll()
         Freeze(false)
         clip()
     end
@@ -2758,9 +2753,14 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
+		_G.sai = true
+		while _G.sai do
+		wait(0)
 		noclip()
         teleportOn()
+		end
     else
+		_G.sai = false
 		clip()
 	    turnOff()
     end
