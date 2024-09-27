@@ -2265,7 +2265,8 @@ local targetPart = nil
 local speed = 2
 local radius = 25
 local angle = 0
-local isTeleportingActive = false
+local heartbeatConnection
+local isActive = true  -- This flag controls the on/off state
 
 local function moveAroundTarget()
     angle = angle + speed * 0.1
@@ -2275,47 +2276,66 @@ local function moveAroundTarget()
     humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
-local function re()
-    for _, b in ipairs(game:GetService("Workspace").Buttleflies:GetDescendants()) do
-        if b:IsA("MeshPart") and b.Transparency == 0 and player.Character.Humanoid.Health >= 70 then
-            humanoidRootPart.CFrame = b.CFrame
-            fire()
-            break  -- Exit the loop after teleporting to the first visible MeshPart
+local function findButterfly()
+    local meshParts = {}
+    local workspaceButterflies = game:GetService("Workspace").Buttleflies:GetDescendants()
+
+    for _, b in ipairs(workspaceButterflies) do
+        if b:IsA("MeshPart") and b.Transparency == 0 then
+            table.insert(meshParts, b)
         end
+    end
+
+    if #meshParts > 0 and player.Character.Humanoid.Health >= 70 then
+        local randomPart = meshParts[math.random(1, #meshParts)]
+        humanoidRootPart.CFrame = randomPart.CFrame
+        fire()
     end
 end
 
-local function TeleportOn()
+local function teleportOn()
     moving = true
     targetPart = nil
 
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+    local bossBattleParts = game:GetService("Workspace").BossBattle:GetDescendants()
+    for _, v in ipairs(bossBattleParts) do
         if v.Name == "SpiderHitbox" and v:IsA("Part") then
             targetPart = v
             break
         end
     end
 
-    if targetPart then
-        while moving do
-            moveAroundTarget()
-            re()
-            wait(0.1)  -- Delay between movements
-        end
+    if targetPart and not heartbeatConnection then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving and isActive then
+                moveAroundTarget()
+                findButterfly()
+            end
+        end)
     end
 end
 
-local function TeleportOff()
+local function teleportOff()
     moving = false
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
 end
 
 local function checkAndTeleport()
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+    if not isActive then
+        teleportOff()
+        return
+    end
+
+    local bossBattleParts = game:GetService("Workspace").BossBattle:GetDescendants()
+    for _, v in ipairs(bossBattleParts) do
         if v.Name == "HumanoidRootPart" then
             local sound = v:FindFirstChild("roar")
             if sound and sound:IsA("Sound") then
                 if sound.IsPlaying then
-                    TeleportOff()
+                    teleportOff()
                     humanoidRootPart.CFrame = v.CFrame
                     return
                 end
@@ -2323,21 +2343,18 @@ local function checkAndTeleport()
         end
     end
 
-    if not moving then
-        TeleportOn()
+    if not moving and isActive then
+        teleportOn()
     end
 end
 
-local function toggleTeleporting()
-    isTeleportingActive = not isTeleportingActive
-    if isTeleportingActive then
-        while isTeleportingActive do
-            checkAndTeleport()
-            wait(0.3)  -- Check every second
-        end
-    else
-        TeleportOff()
-    end
+RunService.Heartbeat:Connect(function()
+    checkAndTeleport()
+end)
+
+local function turnOff()
+    isActive = false
+    teleportOff()
 end
 
 local function setHoldDurationForAllProximityPrompts()
@@ -2725,7 +2742,6 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     if v then
         Freeze(true)
         noclip()
-        nofall()
         _G.DestroyH = true
         while _G.DestroyH do
         wait(0)
@@ -2736,7 +2752,6 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         _G.DestroyH = false
         StopTweenAll()
         Freeze(false)
-        Unnofall()
         clip()
     end
 end)
@@ -2744,10 +2759,10 @@ end)
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 		noclip()
-        toggleTeleporting()
+        teleportOn()
     else
 		clip()
-	    toggleTeleporting()
+	    turnOff()
     end
 end)
 end
