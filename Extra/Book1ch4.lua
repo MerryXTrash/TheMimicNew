@@ -2510,6 +2510,32 @@ function AutoArmors()
     Freeze(false)
  end
 
+ local RunService = game:GetService("RunService")
+ local Players = game:GetService("Players")
+ 
+ local function To(targetPosition)
+	 local player = Players.LocalPlayer
+	 local character = player.Character or player.CharacterAdded:Wait()
+	 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	 local speed = 100
+	 local isTweening = true
+ 
+	 noclip()
+ 
+	 local connection
+	 connection = RunService.RenderStepped:Connect(function(deltaTime)
+		 if isTweening then
+			 local direction = (targetPosition - humanoidRootPart.Position).unit
+			 humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
+ 
+			 if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
+				 isTweening = false
+				 connection:Disconnect()
+			 end
+		 end
+	 end)
+end
+
 function PARTZ()
     local gameHearts = game:GetService("Workspace").GameHearts
      for _, v in pairs(gameHearts.Heart:GetChildren()) do
@@ -2526,8 +2552,8 @@ function toHeart()
          if v:IsA("UnionOperation") then
              v.Rotation = Vector3.new(0, 0, 0)
              v.Size = Vector3.new(60, 60, 60)
-             local targetPositionTeleport = v.CFrame * CFrame.new(0, 20, -3)
-             Teleport(targetPositionTeleport)
+             local targetPosition = v.CFrame * CFrame.new(0, 20, -3)
+             To(targetPosition)
          end
      end
  end
@@ -2601,32 +2627,6 @@ function Hitboxz()
             end
         end
     end
-end
-
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
-local function To(targetPosition)
-    local player = Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local speed = 40
-    local isTweening = true
-
-    noclip()
-
-    local connection
-    connection = RunService.RenderStepped:Connect(function(deltaTime)
-        if isTweening then
-            local direction = (targetPosition - humanoidRootPart.Position).unit
-            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
-
-            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
-                isTweening = false
-                connection:Disconnect()
-            end
-        end
-    end)
 end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
@@ -2706,10 +2706,9 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     if v then
         Freeze(true)
         noclip()
-        nofall()
         _G.DestroyH = true
         while _G.DestroyH do
-        wait(0)
+        wait(1)
         CheckKatana()
         check()
         end
@@ -2717,7 +2716,6 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         _G.DestroyH = false
         StopTweenAll()
         Freeze(false)
-        Unnofall()
         clip()
     end
 end)
