@@ -2194,21 +2194,28 @@ local function fire()
     end
 end
 
-function Teleport(P)
-    local distance = (P.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-    local speed = distance >= 1 and 300 or 1
-    pcall(function()
-        currentTween = game:GetService("TweenService"):Create(
-            game.Players.LocalPlayer.Character.HumanoidRootPart,
-            TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
-            {CFrame = P}
-        )
-        currentTween:Play()
-        NoClip = true
-        wait(distance / speed)
-        NoClip = false
-    end)
-end
+local function Teleport(P)
+local player = Players.LocalPlayer
+if player.Character then
+local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                        
+        if humanoidRootPart then
+                local distance = (P.Position - humanoidRootPart.Position).Magnitude
+                local speed = distance >= 1 and 300 or 1
+                pcall(function()
+                StopTweenAll()
+                                currentTween = TweenService:Create(
+                                    humanoidRootPart,
+                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+                                    {CFrame = P}
+                                )
+                                currentTween:Play()
+                                wait(distance / speed)
+                            end)
+                        end
+                    end
+                end
+
 
 local Noclip = nil
 local Clip = nil
