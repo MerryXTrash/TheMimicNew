@@ -2240,6 +2240,22 @@ function clip()
 	Clip = true
 end
 
+local function tweenCharacterToCFrame(targetCFrame, duration)
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait() -- Waits for the character to load
+
+    local tweenInfo = TweenInfo.new(
+        duration, -- Duration in seconds
+        Enum.EasingStyle.Linear, -- Easing style
+        Enum.EasingDirection.Out -- Easing direction
+    )
+
+    local tween = TweenService:Create(character.HumanoidRootPart, tweenInfo, {CFrame = targetCFrame})
+
+    tween:Play()
+    tween.Completed:Wait() -- Wait for the tween to finish
+end
+
 local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
@@ -2510,6 +2526,8 @@ function AutoArmors()
     Freeze(false)
  end
 
+
+
  local RunService = game:GetService("RunService")
  local Players = game:GetService("Players")
  
@@ -2553,7 +2571,7 @@ function toHeart()
              v.Rotation = Vector3.new(0, 0, 0)
              v.Size = Vector3.new(60, 60, 60)
              local targetPosition = v.CFrame * CFrame.new(0, 20, -3)
-             To(targetPosition)
+             tweenCharacterToCFrame(targetPosition, 0)
          end
      end
  end
