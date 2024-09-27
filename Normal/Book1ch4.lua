@@ -2194,6 +2194,52 @@ local function fire()
     end
 end
 
+local function Teleport(P)
+local player = Players.LocalPlayer
+if player.Character then
+local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                        
+        if humanoidRootPart then
+                local distance = (P.Position - humanoidRootPart.Position).Magnitude
+                local speed = distance >= 1 and 300 or 1
+                pcall(function()
+                StopTweenAll()
+                                currentTween = TweenService:Create(
+                                    humanoidRootPart,
+                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+                                    {CFrame = P}
+                                )
+                                currentTween:Play()
+                                wait(distance / speed)
+                            end)
+                        end
+                    end
+                end
+
+
+local Noclip = nil
+local Clip = nil
+
+function noclip()
+	Clip = false
+	local function Nocl()
+		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+					v.CanCollide = false
+				end
+			end
+		end
+		wait(0.21) -- basic optimization
+	end
+	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+end
+
+function clip()
+	if Noclip then Noclip:Disconnect() end
+	Clip = true
+end
+
 local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
@@ -2464,27 +2510,30 @@ function AutoArmors()
     Freeze(false)
  end
 
- local Noclip = nil
- local Clip = nil
+ local RunService = game:GetService("RunService")
+ local Players = game:GetService("Players")
  
- function noclip()
-     Clip = false
-     local function Nocl()
-         if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-             for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                 if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-                     v.CanCollide = false
-                 end
-             end
-         end
-         wait(0.21) -- basic optimization
-     end
-     Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
- end
+ local function To(targetPosition)
+	 local player = Players.LocalPlayer
+	 local character = player.Character or player.CharacterAdded:Wait()
+	 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	 local speed = 100
+	 local isTweening = true
  
- function clip()
-     if Noclip then Noclip:Disconnect() end
-     Clip = true
+	 noclip()
+ 
+	 local connection
+	 connection = RunService.RenderStepped:Connect(function(deltaTime)
+		 if isTweening then
+			 local direction = (targetPosition - humanoidRootPart.Position).unit
+			 humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
+ 
+			 if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
+				 isTweening = false
+				 connection:Disconnect()
+			 end
+		 end
+	 end)
 end
 
 function PARTZ()
@@ -2503,8 +2552,8 @@ function toHeart()
          if v:IsA("UnionOperation") then
              v.Rotation = Vector3.new(0, 0, 0)
              v.Size = Vector3.new(60, 60, 60)
-             local targetPositionTeleport = v.CFrame * CFrame.new(0, 20, -3)
-             Teleport(targetPositionTeleport)
+             local targetPosition = v.CFrame * CFrame.new(0, 20, -3)
+             To(targetPosition)
          end
      end
  end
@@ -2578,32 +2627,6 @@ function Hitboxz()
             end
         end
     end
-end
-
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
-local function To(targetPosition)
-    local player = Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local speed = 40
-    local isTweening = true
-
-    noclip()
-
-    local connection
-    connection = RunService.RenderStepped:Connect(function(deltaTime)
-        if isTweening then
-            local direction = (targetPosition - humanoidRootPart.Position).unit
-            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
-
-            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
-                isTweening = false
-                connection:Disconnect()
-            end
-        end
-    end)
 end
 
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
@@ -2701,9 +2724,11 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
+		noclip()
         toggleTeleporting()
     else
-	toggleTeleporting()
+		clip()
+	    toggleTeleporting()
     end
 end)
 end
