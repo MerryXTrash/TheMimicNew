@@ -2229,7 +2229,6 @@ local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
 local currentTween
-_G.Sai = false
 
 local function StopTweenAll()
     if currentTween then
@@ -2256,8 +2255,6 @@ local function Teleport(targetPosition)
 end
 
 local function PerformActions()
-    if not _G.Sai then return end
-    
     for _, tap in ipairs(workspace:GetDescendants()) do
         if tap.Name == "WebTrab" then
             for _, part in ipairs(tap:GetChildren()) do
@@ -2298,10 +2295,6 @@ local function PerformActions()
             end
         end
     end
-end
-
-if _G.Sai then
-    PerformActions()
 end
 
 local function setHoldDurationForAllProximityPrompts()
@@ -2633,55 +2626,6 @@ local function To(targetPosition)
     end)
 end
 
-local BossBattle = game:GetService("Workspace"):FindFirstChild("BossBattle")
-if BossBattle then
-    local Saigomo = BossBattle:FindFirstChild("Saigomo")
-    if Saigomo then
-        local HumanoidRootPart = Saigomo:FindFirstChild("HumanoidRootPart")
-        if HumanoidRootPart then
-            local Sound = HumanoidRootPart:FindFirstChild("roar")
-        end
-    end
-end
-
-
-local Players = game.Players
-local isTeleporting = false
-
-local function teleportPlayersToBoss()
-    for _, player in pairs(Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            player.Character.HumanoidRootPart.CFrame = HumanoidRootPart.CFrame
-        end
-    end
-end
-
-local function teleportPlayersToBoss2()
-    for _, player in pairs(Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            player.Character.HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.new(33, 0, 0)
-        end
-    end
-end
-
-local function checkSoundAndTeleport()
-local MOB = game.Workspace.BossBattle.Saigomo.HumanoidRootPart
-local offset = Vector3.new(33, 0, 0) -- Define your offset here
-local targetPositionTeleport = MOB.CFrame * CFrame.new(offset)
-    while true do
-        if Sound.IsPlaying and not isTeleporting then
-            isTeleporting = true
-	    Freeze(true)
-	    StopTweenAll()
-            teleportPlayersToBoss()
-        elseif not Sound.IsPlaying and isTeleporting then
-	    teleportPlayersToBoss2()
-            isTeleporting = false
-	    Teleport(targetPositionTeleport)
-        end
-    end
-end
-
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2778,6 +2722,10 @@ end)
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	_G.Sai = true
+    while _G.Sai do
+        wait(0)
+        PerformActions()
+    end
     else
 	_G.Sai = false
     end
