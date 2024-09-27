@@ -2194,86 +2194,88 @@ local function fire()
     end
 end
 
-local currentTween
-local isTeleporting = false
-                
-local function StopTweenAll()
-if currentTween then
-currentTween:Cancel()
-currentTween = nil
-end
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
+
+local moving = false
+local targetPart = nil
+local speed = 2
+local radius = 25
+local angle = 0
+local heartbeatConnection
+local isTeleportingActive = false
+
+local function moveAroundTarget()
+    angle = angle + speed * RunService.Heartbeat:Wait()
+    local xOffset = math.cos(angle) * radius
+    local zOffset = math.sin(angle) * radius
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
-local function Teleport(P)
-local player = Players.LocalPlayer
-if player.Character then
-local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-                        
-        if humanoidRootPart then
-                local distance = (P.Position - humanoidRootPart.Position).Magnitude
-                local speed = distance >= 1 and 300 or 1
-                pcall(function()
-                StopTweenAll()
-                                currentTween = TweenService:Create(
-                                    humanoidRootPart,
-                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
-                                    {CFrame = P}
-                                )
-                                currentTween:Play()
-                                wait(distance / speed)
-                            end)
-                        end
-                    end
+local function re()
+    for i, b in ipairs(game:GetService("Workspace").Buttleflies:GetDescendants()) do
+        if player.Character.Humanoid.Health >= 70 then
+            if b.ClassName == "MeshPart" and b.Transparency == 0 then
+                humanoidRootPart.CFrame = b.CFrame
+				fire()
+            end
+        end
+    end
+end
+
+local function TeleportOn()
+    moving = true
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+        if v.Name == "SpiderHitbox" and v:IsA("Part") then
+            targetPart = v
+            break
+        end
+    end
+    if targetPart then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving then
+                moveAroundTarget()
+                re()
+            end
+        end)
+    end
+end
+
+local function TeleportOff()
+    moving = false
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
+end
+
+local function checkAndTeleport()
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+        if v.Name == "HumanoidRootPart" then
+            local sound = v:FindFirstChild("roar")
+            if sound and sound:IsA("Sound") then
+                if sound.IsPlaying then
+                    TeleportOff()
+                    humanoidRootPart.CFrame = v.CFrame
+                else
+                    TeleportOn()
                 end
+            end
+        end
+    end
+end
 
-				local RunService = game:GetService("RunService")
-				local player = game.Players.LocalPlayer
-				local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
-				
-				local moving = false
-				local targetPart = nil
-				local speed = 2
-				local radius = 25
-				local angle = 0
-				local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
-				
-				local function moveAroundTarget()
-					angle = angle + speed * RunService.Heartbeat:Wait()
-				
-					local xOffset = math.cos(angle) * radius
-					local zOffset = math.sin(angle) * radius
-				
-					local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
-					
-					humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
-				end
-				
-				local function TeleportOn()
-					moving = true
-					for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-						if v.Name == "SpiderHitbox" then
-							targetPart = v
-							break
-						end
-					end
-				
-					if targetPart then
-						heartbeatConnection = RunService.Heartbeat:Connect(function()
-							if moving then
-								moveAroundTarget()
-							end
-						end)
-					end
-				end
-				
-				local function TeleportOff()
-					moving = false
-					if heartbeatConnection then
-						heartbeatConnection:Disconnect() -- ยกเลิกการเชื่อมต่อ
-						heartbeatConnection = nil -- รีเซ็ตการเชื่อมต่อ
-					end
-				end
-				
+local function toggleTeleporting()
+    isTeleportingActive = not isTeleportingActive
+    if isTeleportingActive then
+        RunService.Heartbeat:Connect(checkAndTeleport)
+        TeleportOn()
+    else
+        TeleportOff()
+    end
+end
 
 local function setHoldDurationForAllProximityPrompts()
     for i, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
@@ -2699,9 +2701,9 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
-        TeleportOn()
+        toggleTeleporting()
     else
-	    TeleportOff()
+	toggleTeleporting()
     end
 end)
 end
