@@ -2224,111 +2224,84 @@ local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
                     end
                 end
 
-if id == 7265397848 or id == 7251867574 then
-    local TweenService = game:GetService("TweenService")
-    local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
 
-    local BossBattle = Workspace:FindFirstChild("BossBattle")
-    if BossBattle then
-        local Saigomo
-        for i, v in pairs(BossBattle:GetChildren()) do
-            if v.ClassName == "Model" then
-                Saigomo = v
-                break
-            end
+local currentTween
+_G.Sai = false
+
+local function StopTweenAll()
+    if currentTween then
+        currentTween:Cancel()
+    end
+end
+
+local function Teleport(targetPosition)
+    if player.Character then
+        local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            local distance = (targetPosition.Position - humanoidRootPart.Position).Magnitude
+            local speed = distance >= 1 and 300 or 1
+            StopTweenAll()
+            currentTween = TweenService:Create(
+                humanoidRootPart,
+                TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+                {CFrame = targetPosition}
+            )
+            currentTween:Play()
+            wait(distance / speed)
         end
+    end
+end
 
-        if Saigomo then
-            local HumanoidRootPartz = Saigomo:FindFirstChild("HumanoidRootPart")
-            if HumanoidRootPartz then
-                local Sound = HumanoidRootPartz:FindFirstChild("roar")
-
-                local function web()
-                    for _, v in pairs(Workspace:GetChildren()) do
-                        if v.Name == "WebTrap" then
-                            v:Destroy()
-                        end
-                    end
+local function PerformActions()
+    if not _G.Sai then return end
+    
+    for _, tap in ipairs(workspace:GetDescendants()) do
+        if tap.Name == "WebTrab" then
+            for _, part in ipairs(tap:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.CanCollide = false
+                    part.CanTouch = false
                 end
-
-                local function checkAndTeleport()
-                    local player = Players.LocalPlayer
-                    if player.Character then
-                        local humanoid = player.Character:FindFirstChild("Humanoid")
-                        if humanoid and humanoid.Health <= 75 then
-                            for _, part in pairs(Workspace.Butterflies:GetDescendants()) do
-                                if part:IsA("MeshPart") and part.Transparency == 0 then
-                                    StopTweenAll()
-                                    player.Character.HumanoidRootPart.CFrame = part.CFrame
-				    fire()
-                                    break
-                                end
-                            end
-                        end
-                    end
-                end
-
-                local function checkSoundAndTeleport()
-                    local player = Players.LocalPlayer
-                    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                        local offset = CFrame.new(30, 0, 15)
-                        local targetPositionTeleport = HumanoidRootPartz.CFrame * offset
-
-                        if Sound and Sound.IsPlaying then
-                            isTeleporting = true
-                            StopTweenAll()
-                            player.Character.HumanoidRootPart.CFrame = HumanoidRootPartz.CFrame
-                        elseif Sound and not Sound.IsPlaying and isTeleporting then
-                            player.Character.HumanoidRootPart.CFrame = HumanoidRootPartz.CFrame * offset
-                            isTeleporting = false
-                            Teleport(targetPositionTeleport)
-                        end
-                    end
-                end
-
-                local function checkPlayerHealth()
-                    local player = Players.LocalPlayer
-                    if player.Character then
-                        local humanoid = player.Character:FindFirstChild("Humanoid")
-                        if humanoid then
-                            if humanoid.Health <= 75 then
-                                StopTweenAll()
-                                checkAndTeleport()
-                            else
-                                checkSoundAndTeleport()
-                            end
-                        end
-                    end
-                end
-
-                local autoLoop
-
-                local function StartAuto()
-                    if not _G.Auto2 then
-                        _G.Auto2 = true
-                        autoLoop = coroutine.create(function()
-                            while _G.Auto2 do
-                                checkPlayerHealth()
-                                web()
-                                wait(0)
-                            end
-                        end)
-                        coroutine.resume(autoLoop)
-                    end
-                end
-
-                local function StopAuto()
-                    if _G.Auto2 then
-                        _G.Auto2 = false
-                        StopTweenAll()
-                    end
-                end
-
-                _G.StartAuto = StartAuto
-                _G.StopAuto = StopAuto
             end
         end
     end
+
+    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
+        if v:IsA("Model") then
+            local humanoidRootPart = v:FindFirstChild("HumanoidRootPart")
+            local roar = v:FindFirstChild("roar")
+
+            if roar and roar:IsA("Sound") then
+                if roar.IsPlaying then
+                    StopTweenAll()
+                    wait(0.2)
+                    player.Character.HumanoidRootPart.CFrame = roar.Parent.CFrame
+                else
+                    if humanoidRootPart then
+                        local targetPosition = humanoidRootPart.CFrame * CFrame.new(30, 0, 0)
+                        Teleport(targetPosition)
+                    end
+                end
+            end
+
+            if player.Character.Humanoid.Health >= 75 then
+                for _, re in ipairs(workspace.butterflies:GetDescendants()) do
+                    if re:IsA("MeshPart") and re.Transparency == 0 then
+                        StopTweenAll()
+                        player.Character.HumanoidRootPart.CFrame = re.CFrame
+                        fire()
+                    end
+                end
+            end
+        end
+    end
+end
+
+if _G.Sai then
+    PerformActions()
 end
 
 local function setHoldDurationForAllProximityPrompts()
@@ -2804,9 +2777,9 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
-	_G.StartAuto()
+	_G.Sai = true
     else
-	_G.StopAuto()
+	_G.Sai = false
     end
 end)
 end
