@@ -2263,7 +2263,7 @@ local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 local moving = false
 local targetPart = nil
 local speed = 2
-local radius = 30
+local radius = 28
 local angle = 0
 local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
 
@@ -2281,7 +2281,7 @@ end
 local function TeleportOn()
     moving = true
     for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-        if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
             targetPart = v
             break
         end
