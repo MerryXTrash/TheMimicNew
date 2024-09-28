@@ -2624,15 +2624,12 @@ function CheckKatana()
         end
     end
 
-    warn("Katana not found in character or backpack")
-end
-
-for i, v in pairs(backpack:GetChildren()) do
+    for i, v in pairs(backpack:GetChildren()) do
     if v.Name == "Katana" then
         v.Parent = character
-        break
     end
 end
+    warn("Katana not found in character or backpack")
 end
 
 function Hitboxz()
