@@ -2257,31 +2257,30 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
 end
 
 local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
-
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local humanoidRootPart = player.Character and player.Character:WaitForChild("HumanoidRootPart")
 local moving = false
 local targetPart = nil
 local speed = 2
 local radius = 30
 local angle = 0
-local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
+local heartbeatConnection
 
 local function moveAroundTarget()
-    angle = angle + speed * RunService.Heartbeat:Wait()
-
-    local xOffset = math.cos(angle) * radius
-    local zOffset = math.sin(angle) * radius
-
-    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
-    
-    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
+    if targetPart then
+        angle = angle + speed * RunService.Heartbeat:Wait()
+        local xOffset = math.cos(angle) * radius
+        local zOffset = math.sin(angle) * radius
+        local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+        humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
+    end
 end
 
 local function TeleportOn()
     moving = true
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-        if v.Name == "SpiderHitbox" then
+    for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
             targetPart = v
             break
         end
@@ -2290,33 +2289,30 @@ local function TeleportOn()
     if targetPart then
         heartbeatConnection = RunService.Heartbeat:Connect(function()
             if moving then
+                updateRadius()
                 moveAroundTarget()
             end
         end)
+    else
+        warn("Target part not found.")
     end
 end
 
 local function TeleportOff()
     moving = false
     if heartbeatConnection then
-        heartbeatConnection:Disconnect() -- ยกเลิกการเชื่อมต่อ
-        heartbeatConnection = nil -- รีเซ็ตการเชื่อมต่อ
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
     end
 end
 
 local function updateRadius()
-    for _, v in ipairs(game.Workspace.BossBattle:GetDescendants()) do
-        if v.Name == "roar" then
-                if v.IsPlaying then
-                    radius = 0
-                else
-                    radius = 30
-                end
-            end
+    for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
+        if v.Name == "roar" and v:IsA("Sound") then
+            radius = v.IsPlaying and 0 or 30
+            break
         end
     end
-
-    return radius
 end
 
 local folder = Instance.new("Folder")
@@ -2739,7 +2735,7 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
         TeleportOn()
 	_G.si = true
 	while _G.si do
-	local currentRadius = updateRadius()
+	updateRadius()
 	CheckKatana()
 	wait(0)
 	end
