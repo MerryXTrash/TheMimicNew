@@ -2256,31 +2256,30 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
     tween.Completed:Wait() -- Wait for the tween to finish
 end
 
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local humanoidRootPart = player.Character and player.Character:WaitForChild("HumanoidRootPart")
 local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
 local moving = false
 local targetPart = nil
-local speed = 2
-local radius = 28
+local speed = 50 -- Speed for BodyVelocity
+local radius = 30 -- Initial radius
 local angle = 0
-local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
+local bodyVelocity
 
-local function moveAroundTarget()
-    angle = angle + speed * RunService.Heartbeat:Wait()
-
-    local xOffset = math.cos(angle) * radius
-    local zOffset = math.sin(angle) * radius
-
-    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
-    
-    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
+-- Create BodyVelocity instance
+local function createBodyVelocity()
+    bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.MaxForce = Vector3.new(1e4, 0, 1e4) -- Only apply force on X and Z axes
+    bodyVelocity.P = 1000
+    bodyVelocity.Velocity = Vector3.zero -- Initial velocity set to 0
+    bodyVelocity.Parent = humanoidRootPart
 end
 
-local function TeleportOn()
-    moving = true
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+local function moveAndUpdateRadius()
+    for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
         if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
             targetPart = v
             break
@@ -2288,19 +2287,40 @@ local function TeleportOn()
     end
 
     if targetPart then
-        heartbeatConnection = RunService.Heartbeat:Connect(function()
-            if moving then
-                moveAroundTarget()
+        moving = true
+        createBodyVelocity()
+
+        RunService.Heartbeat:Connect(function()
+            if not moving then return end
+            
+            -- Update radius based on the "roar" sound
+            for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
+                if v.Name == "roar" and v:IsA("Sound") then
+                    radius = v.IsPlaying and 0 or 30
+                    break
+                end
             end
+            
+            -- Calculate the new position offset based on the updated radius
+            angle = angle + 0.05 -- Adjust this value to control the speed of rotation
+            local xOffset = math.cos(angle) * radius
+            local zOffset = math.sin(angle) * radius
+            local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+            
+            -- Calculate the velocity needed to move towards the new position
+            local direction = (newPosition - humanoidRootPart.Position).unit
+            bodyVelocity.Velocity = direction * speed
         end)
+    else
+        warn("Target part not found.")
     end
 end
 
 local function TeleportOff()
     moving = false
-    if heartbeatConnection then
-        heartbeatConnection:Disconnect() -- ยกเลิกการเชื่อมต่อ
-        heartbeatConnection = nil -- รีเซ็ตการเชื่อมต่อ
+    if bodyVelocity then
+        bodyVelocity:Destroy() -- Remove BodyVelocity when movement is stopped
+        bodyVelocity = nil
     end
 end
 
@@ -2721,9 +2741,9 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	Hitboxz()
 	noclip()
-        TeleportOn()
 	_G.si = true
 	while _G.si do
+	moveAndUpdateRadius()
 	CheckKatana()
 	wait(0)
 	end
