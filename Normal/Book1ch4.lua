@@ -2722,6 +2722,7 @@ end)
 
 MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     if v then
+	nofall()
         Freeze(true)
         noclip()
         _G.DestroyH = true
@@ -2731,6 +2732,7 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         check()
         end
     else
+	Unnofall()
         _G.DestroyH = false
         Freeze(false)
         clip()
@@ -2739,9 +2741,11 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
+	noclip()
         TeleportOn()
     else
         TeleportOff()
+	clip()
     end
 end)
 end
