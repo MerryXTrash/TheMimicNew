@@ -2295,7 +2295,8 @@ local function TeleportOn()
     moving = true
     radius = updateRadius()  -- Update the radius before starting to move
     for _, v in ipairs(game.Workspace.BossBattle:GetDescendants()) do
-        if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
+	    v.Size = Vector3.new(20, 20, 20)
             targetPart = v
             break
         end
@@ -2318,10 +2319,6 @@ local function TeleportOff()
         heartbeatConnection = nil
     end
 end
-
--- Example usage:
--- Call TeleportOn() to start moving around the target and updating radius
--- Call TeleportOff() to stop moving around the target
 
 setHoldDurationForAllProximityPrompts()
 
@@ -2722,9 +2719,9 @@ end)
 
 MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     if v then
-	nofall()
         Freeze(true)
         noclip()
+	nofall()
         _G.DestroyH = true
         while _G.DestroyH do
         wait(0)
