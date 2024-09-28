@@ -2324,7 +2324,6 @@ end
 
 -- Call CustomTeleport() to start moving and TeleportOff() to stop
 
-setHoldDurationForAllProximityPrompts()
 
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
