@@ -2256,7 +2256,6 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
     tween.Completed:Wait() -- Wait for the tween to finish
 end
 
-
 local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
@@ -2272,37 +2271,35 @@ local function moveAroundTarget()
     angle = angle + speed * RunService.Heartbeat:Wait()
     local xOffset = math.cos(angle) * radius
     local zOffset = math.sin(angle) * radius
-    humanoidRootPart.CFrame = CFrame.new(
-        targetPart.Position.X + xOffset,
-        targetPart.Position.Y + 2,
-        targetPart.Position.Z + zOffset
-    )
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, targetPart.Position.Y + 2, targetPart.Position.Z + zOffset)
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position + Vector3.new(0, 2, 0))
 end
 
 local function updateRadius()
+    local newRadius = 30
     for _, v in ipairs(game.Workspace.BossBattle.Saigomo:GetDescendants()) do
-        if v:IsA("BasePart") and v.Name == "HumanoidRootPart" then
+        if v.Name == "HumanoidRootPart" then
             local sound = v:FindFirstChild("roar")
-            if sound and sound:IsA("Sound") and sound.IsPlaying then
-		radius = 0
-			else
-		radius = 30
-                break
+            if sound and sound:IsA("Sound") then
+                if sound.IsPlaying then
+                    newRadius = 0
+                    break
+                end
             end
         end
-	end
+    end
+    return newRadius
 end
 
-local function CustomTeleport()
+local function TeleportOn()
     moving = true
-    updateRadius()
+    radius = updateRadius()  -- Update the radius before starting to move
     for _, v in ipairs(game.Workspace.BossBattle:GetDescendants()) do
-        if v:IsA("Part") and v.Name == "SpiderHitbox" then
+        if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
             targetPart = v
             break
         end
     end
-
     if targetPart then
         heartbeatConnection = RunService.Heartbeat:Connect(function()
             if moving then
@@ -2321,9 +2318,6 @@ local function TeleportOff()
         heartbeatConnection = nil
     end
 end
-
--- Call CustomTeleport() to start moving and TeleportOff() to stop
-
 
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
@@ -2582,7 +2576,7 @@ end
 _G.Ezclick = false
 
 function EquipOrClick()
-    CheckKatana()
+    ch()
     clickMiddleOfScreen()
 end
 
@@ -2621,14 +2615,16 @@ function CheckKatana()
             end
             return
         end
-    end
+	end
+    warn("Katana not found in character or backpack")
+end
 
-    for i, v in pairs(backpack:GetChildren()) do
+function ch()
+for i, v in pairs(backpack:GetChildren()) do
     if v.Name == "Katana" then
         v.Parent = character
     end
 end
-    warn("Katana not found in character or backpack")
 end
 
 function Hitboxz()
@@ -2739,7 +2735,8 @@ end)
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	noclip()
-        CustomTeleport()
+	CheckKatana()
+        TeleportOn()
     else
         TeleportOff()
 	clip()
