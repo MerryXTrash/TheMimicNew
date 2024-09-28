@@ -2271,43 +2271,25 @@ local function moveAroundTarget()
     angle = angle + speed * RunService.Heartbeat:Wait()
     local xOffset = math.cos(angle) * radius
     local zOffset = math.sin(angle) * radius
-    local newPosition = Vector3.new(targetPart.Position.X + xOffset, targetPart.Position.Y + 2, targetPart.Position.Z + zOffset)
-    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position + Vector3.new(0, 2, 0))
-end
-
-local function updateRadius()
-    local newRadius = 30
-    for _, v in ipairs(game.Workspace.BossBattle.Saigomo:GetDescendants()) do
-        if v.Name == "HumanoidRootPart" then
-            local sound = v:FindFirstChild("roar")
-            if sound and sound:IsA("Sound") then
-                if sound.IsPlaying then
-                    newRadius = 0
-                    break
-                end
-            end
-        end
-    end
-    return newRadius
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
 local function TeleportOn()
     moving = true
-    radius = updateRadius()  -- Update the radius before starting to move
-    for _, v in ipairs(game.Workspace.BossBattle:GetDescendants()) do
-        if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
             targetPart = v
             break
         end
     end
+
     if targetPart then
         heartbeatConnection = RunService.Heartbeat:Connect(function()
             if moving then
                 moveAroundTarget()
             end
         end)
-    else
-        warn("No target part found in BossBattle.")
     end
 end
 
@@ -2318,6 +2300,24 @@ local function TeleportOff()
         heartbeatConnection = nil
     end
 end
+
+local function updateRadius()
+    for _, v in ipairs(game.Workspace.BossBattle.Saigomo:GetDescendants()) do
+        if v.Name == "HumanoidRootPart" then
+            local sound = v:FindFirstChild("roar")
+            if sound and sound:IsA("Sound") then
+                radius = sound.IsPlaying and 0 or 30
+            end
+        end
+    end
+end
+
+-- ใช้ฟังก์ชันตามที่ต้องการ
+-- ตัวอย่างการเรียกใช้ฟังก์ชัน
+-- TeleportOn()
+-- TeleportOff()
+-- updateRadius()
+
 
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
@@ -2737,7 +2737,13 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	noclip()
 	CheckKatana()
         TeleportOn()
+	_G.si = true
+	while _G.si do
+	updateRadius()
+	wait(0)
+	end
     else
+	_G.si = false
         TeleportOff()
 	clip()
     end
