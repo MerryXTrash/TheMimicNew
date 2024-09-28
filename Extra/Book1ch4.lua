@@ -15,8 +15,8 @@ local HttpService = game:GetService('HttpService')
 local Alc = {
 	Config = {
 		['UI Size'] = UDim2.new(0.100000001, 370, 0.100000001, 280),
-		['MainColor'] = Color3.fromRGB(56, 182, 255),
-		['DropColor'] = Color3.fromRGB(30, 100, 200)
+		['MainColor'] = Color3.fromRGB(85, 0, 255),
+		['DropColor'] = Color3.fromRGB(34, 0, 102)
 	},
 	CoreGui = game:FindFirstChild('CoreGui') or LocalPlayer.PlayerGui,
 	Windows = {},
@@ -2171,7 +2171,8 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 end
 
 local id = game.PlaceId
-local Players = game:GetService("Players")
+local TP = game.Players.LocalPlayer.Character
+
 local Workspace = game:GetService("Workspace")
 
 function nofall()
@@ -2182,145 +2183,30 @@ function Unnofall()
    game.Workspace.Gravity = 150
 end
 
-function TP(p)
-	game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(p)
-end
+local currentTween
 
-local function fire()
-    for _, descendant in ipairs(Workspace:GetDescendants()) do
-        if descendant:IsA("ProximityPrompt") then
-            fireproximityprompt(descendant)
-        end
+function StopTweenAll()
+    if currentTween then
+        currentTween:Cancel()
+        NoClip = false
+        currentTween = nil
     end
 end
 
-local function Teleport(P)
-local player = Players.LocalPlayer
-if player.Character then
-local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-                        
-        if humanoidRootPart then
-                local distance = (P.Position - humanoidRootPart.Position).Magnitude
-                local speed = distance >= 1 and 300 or 1
-                pcall(function()
-                StopTweenAll()
-                                currentTween = TweenService:Create(
-                                    humanoidRootPart,
-                                    TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
-                                    {CFrame = P}
-                                )
-                                currentTween:Play()
-                                wait(distance / speed)
-                            end)
-                        end
-                    end
-                end
-
-
-local Noclip = nil
-local Clip = nil
-
-function noclip()
-	Clip = false
-	local function Nocl()
-		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-					v.CanCollide = false
-				end
-			end
-		end
-		wait(0.21) -- basic optimization
-	end
-	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
-end
-
-function clip()
-	if Noclip then Noclip:Disconnect() end
-	Clip = true
-end
-
-local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
-
-local moving = false
-local targetPart = nil
-local speed = 2
-local radius = 25
-local angle = 0
-local heartbeatConnection
-local isTeleportingActive = false
-
-local function moveAroundTarget()
-    angle = angle + speed * RunService.Heartbeat:Wait()
-    local xOffset = math.cos(angle) * radius
-    local zOffset = math.sin(angle) * radius
-    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
-    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
-end
-
-local function re()
-    for i, b in ipairs(game:GetService("Workspace").Buttleflies:GetDescendants()) do
-        if player.Character.Humanoid.Health >= 70 then
-            if b.ClassName == "MeshPart" and b.Transparency == 0 then
-                humanoidRootPart.CFrame = b.CFrame
-				fire()
-            end
-        end
-    end
-end
-
-local function TeleportOn()
-    moving = true
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-        if v.Name == "SpiderHitbox" and v:IsA("Part") then
-            targetPart = v
-            break
-        end
-    end
-    if targetPart then
-        heartbeatConnection = RunService.Heartbeat:Connect(function()
-            if moving then
-                moveAroundTarget()
-                re()
-            end
-        end)
-    end
-end
-
-local function TeleportOff()
-    moving = false
-    if heartbeatConnection then
-        heartbeatConnection:Disconnect()
-        heartbeatConnection = nil
-    end
-end
-
-local function checkAndTeleport()
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-        if v.Name == "HumanoidRootPart" then
-            local sound = v:FindFirstChild("roar")
-            if sound and sound:IsA("Sound") then
-                if sound.IsPlaying then
-                    TeleportOff()
-                    humanoidRootPart.CFrame = v.CFrame
-                else
-                    TeleportOn()
-                end
-            end
-        end
-    end
-end
-
-local function toggleTeleporting()
-    isTeleportingActive = not isTeleportingActive
-    if isTeleportingActive then
-        RunService.Heartbeat:Connect(checkAndTeleport)
-        TeleportOn()
-    else
-        TeleportOff()
-    end
+function Teleport(P)
+    local distance = (P.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+    local speed = distance >= 1 and 300 or 1
+    pcall(function()
+        currentTween = game:GetService("TweenService"):Create(
+            game.Players.LocalPlayer.Character.HumanoidRootPart,
+            TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+            {CFrame = P}
+        )
+        currentTween:Play()
+        NoClip = true
+        wait(distance / speed)
+        NoClip = false
+    end)
 end
 
 local function setHoldDurationForAllProximityPrompts()
@@ -2332,6 +2218,14 @@ end
 end
 
 setHoldDurationForAllProximityPrompts()
+
+local function fire()
+    for _, descendant in ipairs(Workspace:GetDescendants()) do
+        if descendant:IsA("ProximityPrompt") then
+            fireproximityprompt(descendant)
+        end
+    end
+end
 
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
@@ -2450,7 +2344,7 @@ end
 local function Autobtfs()
     for _, v in pairs(workspace.Butterflies:GetChildren()) do
         if v:IsA("BasePart") then
-            TP(v.CFrame * CFrame.new(0, 0, 0))
+            TP.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 0, 0)
         else
             UnAutoWin2()
         end
@@ -2459,7 +2353,7 @@ end
 
 function AutoArmors()
     Freeze(true)
-    TP(CFrame.new(706.4743041992188, 14.950273513793945, 1929.3958740234375))
+    TP.HumanoidRootPart.CFrame = CFrame.new(706.4743041992188, 14.950273513793945, 1929.3958740234375)
     for _, v in pairs(game:GetService("Workspace"):GetChildren()) do
      if v.Name == "Texture" or v.Name == "MeshPart" or v.Name == "TreeMeshTop" then
          v:Destroy()
@@ -2475,28 +2369,28 @@ function AutoArmors()
  Float.Size = Vector3.new(30, 2, 30)
  Float.CFrame = Part.CFrame * CFrame.new(0, 14, 0)  -- Offset the position of Float
     wait(0.5)
-    TP(CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375))
+    TP.HumanoidRootPart.CFrame = CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375)
     fire()
     wait(0.5)
-    TP(CFrame.new(839.8504028320312, 18.34674072265625, 2241.216552734375))
+    TP.HumanoidRootPart.CFrame = CFrame.new(839.8504028320312, 18.34674072265625, 2241.216552734375)
     fire()
     wait(0.5)
-    TP(CFrame.new(668.060791015625, 18.767614364624023, 2099.3955078125))
+    TP.HumanoidRootPart.CFrame = CFrame.new(668.060791015625, 18.767614364624023, 2099.3955078125)
     fire()
     wait(0.5)
-    TP(CFrame.new(625.1378173828125, 17.63252830505371, 2345.30078125))
+    TP.HumanoidRootPart.CFrame = CFrame.new(625.1378173828125, 17.63252830505371, 2345.30078125)
     fire()
     wait(0.5)
-    TP(CFrame.new(759.3781127929688, 15.417532920837402, 2531.548583984375))
+    TP.HumanoidRootPart.CFrame = CFrame.new(759.3781127929688, 15.417532920837402, 2531.548583984375)
     fire()
     wait(0.5)
-    TP(CFrame.new(864.6249389648438, 23.993000030517578, 2550.099853515625))
+    TP.HumanoidRootPart.CFrame = CFrame.new(864.6249389648438, 23.993000030517578, 2550.099853515625)
     fire()
     wait(0.5)
-    TP(CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375))
+    TP.HumanoidRootPart.CFrame = CFrame.new(860.1697998046875, 15.059876441955566, 2388.63427734375)
     fire()
     wait(1.5)
-    TP(CFrame.new(687.65673828125, 13.798624038696289, 2253.633544921875))
+    TP.HumanoidRootPart.CFrame = CFrame.new(687.65673828125, 13.798624038696289, 2253.633544921875)
     wait(0.5)
     fire()
     fire()
@@ -2510,30 +2404,27 @@ function AutoArmors()
     Freeze(false)
  end
 
- local RunService = game:GetService("RunService")
- local Players = game:GetService("Players")
+ local Noclip = nil
+ local Clip = nil
  
- local function To(targetPosition)
-	 local player = Players.LocalPlayer
-	 local character = player.Character or player.CharacterAdded:Wait()
-	 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-	 local speed = 100
-	 local isTweening = true
+ function noclip()
+     Clip = false
+     local function Nocl()
+         if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+             for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                 if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+                     v.CanCollide = false
+                 end
+             end
+         end
+         wait(0.21) -- basic optimization
+     end
+     Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+ end
  
-	 noclip()
- 
-	 local connection
-	 connection = RunService.RenderStepped:Connect(function(deltaTime)
-		 if isTweening then
-			 local direction = (targetPosition - humanoidRootPart.Position).unit
-			 humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
- 
-			 if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
-				 isTweening = false
-				 connection:Disconnect()
-			 end
-		 end
-	 end)
+ function clip()
+     if Noclip then Noclip:Disconnect() end
+     Clip = true
 end
 
 function PARTZ()
@@ -2552,8 +2443,8 @@ function toHeart()
          if v:IsA("UnionOperation") then
              v.Rotation = Vector3.new(0, 0, 0)
              v.Size = Vector3.new(60, 60, 60)
-             local targetPosition = v.CFrame * CFrame.new(0, 20, -3)
-             To(targetPosition)
+             local targetPositionTeleport = v.CFrame * CFrame.new(0, 20, -3)
+             Teleport(targetPositionTeleport)
          end
      end
  end
@@ -2623,13 +2514,38 @@ function Hitboxz()
             if spiderHitbox then
               spiderHitbox.Rotation = Vector3.new(0, 0, 0)
               spiderHitbox.Size = Vector3.new(100, 30, 30)
-              spiderHitbox.Transparency = 0.9
+              spiderHitbox.Transparency = 0.1
             end
         end
     end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
+function Saigomo1()
+    for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
+        if v:IsA("Model") then
+            local spiderHitbox = v:FindFirstChild("HumanoidRootPart")
+            if spiderHitbox then
+            local Part = Instance.new("Part")
+            Part.Parent = game.Workspace
+            Part.Anchored = true
+            Part.Transparency = 1
+            Part.CanCollide = true
+            Part.Size = Vector3.new(30, 2, 30)
+            Part.CFrame = spiderHitbox.CFrame * CFrame.new(0, 20, 0)
+            local targetPositionTeleport = Part.CFrame * CFrame.new(0, 6, 0)
+            Teleport(targetPositionTeleport)
+            end
+        end
+    end
+end
+
+local function t(id)
+    local teleportService = game:GetService("TeleportService")
+    local Tl = id
+    teleportService:Teleport(Tl, game.Players.LocalPlayer)
+    end
+
+local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 1 Chapter 4','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
@@ -2646,45 +2562,22 @@ local twoSection = TabUpdate:AddSection('','+[Add]','Christmas Trial','plus')
 local DiscordSection = TabUpdate:AddSection('Support','Discord','Click Copy to copy Link Discord','link')
 
 DiscordSection:AddButton('Copy',function(v)
-	setclipboard("https://discord.gg/AXvTNJdGCz")
+    local copy = "https://discord.gg/AXvTNJdGCz"
+	setclipboard(tostring(copy))
 end)
 
-if id == 7265396387 or id == 7251865082 then
-MainSection:AddButton('Skip',function(v)
-	TP(CFrame.new(85.20524597167969, -51.00001525878906, -1415.0792236328125))
+if id == 7265396387 or id == 7251865082 or id == 7265396805 or id == 7251866503 or id == 7265397072 or id == 7251867155 then
+MainSection:AddButton('Skip to Boss',function(v)
+	_G.skip = true
+	while _G.skip do
+	wait(0)
+        t(7265397848)
+	end
 end)
 end
 
-if id == 7265396805 or id == 7251866503 then
-MainSection:AddToggle('Auto Buttlefly Spirit', false, function(v)
-    if v then
-        TP(CFrame.new(1099.39794921875, 3.135153293609619, 75.5241928100586))
-        wait(1)
-        _G.Auto2 = true
-        while _G.Auto2 do
-            wait(0)
-            Freeze(true)
-            Autobtfs()
-            fire()
-            end
-    else
-        UnAutoWin2()
-    end
-end)
-end
-
-if id == 7265397072 or id == 7251867155 then
-MainSection:AddToggle('Auto Burn Armors', false, function(v)
-    if v then
-        AutoArmors()
-    else
-        print("NO")
-    end
-end)
-end
 
 if id == 7265397848 or id == 7251867574 then
-
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
     if v then
@@ -2706,9 +2599,10 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     if v then
         Freeze(true)
         noclip()
+        nofall()
         _G.DestroyH = true
         while _G.DestroyH do
-        wait(1)
+        wait(0)
         CheckKatana()
         check()
         end
@@ -2716,17 +2610,19 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         _G.DestroyH = false
         StopTweenAll()
         Freeze(false)
+        Unnofall()
         clip()
     end
 end)
 
-MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
+MainSection:AddToggle('Auto Kill Saigomo - Extra Version', false, function(v)
     if v then
-		noclip()
-        toggleTeleporting()
+        Freeze(true)
+        Hitboxz()
+        wait(0.3)
+        Saigomo1()
     else
-		clip()
-	    toggleTeleporting()
+        Freeze(false)
     end
 end)
 end
