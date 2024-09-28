@@ -2256,27 +2256,75 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
     tween.Completed:Wait() -- Wait for the tween to finish
 end
 
-
+local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local humanoidRootPart = player.Character and player.Character:WaitForChild("HumanoidRootPart")
-local RunService = game:GetService("RunService")
 
 local moving = false
 local targetPart = nil
-local speed = 50 -- Speed for BodyVelocity
-local radius = 30 -- Initial radius
+local speed = 2
+local radius = 30
 local angle = 0
-local bodyVelocity
+local tween
 
--- Create BodyVelocity instance
-local function createBodyVelocity()
-    bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.MaxForce = Vector3.new(1e4, 0, 1e4) -- Only apply force on X and Z axes
-    bodyVelocity.P = 1000
-    bodyVelocity.Velocity = Vector3.zero -- Initial velocity set to 0
-    bodyVelocity.Parent = humanoidRootPart
+local function moveAroundTarget()
+    if targetPart then
+        angle = angle + math.rad(360)
+        local xOffset = math.cos(angle) * radius
+        local zOffset = math.sin(angle) * radius
+        local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+        local targetCFrame = CFrame.new(newPosition, targetPart.Position)
+        local tweenInfo = TweenInfo.new(speed, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+        local goal = {CFrame = targetCFrame}
+
+        if tween then
+            tween:Cancel()
+        end
+
+        tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+        tween:Play()
+    end
 end
+
+local function TeleportOn()
+    for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
+            targetPart = v
+            break
+        end
+    end
+
+    if targetPart then
+        moving = true
+
+        while moving do
+            moveAroundTarget()
+            wait(speed)
+        end
+    else
+        warn("Target part not found.")
+    end
+end
+
+local function TeleportOff()
+    moving = false
+    if tween then
+        tween:Cancel()
+        tween = nil
+    end
+end
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local humanoidRootPart = player.Character and player.Character:WaitForChild("HumanoidRootPart")
+local moving = false
+local targetPart = nil
+local speed = 2
+local radius = 30
+local angle = 0
+local tween
 
 local function moveAndUpdateRadius()
     for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
@@ -2288,39 +2336,38 @@ local function moveAndUpdateRadius()
 
     if targetPart then
         moving = true
-        createBodyVelocity()
 
-        RunService.Heartbeat:Connect(function()
-            if not moving then return end
-            
+        while moving do
             -- Update radius based on the "roar" sound
             for _, v in ipairs(workspace.BossBattle:GetDescendants()) do
                 if v.Name == "roar" and v:IsA("Sound") then
                     radius = v.IsPlaying and 0 or 30
-                    break
                 end
             end
-            
-            -- Calculate the new position offset based on the updated radius
-            angle = angle + 0.05 -- Adjust this value to control the speed of rotation
+
+            -- Calculate new position using the updated radius
+            angle = angle + math.rad(360)
             local xOffset = math.cos(angle) * radius
             local zOffset = math.sin(angle) * radius
             local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
             
-            -- Calculate the velocity needed to move towards the new position
-            local direction = (newPosition - humanoidRootPart.Position).unit
-            bodyVelocity.Velocity = direction * speed
-        end)
+            -- Tween to the new position
+            local targetCFrame = CFrame.new(newPosition, targetPart.Position)
+            local tweenInfo = TweenInfo.new(speed, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+            local goal = {CFrame = targetCFrame}
+
+            if tween then
+                tween:Cancel()
+            end
+
+            tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+            tween:Play()
+
+            -- Wait for the tween to finish before starting the next movement
+            wait(speed)
+        end
     else
         warn("Target part not found.")
-    end
-end
-
-local function TeleportOff()
-    moving = false
-    if bodyVelocity then
-        bodyVelocity:Destroy() -- Remove BodyVelocity when movement is stopped
-        bodyVelocity = nil
     end
 end
 
@@ -2741,9 +2788,9 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	Hitboxz()
 	noclip()
+	TeleportOn()
 	_G.si = true
 	while _G.si do
-	moveAndUpdateRadius()
 	CheckKatana()
 	wait(0)
 	end
