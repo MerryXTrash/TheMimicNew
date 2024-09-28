@@ -2256,7 +2256,72 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
     tween.Completed:Wait() -- Wait for the tween to finish
 end
 
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
+local moving = false
+local targetPart = nil
+local speed = 2
+local radius = 30
+local angle = 0
+local heartbeatConnection
+
+local function moveAroundTarget()
+    angle = angle + speed * RunService.Heartbeat:Wait()
+    local xOffset = math.cos(angle) * radius
+    local zOffset = math.sin(angle) * radius
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, targetPart.Position.Y + 2, targetPart.Position.Z + zOffset)
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position + Vector3.new(0, 2, 0))
+end
+
+local function updateRadius()
+    local newRadius = 30
+    for _, v in ipairs(game.Workspace.BossBattle.Saigomo:GetDescendants()) do
+        if v.Name == "HumanoidRootPart" then
+            local sound = v:FindFirstChild("roar")
+            if sound and sound:IsA("Sound") then
+                if sound.IsPlaying then
+                    newRadius = 0
+                    break
+                end
+            end
+        end
+    end
+    return newRadius
+end
+
+local function TeleportOn()
+    moving = true
+    radius = updateRadius()  -- Update the radius before starting to move
+    for _, v in ipairs(game.Workspace.BossBattle:GetDescendants()) do
+        if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
+            targetPart = v
+            break
+        end
+    end
+    if targetPart then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving then
+                moveAroundTarget()
+            end
+        end)
+    else
+        warn("No target part found in BossBattle.")
+    end
+end
+
+local function TeleportOff()
+    moving = false
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
+end
+
+-- Example usage:
+-- Call TeleportOn() to start moving around the target and updating radius
+-- Call TeleportOff() to stop moving around the target
 
 setHoldDurationForAllProximityPrompts()
 
@@ -2531,10 +2596,34 @@ local backpack = player.Backpack
 local character = player.Character
 
 function CheckKatana()
-for i, v in pairs(character:GetChildren()) do
-    if v.Name == "Katana" then
-        return
+    for _, item in pairs(character:GetChildren()) do
+        if item.Name == "Katana" then
+            local handle = item:FindFirstChild("Handle")
+            if handle then
+                handle.Size = Vector3.new(50, 50, 10)
+                handle.Massless = true
+            else
+                warn("Handle not found for Katana in character")
+            end
+            return
+        end
     end
+
+    -- Check in the backpack
+    for _, item in pairs(backpack:GetChildren()) do
+        if item.Name == "Katana" then
+            local handle = item:FindFirstChild("Handle")
+            if handle then
+                handle.Size = Vector3.new(50, 50, 10)
+                handle.Massless = true
+            else
+                warn("Handle not found for Katana in backpack")
+            end
+            return
+        end
+    end
+
+    warn("Katana not found in character or backpack")
 end
 
 for i, v in pairs(backpack:GetChildren()) do
@@ -2650,16 +2739,9 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
-		_G.sai = true
-		while _G.sai do
-		wait(0)
-		noclip()
-        teleportOn()
-		end
+        TeleportOn()
     else
-		_G.sai = false
-		clip()
-	    turnOff()
+        TeleportOff()
     end
 end)
 end
