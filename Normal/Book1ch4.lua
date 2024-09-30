@@ -2309,7 +2309,7 @@ local function checksound()
         end
 
         for _, v in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-            if v:IsA("MeshPart") and v.Transparency == 0 and player.Character.Humanoid.Health >= 70 then
+            if v:IsA("MeshPart") and v.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
                 TeleportOff()
                 player.Character.HumanoidRootPart.CFrame = v.CFrame
                 task.wait(0.2)
