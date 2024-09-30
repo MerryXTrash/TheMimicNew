@@ -2262,8 +2262,8 @@ local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
 local moving = false
 local targetPart = nil
-local speed = 2
-local radius = 30
+local speed = 1.6
+local radius = 27
 local angle = 0
 local heartbeatConnection
 
@@ -2272,12 +2272,9 @@ local Sound = nil
 
 local function moveAroundTarget(b)
     angle = angle + speed * RunService.Heartbeat:Wait()
-
     local xOffset = math.cos(angle) * radius
     local zOffset = math.sin(angle) * radius
-
     local newPosition = Vector3.new(b.Position.X + xOffset, humanoidRootPart.Position.Y, b.Position.Z + zOffset)
-    
     humanoidRootPart.CFrame = CFrame.new(newPosition, b.Position)
 end
 
@@ -2297,24 +2294,25 @@ local function TeleportOff()
     end
 end
 
-function checksound()
-    if not Sound.IsPlaying then
-        radius = 27.5
-        if not heartbeatConnection then
-            heartbeatConnection = RunService.Heartbeat:Connect(function()
-                moveAroundTarget(Boss)
-            end)
+local function checksound()
+    while true do
+        task.wait(0.1)  -- Prevent busy waiting
+        if Sound and not Sound.IsPlaying then
+            radius = 27.5
+            if not heartbeatConnection then
+                heartbeatConnection = RunService.Heartbeat:Connect(function()
+                    moveAroundTarget(Boss)
+                end)
+            end
+        elseif Sound and Sound.IsPlaying then
+            radius = 0
         end
-    elseif Sound.IsPlaying then
-        radius = 0
-    end
 
-    for _, v in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-        if v:IsA("MeshPart") and v.Transparency == 0 then
-            if player.Character.Humanoid.Health >= 70 then
+        for _, v in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
+            if v:IsA("MeshPart") and v.Transparency == 0 and player.Character.Humanoid.Health >= 70 then
                 TeleportOff()
                 player.Character.HumanoidRootPart.CFrame = v.CFrame
-                wait(0.2)
+                task.wait(0.2)
                 fire()
             end
         end
@@ -2421,9 +2419,9 @@ local humanoid = character:FindFirstChildOfClass("Humanoid")
 local function Freeze(enable)
     if humanoid then
         if enable then
-            humanoid.WalkSpeed = 0 -- Default WalkSpeed
+            humanoid.WalkSpeed = 0
         else
-            humanoid.WalkSpeed = 16 -- Disable movement
+            humanoid.WalkSpeed = 16
         end
     end
 end
@@ -2541,7 +2539,7 @@ function toHeart()
      for _, v in pairs(gameHearts.Heart:GetChildren()) do
          if v:IsA("UnionOperation") then
              v.Rotation = Vector3.new(0, 0, 0)
-             v.Size = Vector3.new(57, 57, 57)
+             v.Size = Vector3.new(58, 58, 58)
              local targetPosition = v.CFrame * CFrame.new(0, 20, -3)
              tweenCharacterToCFrame(targetPosition, 0)
          end
@@ -2575,6 +2573,11 @@ function clickMiddleOfScreen()
     VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
 end
 
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player:WaitForChild("Backpack")
+
 function ch()
 	for i, v in pairs(backpack:GetChildren()) do
 		if v.Name == "Katana" then
@@ -2593,11 +2596,6 @@ end
 function UnEquipOrClick()
     _G.Ezclick = false
 end
-
-local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local backpack = player:WaitForChild("Backpack")
 
 function CheckKatana()
     local katanaFound = false
@@ -2644,9 +2642,7 @@ end
 local function onCharacterAdded(newCharacter)
     character = newCharacter
     local humanoid = character:WaitForChild("Humanoid")
-    
     StartCheckingKatana()
-
     humanoid.Died:Connect(function()
         player.CharacterAdded:Wait()
         onCharacterAdded(player.Character)
@@ -2721,6 +2717,7 @@ end)
 end
 
 if id == 7265397848 or id == 7251867574 then
+
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
     if v then
@@ -2760,12 +2757,12 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	Hitboxz()
 	noclip()
-	onCharacterAdded(character)
-	RunService.Stepped:Connect(checksound)
+	CheckKatana()
+	checksound()
     else
     TeleportOff()
 	clip()
-	end
+    end
 end)
 end
 
