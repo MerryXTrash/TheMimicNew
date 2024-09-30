@@ -2782,7 +2782,7 @@ MainSection:AddToggle('Aimbot Saigomo', false, function(v)
 	lock()
 	end
     else
-	_G.lock
+	_G.lock = false
     end
 end)
 		
