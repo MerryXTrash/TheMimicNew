@@ -2656,20 +2656,11 @@ local player = game.Players.LocalPlayer
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
 local moving = false
+local targetPart = nil
 local speed = 1.6
-local radius = 27
+local radius = 26
 local angle = 0
 local heartbeatConnection
-local boss = nil  -- Ensure boss is declared at the right scope
-
--- Function to move around the boss
-local function moveAroundTarget()
-    angle = angle + speed * RunService.Heartbeat:Wait()
-    local xOffset = math.cos(angle) * radius
-    local zOffset = math.sin(angle) * radius
-    local newPosition = Vector3.new(boss.Position.X + xOffset, humanoidRootPart.Position.Y, boss.Position.Z + zOffset)
-    humanoidRootPart.CFrame = CFrame.new(newPosition, boss.Position)
-end
 
 local function TeleportOff()
     moving = false
@@ -2679,65 +2670,63 @@ local function TeleportOff()
     end
 end
 
-local function checkSound()
-    while true do
-        task.wait(0.1)
+local function moveAroundTarget()
+    angle = angle + speed * RunService.Heartbeat:Wait()
 
-        -- Find the boss
-        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-            if v.Name == "SpiderHitbox" then
-                boss = v
-                break
-            end
-        end
+    local xOffset = math.cos(angle) * radius
+    local zOffset = math.sin(angle) * radius
 
-        -- Handle sounds and movement logic
-        local sounds = game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()
-        for _, sound in ipairs(sounds) do
-            if sound:IsA("Sound") and sound.Name == "roar" then  -- Corrected this line
-                if not sound.IsPlaying then
-                    moving = true
-                    if not heartbeatConnection then
-                        heartbeatConnection = RunService.Heartbeat:Connect(function()
-                            if moving and boss then
-                                moveAroundTarget()
-                            end
-                        end)
-                    end
-                else
-                    TeleportOff()
-                    if boss then
-                        humanoidRootPart.CFrame = boss.CFrame
-                    end
-                end
-                break  -- Break after handling the first sound
-            end
-        end
-
-        -- Check for butterflies and health condition
-        for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-            if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
-                TeleportOff()
-                humanoidRootPart.CFrame = butterfly.CFrame
-                task.wait(0.2)
-                fire()  -- Ensure fire() is defined somewhere
-                break  -- Break after teleporting to the first butterfly found
-            end
-        end
-
-        -- Destroy WebTraps
-        for _, trap in ipairs(game:GetService("Workspace"):GetDescendants()) do
-            if trap.Name == "WebTrap" then
-                trap:Destroy()
-            end
-        end
-    end
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+    
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
--- Start checking sounds when the script runs
-checkSound()
+local function TeleportOn()
+    moving = true
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
+            targetPart = v
+            break
+        end
+    end
 
+    if targetPart then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving then
+                local sounds = game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()
+                
+                for _, sound in ipairs(sounds) do
+                    if sound:IsA("Sound") and sound.Name == "roar" then
+                        if not sound.IsPlaying then
+                            moveAroundTarget()
+                            for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
+                                if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
+                                    TeleportOff()
+                                    humanoidRootPart.CFrame = butterfly.CFrame
+                                    task.wait(0.2)
+                                    fire()
+                                    break
+                                end
+                            end
 
+                            for _, trap in ipairs(game:GetService("Workspace"):GetDescendants()) do
+                                if trap.Name == "WebTrap" then
+                                    trap:Destroy()
+                                end
+                            end
+                        else
+                            TeleportOff()
+                            local boss = game:GetService("Workspace").BossBattle.Saigomo:FindFirstChild("SpiderHitbox")
+                            if boss then
+                                humanoidRootPart.CFrame = boss.CFrame
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end
 
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
@@ -2767,7 +2756,7 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         check()
         end
     else
-	Unnofall()
+	    Unnofall()
         _G.DestroyH = false
         Freeze(false)
         clip()
@@ -2780,7 +2769,7 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	Hitboxz()
 	noclip()
 	onCharacterAdded(character)
-	checkSound()
+	TeleportOn()
     else
     TeleportOff()
 	clip()
