@@ -2648,9 +2648,9 @@ local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 local moving = false
 local targetPart = nil
 local speed = 1.6
-local radius = 26.5
+local radius = 28
 local angle = 0
-local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
+local heartbeatConnection
 
 local function moveAroundTarget()
     angle = angle + speed * RunService.Heartbeat:Wait()
@@ -2665,29 +2665,45 @@ end
 
 local function TeleportOn()
     moving = true
-    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
-            targetPart = v
-	else
-	   wait(5)
-	   print("lol")
+    targetPart = nil
+
+    local gameHearts = game:GetService("Workspace").GameHearts
+    local foundHeart = false
+
+    for _, v in pairs(gameHearts:GetChildren()) do
+        if v.Name == "Heart" then
+            foundHeart = true
+            print("Heart found!")
+            return
         end
     end
 
-    if targetPart then
-        heartbeatConnection = RunService.Heartbeat:Connect(function()
-            if moving then
-                moveAroundTarget()
+    if not foundHeart then
+        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+            if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
+                targetPart = v
+                break
             end
-        end)
+        end
+
+        if targetPart then
+            heartbeatConnection = RunService.Heartbeat:Connect(function()
+                if moving then
+                    moveAroundTarget()
+                end
+            end)
+        else
+            print("SpiderHitbox not found, waiting for 5 seconds...")
+            wait(5)
+        end
     end
 end
 
 local function TeleportOff()
     moving = false
     if heartbeatConnection then
-        heartbeatConnection:Disconnect() -- ยกเลิกการเชื่อมต่อ
-        heartbeatConnection = nil -- รีเซ็ตการเชื่อมต่อ
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
     end
 end
 
