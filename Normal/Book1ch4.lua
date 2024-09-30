@@ -2668,7 +2668,9 @@ local function TeleportOn()
     for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
         if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
             targetPart = v
-            break
+	else
+	   wait(5)
+	   print("lol")
         end
     end
 
