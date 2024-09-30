@@ -2663,7 +2663,7 @@ end
 local function TeleportOn()
     moving = true
     for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-        if v.Name == "SpiderHitboxz" and v:IsA("BasePart") then
+        if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
             targetPart = v
             break
         end
