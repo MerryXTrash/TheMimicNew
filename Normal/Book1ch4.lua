@@ -2253,6 +2253,7 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
     tween.Completed:Wait() -- Wait for the tween to finish
 end
 
+if id == 7265397848 or id == 7251867574 then
 local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
@@ -2320,6 +2321,7 @@ local function checkSound()
             end
         end
     end
+end
 end
 
 local folder = Instance.new("Folder")
