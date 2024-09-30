@@ -2662,13 +2662,20 @@ local radius = 27
 local angle = 0
 local heartbeatConnection
 local bossTarget = nil
+local isMoving = false -- สถานะเพื่อป้องกันการเคลื่อนที่ซ้ำ
 
 local function moveToTarget()
-    angle = angle + spinSpeed * RunService.Heartbeat:Wait()
-    local offsetX = math.cos(angle) * radius
-    local offsetZ = math.sin(angle) * radius
-    local newPosition = Vector3.new(bossTarget.Position.X + offsetX, HumanoidRootPart.Position.Y, bossTarget.Position.Z + offsetZ)
-    HumanoidRootPart.CFrame = CFrame.new(newPosition, bossTarget.Position)
+    if not isMoving then
+        isMoving = true -- ตั้งค่าสถานะเพื่อระบุว่ากำลังเคลื่อนที่อยู่
+        while moveEnabled do
+            angle = angle + spinSpeed * RunService.Heartbeat:Wait()
+            local offsetX = math.cos(angle) * radius
+            local offsetZ = math.sin(angle) * radius
+            local newPosition = Vector3.new(bossTarget.Position.X + offsetX, HumanoidRootPart.Position.Y, bossTarget.Position.Z + offsetZ)
+            HumanoidRootPart.CFrame = CFrame.new(newPosition, bossTarget.Position)
+        end
+        isMoving = false -- รีเซ็ตสถานะเมื่อเสร็จสิ้นการเคลื่อนที่
+    end
 end
 
 local function stopMovement()
@@ -2698,8 +2705,8 @@ local function checkSound()
                         moveEnabled = true
                         if not heartbeatConnection then
                             heartbeatConnection = RunService.Heartbeat:Connect(function()
-                                if moveEnabled and bossTarget then
-                                    moveToTarget()
+                                if moveEnabled and bossTarget and not isMoving then
+                                    moveToTarget() -- จะเรียกใช้การเคลื่อนที่เฉพาะเมื่อยังไม่ได้เริ่มการเคลื่อนที่
                                 end
                             end)
                         end
@@ -2732,6 +2739,7 @@ local function checkSound()
         end
     end
 end
+
 
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
