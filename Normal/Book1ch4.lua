@@ -2647,8 +2647,8 @@ local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
 local moving = false
 local targetPart = nil
-local speed = 1.7
-local radius = 30
+local speed = 1.6
+local radius = 28
 local angle = 0
 local heartbeatConnection
 
@@ -2663,20 +2663,9 @@ local function moveAroundTarget()
     humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
-local part = nil
-local player = game.Players.LocalPlayer
-local camera = game.Workspace.CurrentCamera
-
-local function setCameraToLookAtPart(part)
-    if camera and part then
-        camera.CFrame = CFrame.new(camera.CFrame.Position, part.Position)
-    end
-end
-
 local function TeleportOn()
     moving = true
     targetPart = nil
-    part = nil
 
     local gameHearts = game:GetService("Workspace").GameHearts
     local foundHeart = false
@@ -2693,8 +2682,6 @@ local function TeleportOn()
         for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
             if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
                 targetPart = v
-	    elseif v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
-		part = v
                 break
             end
         end
@@ -2703,7 +2690,6 @@ local function TeleportOn()
             heartbeatConnection = RunService.Heartbeat:Connect(function()
                 if moving then
                     moveAroundTarget()
-		    setCameraToLookAtPart(part)
                 end
             end)
         else
@@ -2755,7 +2741,7 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         clip()
     end
 end)
-		
+
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	wait(0.2)
