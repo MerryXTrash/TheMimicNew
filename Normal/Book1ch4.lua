@@ -2747,12 +2747,10 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	wait(0.2)
 	Unnofall()
 	Hitboxz()
-	noclip()
 	TeleportOn()
 	CheckKatana()
     else
 	TeleportOff()
-	clip()
     end
 end)
 end
