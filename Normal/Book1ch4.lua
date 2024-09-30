@@ -2507,7 +2507,6 @@ function clickMiddleOfScreen()
     VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
 end
 
-local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local backpack = player:WaitForChild("Backpack")
@@ -2529,57 +2528,6 @@ end
 
 function UnEquipOrClick()
     _G.Ezclick = false
-end
-
-local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local backpack = player:WaitForChild("Backpack")
-
-function CheckKatana()
-    for _, item in pairs(character:GetChildren()) do
-        if item.Name == "Katana" then
-            local handle = item:FindFirstChild("Handle")
-            if handle then
-                handle.Size = Vector3.new(50, 50, 10)
-                handle.Massless = true
-                return true
-            end
-        end
-    end
-
-    for _, item in pairs(backpack:GetChildren()) do
-        if item.Name == "Katana" then
-            local handle = item:FindFirstChild("Handle")
-            if handle then
-                handle.Size = Vector3.new(50, 50, 10)
-                handle.Massless = true
-                return true
-            end
-        end
-    end
-
-    return false
-end
-
-function StartCheckingKatana()
-    while true do
-        local katanaFound = CheckKatana()
-        if katanaFound then
-            break
-        end
-        wait(0.5)
-    end
-end
-
-local function onCharacterAdded(newCharacter)
-    character = newCharacter
-    local humanoid = character:WaitForChild("Humanoid")
-    StartCheckingKatana()
-    humanoid.Died:Connect(function()
-        player.CharacterAdded:Wait()
-        onCharacterAdded(player.Character)
-    end)
 end
 
 function Hitboxz()
@@ -2661,6 +2609,34 @@ part.Parent = game.Workspace
 
 
 game.Workspace.BossMap:Destroy()
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player:WaitForChild("Backpack")
+
+function CheckKatana()
+    for _, item in pairs(character:GetChildren()) do
+        if item.Name == "Katana" then
+            local handle = item:FindFirstChild("Handle")
+            if handle then
+                handle.Size = Vector3.new(50, 50, 10)
+                handle.Massless = true
+				break
+            end
+        end
+    end
+
+    for _, item in pairs(backpack:GetChildren()) do
+        if item.Name == "Katana" then
+            local handle = item:FindFirstChild("Handle")
+            if handle then
+                handle.Size = Vector3.new(50, 50, 10)
+                handle.Massless = true
+				break
+            end
+        end
+    end
+end
 
 local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
@@ -2751,7 +2727,7 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	Unnofall()
 	Hitboxz()
 	noclip()
-	onCharacterAdded(character)
+	CheckKatana()
 	TeleportOn()
     else
 	TeleportOff()
