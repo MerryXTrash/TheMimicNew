@@ -2656,33 +2656,19 @@ local player = game.Players.LocalPlayer
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
 local moving = false
-local targetPart = nil
 local speed = 1.6
 local radius = 27
 local angle = 0
 local heartbeatConnection
-
-local Boss = nil
-local Sound = nil
+local boss = nil  -- Ensure boss is declared at the right scope
 
 -- Function to move around the boss
-local function moveAroundTarget(boss)
+local function moveAroundTarget()
     angle = angle + speed * RunService.Heartbeat:Wait()
     local xOffset = math.cos(angle) * radius
     local zOffset = math.sin(angle) * radius
     local newPosition = Vector3.new(boss.Position.X + xOffset, humanoidRootPart.Position.Y, boss.Position.Z + zOffset)
     humanoidRootPart.CFrame = CFrame.new(newPosition, boss.Position)
-end
-
--- Find Boss and Sound objects
-for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-    if v.Name == "SpiderHitbox" then
-        Boss = v
-    elseif v.Name == "roar" then
-        Sound = v
-		else
-			print("lol")
-    end
 end
 
 local function TeleportOff()
@@ -2696,29 +2682,62 @@ end
 local function checkSound()
     while true do
         task.wait(0.1)
-        
-        if Sound then
-            if not Sound.IsPlaying then
-                radius = 27.5
-                if Boss then
-                    moveAroundTarget(Boss)
-                end
-            else
-                radius = 0
+
+        -- Find the boss
+        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+            if v.Name == "SpiderHitbox" then
+                boss = v
+                break
             end
-            
-            -- Check for butterflies and health condition
-            for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-                if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
+        end
+
+        -- Handle sounds and movement logic
+        local sounds = game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()
+        for _, sound in ipairs(sounds) do
+            if sound:IsA("Sound") and sound.Name == "roar" then  -- Corrected this line
+                if not sound.IsPlaying then
+                    moving = true
+                    if not heartbeatConnection then
+                        heartbeatConnection = RunService.Heartbeat:Connect(function()
+                            if moving and boss then
+                                moveAroundTarget()
+                            end
+                        end)
+                    end
+                else
                     TeleportOff()
-                    player.Character.HumanoidRootPart.CFrame = butterfly.CFrame
-                    task.wait(0.2)
-                    fire()  -- Ensure fire() is defined somewhere
+                    if boss then
+                        humanoidRootPart.CFrame = boss.CFrame
+                    end
                 end
+                break  -- Break after handling the first sound
+            end
+        end
+
+        -- Check for butterflies and health condition
+        for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
+            if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
+                TeleportOff()
+                humanoidRootPart.CFrame = butterfly.CFrame
+                task.wait(0.2)
+                fire()  -- Ensure fire() is defined somewhere
+                break  -- Break after teleporting to the first butterfly found
+            end
+        end
+
+        -- Destroy WebTraps
+        for _, trap in ipairs(game:GetService("Workspace"):GetDescendants()) do
+            if trap.Name == "WebTrap" then
+                trap:Destroy()
             end
         end
     end
 end
+
+-- Start checking sounds when the script runs
+checkSound()
+
+
 
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
@@ -2757,6 +2776,7 @@ end)
 
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
+	wait(0.2)
 	Hitboxz()
 	noclip()
 	onCharacterAdded(character)
