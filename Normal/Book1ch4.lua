@@ -2681,38 +2681,6 @@ local function moveAroundTarget()
     humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
-local function TeleportOn()
-    moving = true
-    for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
-        if v.Name == "SpiderHitbox" then
-            targetPart = v
-        end
-    end
-
-    if targetPart then
-        heartbeatConnection = RunService.Heartbeat:Connect(function()
-            if moving then
-                for _, sound in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
-                    if sound:IsA("Sound") and sound.Name == "roar" then
-                        if not sound.IsPlaying then
-                            moveAroundTarget()
-                        else
-                            for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
-                                if v.Name == "HumanoidRootPart" then
-                                    TeleportOff()
-                                    humanoidRootPart.CFrame = v.CFrame
-                                    break
-                                end
-                            end
-                        end
-                        break
-                    end
-                end
-            end
-        end)
-    end
-end
-
 function pc()
     for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
         if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
@@ -2728,6 +2696,39 @@ function pc()
         if trap.Name == "WebTrap" then
             trap:Destroy()
         end
+    end
+end
+
+local function TeleportOn()
+    moving = true
+    for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
+        if v.Name == "SpiderHitbox" then
+            targetPart = v
+        end
+    end
+
+    if targetPart then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving then
+                for _, sound in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
+                    if sound:IsA("Sound") and sound.Name == "roar" then
+                        if not sound.IsPlaying then
+                            moveAroundTarget()
+							pc()
+                        else
+                            for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
+                                if v.Name == "HumanoidRootPart" then
+                                    TeleportOff()
+                                    humanoidRootPart.CFrame = v.CFrame
+                                    break
+                                end
+                            end
+                        end
+                        break
+                    end
+                end
+            end
+        end)
     end
 end
 
