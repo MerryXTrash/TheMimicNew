@@ -2691,6 +2691,7 @@ local gameHearts = game:GetService("Workspace").GameHearts
                 break
             end
 	end
+    end
 end
 
 local function TeleportOn()
