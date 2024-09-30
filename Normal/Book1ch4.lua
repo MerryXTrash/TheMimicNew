@@ -2766,6 +2766,7 @@ end)
 MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	wait(0.2)
+	Unnofall()
 	Hitboxz()
 	noclip()
 	onCharacterAdded(character)
