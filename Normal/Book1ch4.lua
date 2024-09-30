@@ -2651,85 +2651,81 @@ end
 
 if id == 7265397848 or id == 7251867574 then
 
-local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
+local _R = game:GetService("RunService")
+local _P = game.Players.LocalPlayer
+local _H = _P.Character:WaitForChild("HumanoidRootPart")
 
-local moving = false
-local targetPart = nil
-local speed = 1.6
-local radius = 27
-local angle = 0
-local heartbeatConnection
+local _M = false
+local _S = 1.6
+local _R = 27
+local _A = 0
+local _Hc
+local _B = nil
 
-local function TeleportOff()
-    moving = false
-    if heartbeatConnection then
-        heartbeatConnection:Disconnect()
-        heartbeatConnection = nil
+local function _MvTgt()
+    _A = _A + _S * _R.Heartbeat:Wait()
+    local _Xo = math.cos(_A) * _R
+    local _Zo = math.sin(_A) * _R
+    local _Np = Vector3.new(_B.Position.X + _Xo, _H.Position.Y, _B.Position.Z + _Zo)
+    _H.CFrame = CFrame.new(_Np, _B.Position)
+end
+
+local function _TpOff()
+    _M = false
+    if _Hc then
+        _Hc:Disconnect()
+        _Hc = nil
     end
 end
 
-local function moveAroundTarget()
-    angle = angle + speed * RunService.Heartbeat:Wait()
+local function _ChkSnd()
+    while true do
+        task.wait(0.1)
 
-    local xOffset = math.cos(angle) * radius
-    local zOffset = math.sin(angle) * radius
-
-    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
-    
-    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
-end
-
-function pc()
-    for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-        if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
-            TeleportOff()
-            humanoidRootPart.CFrame = butterfly.CFrame
-            task.wait(0.2)
-            fire()
-            break
+        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+            if v.Name == "SpiderHitbox" then
+                _B = v
+                break
+            end
         end
-    end
 
-    for _, trap in ipairs(game:GetService("Workspace"):GetDescendants()) do
-        if trap.Name == "WebTrap" then
-            trap:Destroy()
-        end
-    end
-end
-
-local function TeleportOn()
-    moving = true
-    for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
-        if v.Name == "SpiderHitbox" then
-            targetPart = v
-            break
-        end
-    end
-
-    if targetPart then
-        heartbeatConnection = RunService.Heartbeat:Connect(function()
-            if moving then
-                for _, sound in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
-                    if sound:IsA("Sound") and sound.Name == "roar" then
-                        if not sound.IsPlaying then
-                            moveAroundTarget()
-                            pc()
-                        else
-                            for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
-                                if v.Name == "HumanoidRootPart" then
-                                    TeleportOff()
-                                    humanoidRootPart.CFrame = v.CFrame
-                                    break
-                                end
+        local _Snds = game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()
+        for _, _Snd in ipairs(_Snds) do
+            if _Snd:IsA("Sound") and _Snd.Name == "roar" then
+                if not _Snd.IsPlaying then
+                    _M = true
+                    if not _Hc then
+                        _Hc = _R.Heartbeat:Connect(function()
+                            if _M and _B then
+                                _MvTgt()
                             end
-                        end
-                        break
+                        end)
+                    end
+                else
+                    _TpOff()
+                    if _B then
+                        _H.CFrame = _B.CFrame
                     end
                 end
+                break
             end
-        end)
+        end
+
+        for _, _Bfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
+            if _Bfly:IsA("MeshPart") and _Bfly.Transparency == 0 and _P.Character.Humanoid.Health <= 70 then
+                _TpOff()
+                _H.CFrame = _Bfly.CFrame
+                task.wait(0.2)
+                fire() 
+                break
+            end
+        end
+
+        for _, _Trap in ipairs(game:GetService("Workspace"):GetDescendants()) do
+            if _Trap.Name == "WebTrap" then
+                _Trap:Destroy()
+            end
+        end
     end
 end
 
@@ -2775,9 +2771,9 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	Hitboxz()
 	noclip()
 	onCharacterAdded(character)
-	TeleportOn()
+	coroutine.wrap(_ChkSnd)()
     else
-    TeleportOff()
+	coroutine.wrap(_TpOff)()
 	clip()
     end
 end)
