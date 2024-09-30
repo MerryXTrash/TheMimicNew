@@ -2614,26 +2614,29 @@ local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local backpack = player:WaitForChild("Backpack")
 
+-- ฟังก์ชันเพื่อปรับ Handle ของ Katana
+local function ModifyHandle(item)
+    local handle = item:FindFirstChild("Handle")
+    if handle then
+        handle.Size = Vector3.new(50, 50, 10)
+        handle.Massless = true
+    end
+end
+
 function CheckKatana()
+    -- ตรวจสอบ Katana ในตัวละคร
     for _, item in pairs(character:GetChildren()) do
         if item.Name == "Katana" then
-            local handle = item:FindFirstChild("Handle")
-            if handle then
-                handle.Size = Vector3.new(50, 50, 10)
-                handle.Massless = true
-				break
-            end
+            ModifyHandle(item)
+            break
         end
     end
 
+    -- ตรวจสอบ Katana ใน Backpack
     for _, item in pairs(backpack:GetChildren()) do
         if item.Name == "Katana" then
-            local handle = item:FindFirstChild("Handle")
-            if handle then
-                handle.Size = Vector3.new(50, 50, 10)
-                handle.Massless = true
-				break
-            end
+            ModifyHandle(item)
+            break
         end
     end
 end
@@ -2727,8 +2730,8 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	Unnofall()
 	Hitboxz()
 	noclip()
-	CheckKatana()
 	TeleportOn()
+	CheckKatana()
     else
 	TeleportOff()
 	clip()
