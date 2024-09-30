@@ -2270,14 +2270,16 @@ local heartbeatConnection
 local Boss = nil
 local Sound = nil
 
-local function moveAroundTarget(b)
+-- Function to move around the boss
+local function moveAroundTarget(boss)
     angle = angle + speed * RunService.Heartbeat:Wait()
     local xOffset = math.cos(angle) * radius
     local zOffset = math.sin(angle) * radius
-    local newPosition = Vector3.new(b.Position.X + xOffset, humanoidRootPart.Position.Y, b.Position.Z + zOffset)
-    humanoidRootPart.CFrame = CFrame.new(newPosition, b.Position)
+    local newPosition = Vector3.new(boss.Position.X + xOffset, humanoidRootPart.Position.Y, boss.Position.Z + zOffset)
+    humanoidRootPart.CFrame = CFrame.new(newPosition, boss.Position)
 end
 
+-- Find Boss and Sound objects
 for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
     if v.Name == "SpiderHitbox" then
         Boss = v
@@ -2294,26 +2296,28 @@ local function TeleportOff()
     end
 end
 
-local function checksound()
+local function checkSound()
     while true do
-        task.wait(0.1)  -- Prevent busy waiting
-        if Sound and not Sound.IsPlaying then
-            radius = 27.5
-            if not heartbeatConnection then
-                heartbeatConnection = RunService.Heartbeat:Connect(function()
+        task.wait(0.1)
+        
+        if Sound then
+            if not Sound.IsPlaying then
+                radius = 27.5
+                if Boss then
                     moveAroundTarget(Boss)
-                end)
+                end
+            else
+                radius = 0
             end
-        elseif Sound and Sound.IsPlaying then
-            radius = 0
-        end
-
-        for _, v in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-            if v:IsA("MeshPart") and v.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
-                TeleportOff()
-                player.Character.HumanoidRootPart.CFrame = v.CFrame
-                task.wait(0.2)
-                fire()
+            
+            -- Check for butterflies and health condition
+            for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
+                if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
+                    TeleportOff()
+                    player.Character.HumanoidRootPart.CFrame = butterfly.CFrame
+                    task.wait(0.2)
+                    fire()  -- Ensure fire() is defined somewhere
+                end
             end
         end
     end
@@ -2597,18 +2601,20 @@ function UnEquipOrClick()
     _G.Ezclick = false
 end
 
-function CheckKatana()
-    local katanaFound = false
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player:WaitForChild("Backpack")
 
+function CheckKatana()
     for _, item in pairs(character:GetChildren()) do
         if item.Name == "Katana" then
             local handle = item:FindFirstChild("Handle")
             if handle then
                 handle.Size = Vector3.new(50, 50, 10)
                 handle.Massless = true
-                katanaFound = true
+                return true
             end
-            return
         end
     end
 
@@ -2618,25 +2624,24 @@ function CheckKatana()
             if handle then
                 handle.Size = Vector3.new(50, 50, 10)
                 handle.Massless = true
-                katanaFound = true
+                return true
             end
-            return
         end
     end
+
+    return false
 end
 
 function StartCheckingKatana()
-    local checkConnection
-    checkConnection = RunService.Stepped:Connect(function()
-        CheckKatana()
+    while true do
+        local katanaFound = CheckKatana()
 
-        for _, item in pairs(character:GetChildren()) do
-            if item.Name == "Katana" then
-                checkConnection:Disconnect()
-                break
-            end
+        if katanaFound then
+            break -- ออกจากลูปถ้าพบ Katana
         end
-    end)
+
+        wait(0.5) -- หยุดพัก 0.5 วินาทีก่อนตรวจสอบอีกครั้ง
+    end
 end
 
 local function onCharacterAdded(newCharacter)
@@ -2648,6 +2653,7 @@ local function onCharacterAdded(newCharacter)
         onCharacterAdded(player.Character)
     end)
 end
+
 
 function Hitboxz()
     for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
@@ -2758,7 +2764,7 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	Hitboxz()
 	noclip()
 	CheckKatana()
-	checksound()
+	checkSound()
     else
     TeleportOff()
 	clip()
