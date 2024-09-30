@@ -2663,34 +2663,13 @@ local function moveAroundTarget()
     humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
 end
 
+local part = nil
 local player = game.Players.LocalPlayer
 local camera = game.Workspace.CurrentCamera
 
 local function setCameraToLookAtPart(part)
     if camera and part then
         camera.CFrame = CFrame.new(camera.CFrame.Position, part.Position)
-    end
-end
-
-local function lock()
-local gameHearts = game:GetService("Workspace").GameHearts
-    local foundHeart = false
-
-    for _, v in pairs(gameHearts:GetChildren()) do
-        if v.Name == "Heart" then
-            foundHeart = true
-            print("Heart found!")
-            return
-        end
-    end
-
-    if not foundHeart then
-        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-	    if v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
-		setCameraToLookAtPart(v)
-                break
-            end
-	end
     end
 end
 
@@ -2715,6 +2694,7 @@ local function TeleportOn()
             if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
                 targetPart = v
 	    elseif v.Name == "HumanoidRootPart" and v:IsA("BasePart") then
+		part = v
                 break
             end
         end
@@ -2723,6 +2703,7 @@ local function TeleportOn()
             heartbeatConnection = RunService.Heartbeat:Connect(function()
                 if moving then
                     moveAroundTarget()
+		    setCameraToLookAtPart(part)
                 end
             end)
         else
@@ -2772,18 +2753,6 @@ MainSection:AddToggle('Auto Destroy Heart', false, function(v)
         _G.DestroyH = false
         Freeze(false)
         clip()
-    end
-end)
-
-MainSection:AddToggle('Aimbot Saigomo', false, function(v)
-    if v then
-	_G.lock = true
-	while _G.lock do
-	wait(0)
-	lock()
-	end
-    else
-	_G.lock = false
     end
 end)
 		
