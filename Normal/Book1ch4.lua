@@ -2704,6 +2704,7 @@ local function TeleportOn()
     for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
         if v.Name == "SpiderHitbox" then
             targetPart = v
+            break
         end
     end
 
@@ -2714,7 +2715,7 @@ local function TeleportOn()
                     if sound:IsA("Sound") and sound.Name == "roar" then
                         if not sound.IsPlaying then
                             moveAroundTarget()
-							pc()
+                            pc()
                         else
                             for _, v in ipairs(game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()) do
                                 if v.Name == "HumanoidRootPart" then
