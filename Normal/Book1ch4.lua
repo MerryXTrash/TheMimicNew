@@ -2253,77 +2253,6 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
     tween.Completed:Wait() -- Wait for the tween to finish
 end
 
-if id == 7265397848 or id == 7251867574 then
-local RunService = game:GetService("RunService")
-local player = game.Players.LocalPlayer
-local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
-
-local moving = false
-local targetPart = nil
-local speed = 1.6
-local radius = 27
-local angle = 0
-local heartbeatConnection
-
-local Boss = nil
-local Sound = nil
-
--- Function to move around the boss
-local function moveAroundTarget(boss)
-    angle = angle + speed * RunService.Heartbeat:Wait()
-    local xOffset = math.cos(angle) * radius
-    local zOffset = math.sin(angle) * radius
-    local newPosition = Vector3.new(boss.Position.X + xOffset, humanoidRootPart.Position.Y, boss.Position.Z + zOffset)
-    humanoidRootPart.CFrame = CFrame.new(newPosition, boss.Position)
-end
-
--- Find Boss and Sound objects
-for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-    if v.Name == "SpiderHitbox" then
-        Boss = v
-    elseif v.Name == "roar" then
-        Sound = v
-		else
-			print("lol")
-    end
-end
-
-local function TeleportOff()
-    moving = false
-    if heartbeatConnection then
-        heartbeatConnection:Disconnect()
-        heartbeatConnection = nil
-    end
-end
-
-local function checkSound()
-    while true do
-        task.wait(0.1)
-        
-        if Sound then
-            if not Sound.IsPlaying then
-                radius = 27.5
-                if Boss then
-                    moveAroundTarget(Boss)
-                end
-            else
-                radius = 0
-            end
-            
-            -- Check for butterflies and health condition
-            for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
-                if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
-                    TeleportOff()
-                    player.Character.HumanoidRootPart.CFrame = butterfly.CFrame
-                    task.wait(0.2)
-                    fire()  -- Ensure fire() is defined somewhere
-                end
-            end
-        end
-    end
-end
-end
-
 local folder = Instance.new("Folder")
 folder.Name = "HighlightsFolder"
 folder.Parent = game.Workspace
@@ -2721,6 +2650,75 @@ end)
 end
 
 if id == 7265397848 or id == 7251867574 then
+
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
+
+local moving = false
+local targetPart = nil
+local speed = 1.6
+local radius = 27
+local angle = 0
+local heartbeatConnection
+
+local Boss = nil
+local Sound = nil
+
+-- Function to move around the boss
+local function moveAroundTarget(boss)
+    angle = angle + speed * RunService.Heartbeat:Wait()
+    local xOffset = math.cos(angle) * radius
+    local zOffset = math.sin(angle) * radius
+    local newPosition = Vector3.new(boss.Position.X + xOffset, humanoidRootPart.Position.Y, boss.Position.Z + zOffset)
+    humanoidRootPart.CFrame = CFrame.new(newPosition, boss.Position)
+end
+
+-- Find Boss and Sound objects
+for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+    if v.Name == "SpiderHitbox" then
+        Boss = v
+    elseif v.Name == "roar" then
+        Sound = v
+		else
+			print("lol")
+    end
+end
+
+local function TeleportOff()
+    moving = false
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
+end
+
+local function checkSound()
+    while true do
+        task.wait(0.1)
+        
+        if Sound then
+            if not Sound.IsPlaying then
+                radius = 27.5
+                if Boss then
+                    moveAroundTarget(Boss)
+                end
+            else
+                radius = 0
+            end
+            
+            -- Check for butterflies and health condition
+            for _, butterfly in ipairs(game:GetService("Workspace").Butterflies:GetDescendants()) do
+                if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and player.Character.Humanoid.Health <= 70 then
+                    TeleportOff()
+                    player.Character.HumanoidRootPart.CFrame = butterfly.CFrame
+                    task.wait(0.2)
+                    fire()  -- Ensure fire() is defined somewhere
+                end
+            end
+        end
+    end
+end
 
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
