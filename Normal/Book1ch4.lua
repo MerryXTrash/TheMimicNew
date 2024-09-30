@@ -2595,6 +2595,7 @@ function Hitboxz()
     end
 end
 
+
 local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 4','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
@@ -2650,96 +2651,64 @@ end)
 end
 
 if id == 7265397848 or id == 7251867574 then
+local part = Instance.new("Part")
+part.CFrame = CFrame.new(2760.362548828125, 263.2343444824219, 2701.247314453125)
+part.Size = Vector3.new(500, 3, 500)
+part.Material = Enum.Material.Neon
+part.Color = Color3.new(80/255, 109/255, 84/255) -- ปรับค่าสีจาก 0 ถึง 255 เป็น 0 ถึง 1
+part.Anchored = true
+part.Parent = game.Workspace
+
+
+game.Workspace.BossMap:Destroy()
 
 local RunService = game:GetService("RunService")
-local Players = game.Players
-local LocalPlayer = Players.LocalPlayer
-local HumanoidRootPart = LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+local player = game.Players.LocalPlayer
+local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
-local moveEnabled = false
-local spinSpeed = 1.6
-local radius = 27
+local moving = false
+local targetPart = nil
+local speed = 1.6
+local radius = 26.5
 local angle = 0
-local heartbeatConnection
-local bossTarget = nil
-local isMoving = false -- สถานะเพื่อป้องกันการเคลื่อนที่ซ้ำ
+local heartbeatConnection -- ตัวแปรสำหรับเก็บการเชื่อมต่อ
 
-local function moveToTarget()
-    if not isMoving then
-        isMoving = true -- ตั้งค่าสถานะเพื่อระบุว่ากำลังเคลื่อนที่อยู่
-        while moveEnabled do
-            angle = angle + spinSpeed * RunService.Heartbeat:Wait()
-            local offsetX = math.cos(angle) * radius
-            local offsetZ = math.sin(angle) * radius
-            local newPosition = Vector3.new(bossTarget.Position.X + offsetX, HumanoidRootPart.Position.Y, bossTarget.Position.Z + offsetZ)
-            HumanoidRootPart.CFrame = CFrame.new(newPosition, bossTarget.Position)
+local function moveAroundTarget()
+    angle = angle + speed * RunService.Heartbeat:Wait()
+
+    local xOffset = math.cos(angle) * radius
+    local zOffset = math.sin(angle) * radius
+
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+    
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
+end
+
+local function TeleportOn()
+    moving = true
+    for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+        if v.Name == "SpiderHitboxz" and v:IsA("BasePart") then
+            targetPart = v
+            break
         end
-        isMoving = false -- รีเซ็ตสถานะเมื่อเสร็จสิ้นการเคลื่อนที่
+    end
+
+    if targetPart then
+        heartbeatConnection = RunService.Heartbeat:Connect(function()
+            if moving then
+                moveAroundTarget()
+            end
+        end)
     end
 end
 
-local function stopMovement()
-    moveEnabled = false
+local function TeleportOff()
+    moving = false
     if heartbeatConnection then
-        heartbeatConnection:Disconnect()
-        heartbeatConnection = nil
+        heartbeatConnection:Disconnect() -- ยกเลิกการเชื่อมต่อ
+        heartbeatConnection = nil -- รีเซ็ตการเชื่อมต่อ
     end
 end
-
-local function checkSound()
-    while true do
-        task.wait(0.1)
-
-        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
-            if v.Name == "SpiderHitbox" then
-                bossTarget = v
-                break
-            end
-        end
-
-        if bossTarget then
-            local sounds = game:GetService("Workspace").BossBattle.Saigomo:GetDescendants()
-            for _, sound in ipairs(sounds) do
-                if sound:IsA("Sound") and sound.Name == "roar" then
-                    if not sound.IsPlaying then
-                        moveEnabled = true
-                        if not heartbeatConnection then
-                            heartbeatConnection = RunService.Heartbeat:Connect(function()
-                                if moveEnabled and bossTarget and not isMoving then
-                                    moveToTarget() -- จะเรียกใช้การเคลื่อนที่เฉพาะเมื่อยังไม่ได้เริ่มการเคลื่อนที่
-                                end
-                            end)
-                        end
-                    else
-                        stopMovement()
-                        if bossTarget then
-                            HumanoidRootPart.CFrame = bossTarget.CFrame
-                        end
-                    end
-                    break
-                end
-            end
-        end
-
-        local butterflies = game:GetService("Workspace").Butterflies:GetDescendants()
-        for _, butterfly in ipairs(butterflies) do
-            if butterfly:IsA("MeshPart") and butterfly.Transparency == 0 and LocalPlayer.Character.Humanoid.Health <= 70 then
-                stopMovement()
-                HumanoidRootPart.CFrame = butterfly.CFrame
-                task.wait(0.2)
-                fire()
-                break
-            end
-        end
-
-        for _, trap in ipairs(game:GetService("Workspace"):GetDescendants()) do
-            if trap.Name == "WebTrap" then
-                trap:Destroy()
-            end
-        end
-    end
-end
-
 
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
@@ -2783,9 +2752,9 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
 	Hitboxz()
 	noclip()
 	onCharacterAdded(character)
-	coroutine.wrap(checkSound)()
+	TeleportOn()
     else
-	coroutine.wrap(stopMovement)()
+	TeleportOff()
 	clip()
     end
 end)
