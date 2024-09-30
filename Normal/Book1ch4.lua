@@ -2648,7 +2648,7 @@ local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 local moving = false
 local targetPart = nil
 local speed = 1.6
-local radius = 28
+local radius = 30
 local angle = 0
 local heartbeatConnection
 
