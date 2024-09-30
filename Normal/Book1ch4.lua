@@ -2202,8 +2202,6 @@ local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
         if humanoidRootPart then
                 local distance = (P.Position - humanoidRootPart.Position).Magnitude
                 local speed = distance >= 1 and 300 or 1
-                pcall(function()
-                StopTweenAll()
                                 currentTween = TweenService:Create(
                                     humanoidRootPart,
                                     TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
@@ -2211,7 +2209,6 @@ local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
                                 )
                                 currentTween:Play()
                                 wait(distance / speed)
-                            end)
                         end
                     end
                 end
@@ -2285,6 +2282,8 @@ for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
         Boss = v
     elseif v.Name == "roar" then
         Sound = v
+		else
+			print("lol")
     end
 end
 
@@ -2635,12 +2634,10 @@ end
 function StartCheckingKatana()
     while true do
         local katanaFound = CheckKatana()
-
         if katanaFound then
-            break -- ออกจากลูปถ้าพบ Katana
+            break
         end
-
-        wait(0.5) -- หยุดพัก 0.5 วินาทีก่อนตรวจสอบอีกครั้ง
+        wait(0.5)
     end
 end
 
@@ -2653,7 +2650,6 @@ local function onCharacterAdded(newCharacter)
         onCharacterAdded(player.Character)
     end)
 end
-
 
 function Hitboxz()
     for _, v in pairs(game:GetService("Workspace").BossBattle:GetChildren()) do
@@ -2763,7 +2759,7 @@ MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
     if v then
 	Hitboxz()
 	noclip()
-	CheckKatana()
+	onCharacterAdded(character)
 	checkSound()
     else
     TeleportOff()
