@@ -2374,12 +2374,12 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
-if id == 7633631351 then
+if id == 7633631103 then
 MainSection:AddButton('Auto Collect Pumpkin',function(v)
 	a1()
 end)
 
-elseif id == 7633631103 then
+elseif id == 7633631351 then
 MainSection:AddButton('Auto Light Up Candle',function(v)
 	 a2()
 end)
