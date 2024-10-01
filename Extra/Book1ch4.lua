@@ -2703,13 +2703,23 @@ MainSection:AddToggle('Auto Click', false, function(v)
     end
 end)
 
-MainSection:AddToggle('Auto Kill Saigomo - Extra Version', false, function(v)
+MainSection:AddToggle('Auto Destroy Heart', false, function(v)
     if v then
         Freeze(true)
-        Hitboxz()
-        Saigomo1()
+        noclip()
+        nofall()
+        _G.DestroyH = true
+        while _G.DestroyH do
+        wait(0)
+        CheckKatana()
+        check()
+        end
     else
+        _G.DestroyH = false
+        StopTweenAll()
         Freeze(false)
+        Unnofall()
+        clip()
     end
 end)
 
