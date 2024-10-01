@@ -2374,9 +2374,25 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
+if id == 7633631351 then
 MainSection:AddButton('Auto Collect Pumpkin',function(v)
 	a1()
 end)
+end
+
+if id == 7633631103 then
+MainSection:AddButton('Auto Collect Pumpkin',function(v)
+	 a2()
+end)
+end
+
+if id == 7633631511 then
+MainSection:AddButton('Auto Collect Pumpkin',function(v)
+	TP.HumanoidRootPart.CFrame = CFrame.new(156.75186157226562, 17.099130630493164, -1120.8385009765625)
+	wait(0.5)
+	fire()
+end)
+end
 
 VisualSection:AddToggle('ESP Monster', false, function(v)
     if v then
