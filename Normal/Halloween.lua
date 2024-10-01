@@ -2189,13 +2189,17 @@ local function fire2()
     end
 end
 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player:WaitForChild("Backpack")
 
-
-
-
-
-
-pumpkin
+function ch()
+	for i, v in pairs(backpack:GetChildren()) do
+		if v.Name == "pumpkin" then
+			v.Parent = character
+		end
+	end
+end
 
 function a1()
   TP.HumanoidRootPart.CFrame = CFrame.new(-350.8192443847656, 0.896565854549408, -159.50338745117188)
@@ -2212,6 +2216,8 @@ function a1()
   wait(0.2)
   TP.HumanoidRootPart.CFrame = CFrame.new(-351.61932373046875, -16.968265533447266, -164.6467742919922)
   wait(0.2)
+  ch()
+  wait(0.1)
   fire2()
   fire2()
   fire2()
@@ -2310,7 +2316,7 @@ local function UnEspPlayers()
 end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 1 Chapter 1','rbxassetid://134204200422920')
+local Window = Alc:NewWindow('Overflow','The Mimic - Halloween Trial','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('Genaral',"Main",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
@@ -2331,8 +2337,8 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
-MainSection:AddButton('Skip',function(v)
-	Skip()
+MainSection:AddButton('Auto Collect Pumpkin',function(v)
+	a1()
 end)
 
 VisualSection:AddToggle('ESP Monster', false, function(v)
