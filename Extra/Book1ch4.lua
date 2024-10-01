@@ -2578,6 +2578,114 @@ end
 
 
 if id == 7265397848 or id == 7251867574 then
+local part = Instance.new("Part")
+part.CFrame = CFrame.new(2760.362548828125, 263.2343444824219, 2701.247314453125)
+part.Size = Vector3.new(500, 3, 500)
+part.Material = Enum.Material.Neon
+part.Color = Color3.new(80/255, 109/255, 84/255) -- ปรับค่าสีจาก 0 ถึง 255 เป็น 0 ถึง 1
+part.Anchored = true
+part.Parent = game.Workspace
+
+
+game.Workspace.BossMap:Destroy()
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player:WaitForChild("Backpack")
+
+-- ฟังก์ชันเพื่อปรับ Handle ของ Katana
+local function ModifyHandle(item)
+    local handle = item:FindFirstChild("Handle")
+    if handle then
+        handle.Size = Vector3.new(50, 50, 10)
+        handle.Massless = true
+    end
+end
+
+function CheckKatana()
+    -- ตรวจสอบ Katana ในตัวละคร
+    for _, item in pairs(character:GetChildren()) do
+        if item.Name == "Katana" then
+            ModifyHandle(item)
+            break
+        end
+    end
+
+    -- ตรวจสอบ Katana ใน Backpack
+    for _, item in pairs(backpack:GetChildren()) do
+        if item.Name == "Katana" then
+            ModifyHandle(item)
+            break
+        end
+    end
+end
+
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
+
+local moving = false
+local targetPart = nil
+local speed = 1.6
+local radius = 30
+local angle = 0
+local heartbeatConnection
+
+local function moveAroundTarget()
+    angle = angle + speed * RunService.Heartbeat:Wait()
+
+    local xOffset = math.cos(angle) * radius
+    local zOffset = math.sin(angle) * radius
+
+    local newPosition = Vector3.new(targetPart.Position.X + xOffset, humanoidRootPart.Position.Y, targetPart.Position.Z + zOffset)
+    
+    humanoidRootPart.CFrame = CFrame.new(newPosition, targetPart.Position)
+end
+
+local function TeleportOn()
+    moving = true
+    targetPart = nil
+
+    local gameHearts = game:GetService("Workspace").GameHearts
+    local foundHeart = false
+
+    for _, v in pairs(gameHearts:GetChildren()) do
+        if v.Name == "Heart" then
+            foundHeart = true
+            print("Heart found!")
+            return
+        end
+    end
+
+    if not foundHeart then
+        for _, v in ipairs(game:GetService("Workspace").BossBattle:GetDescendants()) do
+            if v.Name == "SpiderHitbox" and v:IsA("BasePart") then
+                targetPart = v
+                break
+            end
+        end
+
+        if targetPart then
+            heartbeatConnection = RunService.Heartbeat:Connect(function()
+                if moving then
+                    moveAroundTarget()
+                end
+            end)
+        else
+            print("SpiderHitbox not found, waiting for 5 seconds...")
+            wait(5)
+        end
+    end
+end
+
+local function TeleportOff()
+    moving = false
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
+end
+
 local autoClickActive = false
 MainSection:AddToggle('Auto Click', false, function(v)
     if v then
@@ -2595,34 +2703,25 @@ MainSection:AddToggle('Auto Click', false, function(v)
     end
 end)
 
-MainSection:AddToggle('Auto Destroy Heart', false, function(v)
-    if v then
-        Freeze(true)
-        noclip()
-        nofall()
-        _G.DestroyH = true
-        while _G.DestroyH do
-        wait(0)
-        CheckKatana()
-        check()
-        end
-    else
-        _G.DestroyH = false
-        StopTweenAll()
-        Freeze(false)
-        Unnofall()
-        clip()
-    end
-end)
-
 MainSection:AddToggle('Auto Kill Saigomo - Extra Version', false, function(v)
     if v then
         Freeze(true)
         Hitboxz()
-        wait(0.3)
         Saigomo1()
     else
         Freeze(false)
+    end
+end)
+
+MainSection:AddToggle('Auto Kill Saigomo', false, function(v)
+    if v then
+	wait(0.2)
+	Unnofall()
+	Hitboxz()
+	TeleportOn()
+	CheckKatana()
+    else
+	TeleportOff()
     end
 end)
 end
