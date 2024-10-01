@@ -2174,6 +2174,14 @@ local id = game.PlaceId
 local TP = game.Players.LocalPlayer.Character
 
 local function fire()
+    for _, descendant in ipairs(Workspace:GetDescendants()) do
+        if descendant:IsA("ProximityPrompt") then
+            fireproximityprompt(descendant)
+        end
+    end
+end
+
+local function fire2()
     for _, descendant in ipairs(Workspace.GameInfo:GetDescendants()) do
         if descendant:IsA("ProximityPrompt") then
             fireproximityprompt(descendant)
@@ -2181,18 +2189,32 @@ local function fire()
     end
 end
 
--350.8192443847656, 0.896565854549408, -159.50338745117188
 
--201.8297576904297, -7.877932548522949, -163.0459747314453
 
--357.45574951171875, -19.984710693359375, -61.20021438598633
 
-pos -351.61932373046875, -16.968265533447266, -164.6467742919922
+
+
 
 pumpkin
 
 function a1()
-  
+  TP.HumanoidRootPart.CFrame = CFrame.new(-350.8192443847656, 0.896565854549408, -159.50338745117188)
+  wait(0.2)
+  fire2()
+  wait(0.2)
+  TP.HumanoidRootPart.CFrame = CFrame.new(-201.8297576904297, -7.877932548522949, -163.0459747314453)
+  wait(0.2)
+  fire2()
+  wait(0.2)
+  TP.HumanoidRootPart.CFrame = CFrame.new(-357.45574951171875, -19.984710693359375, -61.20021438598633)
+  wait(0.2)
+  fire2()
+  wait(0.2)
+  TP.HumanoidRootPart.CFrame = CFrame.new(-351.61932373046875, -16.968265533447266, -164.6467742919922)
+  wait(0.2)
+  fire2()
+  fire2()
+  fire2()
 end
 
 local folder = Instance.new("Folder")
