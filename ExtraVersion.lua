@@ -26,6 +26,8 @@ elseif currentPlaceId == 11126398230 then
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Nightmarecircus.lua'))()
 elseif currentPlaceId == 7618863566 then
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Jigoku.lua'))()
+elseif currentPlaceId == 7633631103 or currentPlaceId == 7633631351 or currentPlaceId == 7633631511 then
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/Extra/Halloween.lua'))()
 else
      loadstring(game:HttpGet("https://raw.githubusercontent.com/MerryXTrash/TheMimicNew/refs/heads/main/NotSupport.lua"))()
 end
