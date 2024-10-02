@@ -2325,12 +2325,12 @@ end
 
 function Xmas1()
     TP.HumanoidRootPart.CFrame = CFrame.new(-84.6919174194336, 11.107906341552734, -111.78636169433594) --safe
-    wait(0.8)
+    wait(0.2)
     TP.HumanoidRootPart.CFrame = CFrame.new(-251.05911254882812, -11.551362991333008, -66.66143798828125) --elf
     wait(0.4)
     fire()
     fire()
-    wait(0.4)
+    wait(5)
     setHoldDurationForAllProximityPrompts()
     TP.HumanoidRootPart.CFrame = CFrame.new(-134.54364013671875, 10.574685096740723, -209.96405029296875) --item1
     wait(0.4)
