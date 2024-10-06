@@ -15,8 +15,8 @@ local HttpService = game:GetService('HttpService')
 local Alc = {
 	Config = {
 		['UI Size'] = UDim2.new(0.100000001, 370, 0.100000001, 280),
-		['MainColor'] = Color3.fromRGB(56, 182, 255),
-		['DropColor'] = Color3.fromRGB(30, 100, 200)
+		['MainColor'] = Color3.fromRGB(85, 0, 255),
+		['DropColor'] = Color3.fromRGB(34, 0, 102)
 	},
 	CoreGui = game:FindFirstChild('CoreGui') or LocalPlayer.PlayerGui,
 	Windows = {},
@@ -2908,7 +2908,7 @@ function disconnectGetbl()
     end
 end
 
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 2','rbxassetid://134204200422920')
+local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 2','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
