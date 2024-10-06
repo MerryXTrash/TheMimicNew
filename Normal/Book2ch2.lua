@@ -2171,9 +2171,6 @@ function Alc:NewWindow(WindowName:string,WindowDescription:string,WindowLogo:str
 end
 
 local id = game.PlaceId
-local player = game.Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
-local TP = char:WaitForChild("HumanoidRootPart")
 local Workspace = game:GetService("Workspace")
 
 local TweenService = game:GetService("TweenService")
@@ -2201,6 +2198,15 @@ local function fire()
         if descendant:IsA("ProximityPrompt") then
             fireproximityprompt(descendant)
         end
+    end
+end
+
+function to(position)
+    local player = game.Players.LocalPlayer
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character:SetPrimaryPartCFrame(CFrame.new(position))
+    else
+        warn("Character or HumanoidRootPart not found.")
     end
 end
 
@@ -2334,36 +2340,16 @@ end
      Clip = true
 end
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+local UserInputService = game:GetService("UserInputService")
+local VirtualUser = game:GetService("VirtualUser")
 
-local function setPlayerSpeed(newSpeed)
-    humanoid.WalkSpeed = newSpeed
+function clickMiddleOfScreen()
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local centerX = screenSize.X / 2
+    local centerY = screenSize.Y / 2
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
 end
-
-function InsertPart(Name, position)
-    local part = Instance.new("Part")
-    part.Name = Name
-    part.Parent = game.Workspace
-    part.Anchored = true
-    part.CanCollide = true
-    part.Transparency = 1
-    part.Size = Vector3.new(10, 2, 10)
-    
-    -- Create a local CFrame using the position
-    local cframe = CFrame.new(position) * CFrame.new(0, -2, 0)
-    part.CFrame = cframe
-end
-
--- Inserting parts using Vector3 positions
-InsertPart("House1", Vector3.new(-395.0856, 3069.5757, 3891.5354))
-InsertPart("House2", Vector3.new(-4.7849, 3067.8242, 4712.5752))
-InsertPart("House3", Vector3.new(-246.9231, 3068.6431, 4219.7925))
-InsertPart("House4", Vector3.new(595.4817, 3069.5764, 4422.1924))
-InsertPart("House5", Vector3.new(-676.0107, 3069.5251, 5002.6636))
-InsertPart("Key", Vector3.new(-401.7100, 3069.5759, 3867.8293))
-InsertPart("Office", Vector3.new(-1778.0726318359375, 9.717201232910156, -4295.62109375))
 
 local function countdown(time)
     local screenGui = Instance.new("ScreenGui")
@@ -2417,53 +2403,6 @@ local function countdown(time)
     textLabel:Destroy()
 end
 
-function Rat()
-    local player = game:GetService("Players").LocalPlayer
-    local backpack = player.Backpack
-	local character = player.Character
-
-    for i, item in pairs(backpack:GetChildren()) do
-        if item.Name == "Poisoned Rat" then
-            item.Parent = character
-            break
-        end
-    end
-end
-
-function Ratfind()
-    for _, rat in ipairs(game:GetService("Workspace"):GetDescendants()) do
-        if rat:IsA("MeshPart") then
-            if rat.TextureID == "rbxassetid://8569135832" then
-                local proximityPrompt = rat:FindFirstChildOfClass("ProximityPrompt")
-                if proximityPrompt then
-                    proximityPrompt.HoldDuration = 0
-                    TP.CFrame = rat.CFrame
-                    wait(0.2)
-                    fire()
-                    fire()
-                    fire()
-                    wait(0.2)
-                    TP.CFrame = CFrame.new(-1539.063, -30.171, -3543.718)
-                    wait(0.1)
-                    Rat()
-                    wait(0.1)
-                    fire()
-                    fire()
-                    wait(5)
-                    TP.CFrame = CFrame.new(-1563.528, -28.910, -3408.718)
-                    wait(0.2)
-                    fire()
-                    fire()
-                    wait(0.2)
-                    TP.CFrame = CFrame.new(-1674.827, -21.010, -3402.391)
-                    countdown(25)
-                    break
-                end
-            end
-        end
-    end
-end
-
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -2493,102 +2432,506 @@ local function To(targetPosition)
     end)
 end
 
-local function ToCFrame(targetPosition)
-    local player = Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local Bypass = Vector3.new(-4371.806640625, 711.3719482421875, 1121.54248046875)
 
-    local originalGravity = workspace.Gravity
-    local speed = 1000000
-    local isTweening = true
+local Start = Vector3.new(-537.7177734375, 22.193456649780273, -85.44476318359375)
+local str = Vector3.new(-511.869232, 22.302742, -45.1528854, 0.997435391, 0, -0.0715723634, 0, 1, 0, 0.0715723634, 0, 0.997435391)
+local door1 = Vector3.new(-3573.71997, 602.739197, 888.569031, -0.0237644427, 0, 0.999717593, 0, 1, 0, -0.999717593, 0, -0.0237644427)
+local door2 = Vector3.new(-3602.33984, 602.764954, 765.950867, 0.0132561736, 0, 0.999912143, 0, 1, 0, -0.999912143, 0, 0.0132561736)
+local doorlast = Vector3.new(-3953.24072, 594.218933, 321.80304, 0.999459922, 0, -0.032861691, 0, 1, 0, 0.032861691, 0, 0.999459922)
 
-    workspace.Gravity = 0
-	noclip()
+local talk = Vector3.new(-4442.72803, 711.371887, 1162.86707, -0.146179333, 0, 0.989258111, 0, 1, 0, -0.989258111, 0, -0.146179333)
+local skele = Vector3.new(-4601.89404296875, 826.4385986328125, -35.5607795715332)
+local endskele = Vector3.new(-5364.40918, 682.05365, 30.630415, 0.317401469, 0, 0.948291242, 0, 1, 0, -0.948291242, 0, 0.317401469)
 
-    RunService.RenderStepped:Connect(function(deltaTime)
-        if isTweening then
-            local direction = (targetPosition - humanoidRootPart.Position).unit
-            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
+local startlever = Vector3.new(-11030.5029296875, -81.40126037597656, -12.647021293640137)
+local endlever = Vector3.new(-10060.2744140625, 484.0893859863281, -9.173670768737793)
 
-            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
-                isTweening = false
-                workspace.Gravity = originalGravity
-				clip()
+local StartCook = Vector3.new(-2582.31445, 968.246521, -4920.55469, -0.0169319678, 0, 0.999856651, 0, 1, 0, -0.999856651, 0, -0.0169319678)
+
+
+
+function getBow()
+    for _, room in ipairs(Workspace:GetDescendants()) do
+        if room.Name == "RestaurantRoom" then
+            for _, bowlGiver in ipairs(room:GetDescendants()) do
+                if bowlGiver.Name == "BowlGiver" and bowlGiver.PrimaryPart then
+                    to(bowlGiver.PrimaryPart.CFrame)
+                    wait(0.2)
+                    fire()
+                end
             end
         end
-    end)
+    end
+end
+
+function getmeat()
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "RestaurantRoom" then
+            for j, meat in ipairs(v:Getdescendant()) do
+                if meat.Name =="Meat" then
+                    for u, m in pairs(meat:GetChildren()) do
+                        if m:IsA("MestPart") then
+                            to(m.CFrame)
+                            wait(0.2)
+                            fire()
+							wait(0.2)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function startgetmeat()
+	Freeze(true)
+    getmeat()
+    getmeat()
+    getmeat()
+    to(Bypass)
+    countdown(10)
+    to(talk)
+    wait(0.2)
+    fire()
+	Freeze(false)
+end
+
+function umi()
+    to(str)
+    Freeze(true)
+    countdown(30)
+    to(Start)
+    Freeze(false)
+end
+
+function cow()
+    to(door1)
+    wait(0.2)
+    fire()
+    fire()
+    wait(0.2)
+    to(door2)
+    wait(0.2)
+    fire()
+    fire()
+    wait(0.2)
+    to(Bypass)
+    countdown(60)
+    to(doorlast)
+    wait(0.3)
+    fire()
+    fire()
+end
+
+function togate1()
+    for i, b in ipairs(Workspace:Getdescandants()) do
+        if b.Name == "EndRoom" then
+            for k, v in pairs(b:GetChildren()) do
+                if v.Name == "lanternceiling" then
+                    local gate = v:FindFirstChild("Coral9_G1")
+                    if gate then
+                        to(gate.CFrame)
+                    end
+                end
+            end
+        end
+    end
+end
+
+function alever()
+    for _, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "Levers" then
+            for _, n in ipairs(v:GetDescendants()) do
+                if n:IsA("MeshPart") and n.Transparency == 1 then
+					n:Destroy()
+                elseif n:IsA("MeshPart") and n.Transparency == 0 then
+					to(n.CFrame)
+                    wait(0.2)
+                    fire()
+                end
+            end
+        end
+    end
+end
+
+function Foodfire(Name)
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "Giver" then
+            for _, e in pairs(v:GetChildren()) do
+                if e.Name == Name then
+                    for _, t in ipairs(e:GetDescendants()) do
+                        if t:IsA("ProximityPrompt") then
+                            fireproximityprompt(t)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function Makefire(Name)
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "SystemBin" then
+            for _, e in pairs(v:GetChildren()) do
+                if e.Name == Name then
+                    for _, t in ipairs(e:GetDescendants()) do
+                        if t:IsA("ProximityPrompt") then
+                            fireproximityprompt(t)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function Cookfire()
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "Stoves" then
+            for _, e in pairs(v:GetChildren()) do
+                if e.Name == "stove" and e.Position == Vector3.new(-2730.124755859375, 967.5448608398438, -4902.7666015625) then
+                    for _, t in ipairs(e:GetDescendants()) do
+                        if t:IsA("ProximityPrompt") then
+                            fireproximityprompt(t)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function PlacePfire()
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "WoodenCounters" then
+            for _, e in pairs(v:GetChildren()) do
+                if e:IsA("Model") and e.Position == Vector3.new(-2734.9755859375, 967.0695190429688, -4935.75732421875) then
+                    for _, t in ipairs(e:GetDescendants()) do
+                        if t:IsA("ProximityPrompt") then
+                            fireproximityprompt(t)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function PlaceBfire()
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "WoodenCounters" then
+            for _, e in pairs(v:GetChildren()) do
+                if e:IsA("Model") and e.Position == Vector3.new(-2739.6455078125, 967.0695190429688, -4935.75732421875) then
+                    for _, t in ipairs(e:GetDescendants()) do
+                        if t:IsA("ProximityPrompt") then
+                            fireproximityprompt(t)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local Bowlq = Vector3.new(-2694.26904296875, 968.2465209960938, -4926.45166015625)
+local Pot = Vector3.new(-2693.164306640625, 968.2465209960938, -4910.55029296875)
+local StovePos = Vector3.new(-2729.610107421875, 968.2465209960938, -4906.57763671875)
+local PandBPos = Vector3.new(-2729.904541015625, 968.24658203125, -4930.19580078125)
+local FeedF = Vector3.new(-2762.750244140625, 968.2464599609375, -4919.3310546875)
+local ENdCook = Vector3.new(-3361.457763671875, 1205.020751953125, -6819.82666015625)
+
+function EyeBall()
+	Freeze(true)
+	to(Bowlq) --วาปไปถ้วย
+	wait(0.2)
+	Foodfire("Pot") --เก็บถ้วย
+	wait(0.2)
+	to(PandBPos) --วาปไปที่วางถ้วย
+	wait(0.2)
+	PlaceBfire() --วางถ้วย
+	wait(0.2)
+	to(Pot) --วาปไปหาตา
+	wait(0.2)
+	Foodfire("Eyeball") --เก็บตา
+	wait(0.2)
+	to(PandBPos) --วาปมาถ้วย
+	wait(0.2)
+	Makefire("Bowl")
+	wait(0.2)
+	to(Pot)
+	wait(0.2)
+	Foodfire("Spaghetti")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	Makefire("Bowl")
+	wait(0.2)
+	Makefire("Bowl")
+	wait(0.2)
+	to(FeedF)
+	wait(0.3)
+	fire()
+	Freeze(false)
+end
+
+function Chick()
+	Freeze(true)
+	to(Pot)
+	wait(0.2)
+	Foodfire("Pot")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	PlacePfire()
+	wait(0.2)
+	to(Bowlq)
+	wait(0.2)
+	Foodfire("Chicken")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(Pot)
+	wait(0.2)
+	Foodfire("Cheese")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(Bowlq)
+	wait(0.2)
+	Foodfire("Wrapped Meat")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(Bowlq)
+	wait(0.2)
+	Foodfire("Bowl")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	PlaceBfire()
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(StovePos)
+	wait(0.2)
+	Cookfire()
+	task.wait(12)
+	Cookfire()
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	PlaceBfire()
+	wait(0.2)
+	Makefire("Bowl")
+	wait(0.2)
+	to(FeedF)
+	wait(0.2)
+	fire()
+	Freeze(false)
+end
+
+function ham()
+	Freeze(true)
+	to(Pot)
+	wait(0.2)
+	Foodfire("Pot")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	PlacePfire()
+	wait(0.2)
+	to(Bowlq)
+	wait(0.2)
+	Foodfire("Ham")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(Pot)
+	wait(0.2)
+	Foodfire("Sausage")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(Bowlq)
+	wait(0.2)
+	Foodfire("Bowl")
+	wait(0.2)
+	to(PandBPos)
+	wait(0.2)
+	PlaceBfire()
+	wait(0.2)
+	Makefire("Pot")
+	wait(0.2)
+	to(StovePos)
+	wait(0.2)
+	Cookfire()
+	task.wait(12)
+	Cookfire()
+	wait(0.2)
+	to(PandBPos)
+	wait()
+	PlaceBfire()
+	wait(0.2)
+	Makefire("Bowl")
+	wait(0.2)
+	to(FeedF)
+	wait(0.3)
+	fire()
+	Freeze(false)
+end
+
+local SKT = Vector3.new(-4079.585205078125, 743.8174438476562, -948.4310302734375)
+local Saf = Vector3.new(-4089.20483, 743.817444, -960.496887, -0.0886541307, 0, -0.996062458, 0, 1, 0, 0.996062458, 0, -0.0886541307)
+local ended = Vector3.new(-4079.585205078125, 743.8174438476562, -948.4310302734375)
+
+local RunService = game:GetService("RunService")
+local connection -- Variable to store the connection
+
+function embedsafe()
+    play = nil
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v:IsA("Folder") and v.Name == "HideMonster" then
+            for _, f in pairs(v:GetChildren()) do
+                local Sound = v:FindFirstChild("Warning2")
+                if Sound and Sound.IsPlaying then
+                    play = true
+                    to(Saf)
+                elseif Sound and not Sound.IsPlaying then
+                    play = false
+                end
+            end
+        end
+    end
+end
+
+function disconnectEmbedsafe()
+    if connection then
+        connection:Disconnect()
+        connection = nil
+    end
+end
+
+
+function findnote()
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "Notes" then
+            for k, join in ipairs(v:GetDescendants()) do
+                if join.Name == "Note" then
+                    for p, y in ipairs(join:GetDescendants()) do
+                        if y:IsA("ProximityPrompt") and y.Enabled == true then
+                            to(join.CFrame)
+							wait(0.2)
+							fire()
+							wait(0.1)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function togt()
+	for i, v in ipairs(Workspace:GesDescandants()) do
+		if v.Name == "Door" then
+			local t = v:FindFirstChild("Formation")
+			if t then
+				to(t.CFrame)
+			end
+		end
 	end
+end
+
+function kida()
+	for i, v in ipairs(Workspace:GetDescandants()) do
+		if v.Name == "Daugther" then
+			local p = v:FindFirstChild("Cube.001")
+			if p then
+				to(p.CFrame)
+			end
+		end
+	end
+end
+
+local UserInputService = game:GetService("UserInputService")
+local VirtualUser = game:GetService("VirtualUser")
+
+function clickMiddleOfScreen()
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local centerX = screenSize.X / 2
+    local centerY = screenSize.Y / 2
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton1(Vector2.new(centerX, centerY))
+end
+
+_G.Ezclick = false
+
+function EquipOrClick()
+    clickMiddleOfScreen()
+end
+
+function UnEquipOrClick()
+    _G.Ezclick = false
+end
 
 
-local targetCFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
-local targetCFrame1 = CFrame.new(-395.08563232421875, 3069.57568359375, 3891.535400390625)
-local targetCFrame2 = CFrame.new(-4.784941673278809, 3067.82421875, 4712.5751953125)
-local targetCFrame3 = CFrame.new(-246.92311096191406, 3068.64306640625, 4219.79248046875)
-local targetCFrame4 = CFrame.new(595.481689453125, 3069.576416015625, 4422.1923828125)
-local targetCFrame5 = CFrame.new(-676.0106811523438, 3069.525146484375, 5002.66357421875)
-local KeyCFrame = CFrame.new(-401.7100, 3069.5759, 3867.8293)
-local Door = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
-local Book = CFrame.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
-local EspcapeRin = CFrame.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
-local Office = CFrame.new(-1778.0726318359375, 9.717201232910156, -4295.62109375)
-local OX = CFrame.new(-6066.32763671875, 546.6655883789062, 7172.89501953125)
+local connection1 -- Variable to store the connection
 
---lowerfloor
-local Candle11 = CFrame.new(-5453.7373046875, 461.4326171875, 6514.80859375)
-local Candle12 = CFrame.new(-5435.24755859375, 462.03277587890625, 6351.935546875)
-local Candle13 = CFrame.new(-5444.45654296875, 462.0570373535156, 6254.01611328125)
-local Candle14 = CFrame.new(-5467.76318359375, 462.39044189453125, 6260.67236328125)
-local Candle15 = CFrame.new(-5453.34912109375, 461.8515930175781, 6101.9853515625)
+function getbl()
+    for i, v in ipairs(Workspace:GetDescendants()) do
+        if v.Name == "BallGiver" then
+            for f, prox in ipairs(v:GetDescendants()) do
+                if prox:IsA("ProximityPrompt") then
+                    fireproximityprompt(prox)
+                end
+            end
+        end
+    end
+end
 
---middle floor
-local Candle21 = CFrame.new(-6065.1728515625, 547.58154296875, 7319.21923828125)
+function disconnectGetbl()
+    if connection1 then
+        connection1:Disconnect()
+        connection1 = nil
+    end
+end
 
---upper floor
-local Candle31 = CFrame.new(-6808.1669921875, 758.5756225585938, 6414.2978515625)
-local Candle32 = CFrame.new(-6820.96728515625, 746.4933471679688, 6258.71044921875)
-local Candle33 = CFrame.new(-6822.0380859375, 746.42431640625, 6173.79296875)
-
---pic
-local blue = CFrame.new(209.63929748535156, 3084.15478515625, 3832.36279296875)
-local red = CFrame.new(152.81671142578125, 3060.99365234375, 3861.497802734375)
-local man = CFrame.new(210.2085418701172, 3060.99365234375, 3819.75439453125)
-local Chicken = CFrame.new(237.98187255859375, 3072.503662109375, 3878.86181640625)
-local Momson = CFrame.new(168.0010223388672, 3072.5048828125, 3830.942626953125)
-local UM = CFrame.new(190.3834991455078, 3084.15478515625, 3903.572998046875)
-local fox = CFrame.new(247.91357421875, 3061.43408203125, 3851.5556640625)
-local flute = CFrame.new(184.19967651367188, 3072.50390625, 3925.464111328125)
-local love = CFrame.new(182.9803009033203, 3060.994140625, 3923.0703125)
-local ORB = CFrame.new(191.37278747558594, 3061.04443359375, 3891.880126953125)
-
-
-local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 1','rbxassetid://134204200422920')
+local Window = Alc:NewWindow('Overflow','The Mimic - Book 2 Chapter 2','rbxassetid://134204200422920')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
-if id == 8056702588 then
-local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
-local OfficeSec = OfficeFunctions:AddSection('Function','Enter','Auto Win','home')
-OfficeSec:AddButton('Enter Office',function(v)
-	tweenCharacterToCFrame(Office, 0)
-end)
-end
-
-local MioFunctions = MenuFunctions:AddTab('Rin and Mio','Function','menu')
-local NagisaFunctions = MenuFunctions:AddTab('Nagisa','Function','menu')
-local VillageFunctions = MenuFunctions:AddTab('Village','Function','menu')
-local ShipFunctions = MenuFunctions:AddTab('Ship','Function','menu')
-local SeaFunctions = MenuFunctions:AddTab('Sea','Function','menu')
+local StartFunction = MenuFunctions:AddTab('Start','Function','menu')
+local MeatFunction = MenuFunctions:AddTab('Meat','Function','menu')
+local LeversFunction = MenuFunctions:AddTab('Levers','Function','menu')
+local CookFunction = MenuFunctions:AddTab('Cooking','Function','menu')
+local CurseFunction = MenuFunctions:AddTab('Cursed','Function','menu')
+local KidFunction = MenuFunctions:AddTab('Kid','Function','menu')
+local BossFunction = MenuFunctions:AddTab('Boss','Function','menu')
 local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
 
-local MioSection = MioFunctions:AddSection('Function','Rin and Mio','Auto Win','list')
-local NagisaSection = NagisaFunctions:AddSection('Function','Nagisa','Auto Win','list')
-local VillageSection = VillageFunctions:AddSection('Function','Village','Auto Win','list')
-local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Auto Win','list')
-local ShipSection = ShipFunctions:AddSection('Function','Ship','Auto Win','list')
-local SeaSection = SeaFunctions:AddSection('Function','Sea','Auto Win','list')
+local StartSection = StartFunction:AddSection('Function','Start','Auto Win','list')
+local MeatsSection = MeatFunction:AddSection('Function','Meats','Auto Win','list')
+local LeversSection = LeversFunction:AddSection('Function','Levers','Auto Win','list')
+local CookSection = CookFunction:AddSection('Function','Cooking','Auto Win','list')
+local CursedSection = CurseFunction:AddSection('Function','Curse','Auto Win','list')
+local CursedSection2 = CurseFunction:AddSection('Function','Curse','Auto Win','list')
+local KidSection = KidFunction:AddSection('Function','Kid','Auto Win','list')
+local BossSection = BossFunction:AddSection('Function','Kid','Auto Win','list')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
 
@@ -2597,172 +2940,188 @@ local twoSection = TabUpdate:AddSection('','+[Add]','Christmas Trial','plus')
 local DiscordSection = TabUpdate:AddSection('Support','Discord','Click Copy to copy Link Discord','link')
 
 DiscordSection:AddButton('Copy',function(v)
-    local copy = "https://discord.gg/AXvTNJdGCz"
-	setclipboard(tostring(copy))
+	setclipboard("https://discord.gg/AXvTNJdGCz")
+end)
+
+--started
+StartSection:AddButton('Skip Umibozu',function(v)
+    umi()
+end)
+
+StartSection:AddButton('Skip Jikininki',function(v)
+    cow()
 end)
 
 
 
---Mio and rin
-MioSection:AddButton('Read Book',function(v)
-tweenCharacterToCFrame(Book, 0)
-wait(0.2)
-fire()
-fire()
+--ashina/meat
+MeatsSection:AddButton('Talk Nuppeppo',function(v)
+    to(talk)
 end)
 
-MioSection:AddButton('Auto Rat',function(v)
-	Ratfind()
+MeatsSection:AddButton('Get Bowl',function(v)
+    getBow()
 end)
 
-MioSection:AddButton('Escape',function(v)
-	tweenCharacterToCFrame(EspcapeRin, 0)
-	wait(0.2)
-	fire()
+MeatsSection:AddButton('Auto Collect Meats',function(v)
+    startgetmeat()
 end)
 
-MioSection:AddButton('Run Away from Mio',function(v)
-    To(Vector3.new(-961.4176635742188, -46.48267364501953, -3601.613525390625))
+MeatsSection:AddButton('Enter to Gate',function(v)
+    togate1()
 end)
 
-
-
-
---Nagisa
-NagisaSection:AddButton('Enter to Cave',function(v)
-    To(Vector3.new(583.685546875, 567.3634643554688, -365.7061462402344))
+MeatsSection:AddButton('Start Cutscene Gashadokuro',function(v)
+    to(skele)
 end)
 
-NagisaSection:AddButton('Run Away from Nagisa',function(v)
-    To(Vector3.new(3866.74462890625, 140.48388671875, 10.994720458984375))
+MeatsSection:AddButton('Run from Gashadokuro',function(v)
+    To(endskele)
 end)
 
 
 
-
---Village
-VillageSection:AddButton('Talk',function(v)
-	tweenCharacterToCFrame(targetCFrame, 0)
-	wait(0.5)
-	fire()
+--Levers
+LeversSection:AddButton('Enter Zone',function(v)
+    to(startlever)
 end)
 
-VillageSection:AddDropdown('Select House', {'House 1','House 2','Drawing House','House 4','House 5'}, nil, 1, function(list, item)
-    if item == 'House 1' then
-		tweenCharacterToCFrame(targetCFrame1, 0)
-	elseif item == 'House2' then
-		tweenCharacterToCFrame(targetCFrame2, 0)
-	elseif item == 'Drawing House' then
-		tweenCharacterToCFrame(targetCFrame3, 0)
-	elseif item == 'House4' then
-		tweenCharacterToCFrame(targetCFrame4, 0)
-	elseif item == 'House5' then
-		tweenCharacterToCFrame(targetCFrame5, 0)
-    end
-end)
-
-VillageSection:AddButton('Unlock House',function(v)
-    tweenCharacterToCFrame(KeyCFrame, 0)
-    wait(0.2)
-    fire()
-    fire()
-    fire()
-    wait(0.2)
-    tweenCharacterToCFrame(Door, 0)
-    wait(0.5)
-    fire()
-    fire()
-end)
-
-
-
---village2
-VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl','Umbrella Girl', 'Mother and Child', 'Old Man', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
-    if item == 'Blue Samurai' then
-		tweenCharacterToCFrame(blue, 0)
-	elseif item == 'Red Samarai' then
-		tweenCharacterToCFrame(red, 0)
-	elseif item == 'Fox Girl' then
-	    tweenCharacterToCFrame(fox, 0)
-	elseif item == 'Umbrella Girl' then
-	    tweenCharacterToCFrame(UM, 0)
-	elseif item == 'Mother and Child' then
-		tweenCharacterToCFrame(Momson, 0)
-	elseif item == 'Old Man' then
-		tweenCharacterToCFrame(man, 0)
-	elseif item == 'Hustband and Wife' then
-		tweenCharacterToCFrame(love, 0)
-	elseif item == 'Girl and Chicken' then
-		tweenCharacterToCFrame(Chicken, 0)
-	elseif item == 'Girl and Flute' then
-		tweenCharacterToCFrame(flute, 0)
-    end
-end)
-
-VillageSection2:AddButton('Get Orb and Give Orb',function(v)
-    tweenCharacterToCFrame(ORB, 0)
-	wait(0.2)
-	fire()
-	fire()
-	wait(0.2)
-	tweenCharacterToCFrame(targetCFrame, 0)
-	wait(0.2)
-	fire()
-	fire()
-end)
-
-
-
---Ship
-ShipSection:AddButton('Enter Ship',function(v)
-    
-end)
-
-ShipSection:AddDropdown('Middle Floor', {'Candle 1'}, nil, 1, function(list, item)
-    if item == 'Candle 1' then
-		tweenCharacterToCFrame(Candle21, 0)
-    end
-end)
-
-ShipSection:AddDropdown('Upper Floor', {'Candle 1', 'Candle 2', 'Candle 3'}, nil, 1, function(list, item)
-    if item == 'Candle 1' then
-		tweenCharacterToCFrame(Candle31, 0)
-	elseif item == 'Candle 2' then
-		tweenCharacterToCFrame(Candle32, 0)
-	elseif item == 'Candle 3' then
-		tweenCharacterToCFrame(Candle33, 0)
-    end
-end)
-
-ShipSection:AddDropdown('Lower Floor', {'Candle 1', 'Candle 2', 'Candle 3', 'Candle 4', 'Candle 5'}, nil, 1, function(list, item)
-	if item == 'Candle 1' then
-		tweenCharacterToCFrame(Candle11, 0)
-	elseif item == 'Candle 2' then
-		tweenCharacterToCFrame(Candle12, 0)
-	elseif item == 'Candle 3' then
-		tweenCharacterToCFrame(Candle13, 0)
-	elseif item == 'Candle 4' then
-		tweenCharacterToCFrame(Candle14, 0)
-	elseif item == 'Candle 5' then
-		tweenCharacterToCFrame(Candle15, 0)
-    end
-end)
-
-ShipSection:AddButton('Run Away Tenome',function(v)
-    
-end)
-
-SeaSection:AddButton('Enter Zone',function(v)
-    
-end)
-
-VisualSection:AddToggle('Insert Speed Player(Dont Work)',false,function(v)
+LeversSection:AddToggle('Auto Levers',false,function(v)
 	if v then
-        setPlayerSpeed(55)
+		_G.lever = true
+		while _G.lever do
+			wait(0)
+			Freeze(true)
+			alever()
+		end
     else
-        setPlayerSpeed(21)
+		_G.lever = false
+		Freeze(false)
     end
 end)
+
+LeversSection:AddButton('Enter to Gate',function(v)
+    to(endlever)
+end)
+
+
+
+--Cook
+CookSection:AddButton('Start Cooking',function(v)
+    to(StartCook)
+end)
+
+CookSection:AddButton('Auto Eye Menu',function(v)
+    EyeBall()
+end)
+
+CookSection:AddButton('Auto Ham Menu',function(v)
+    ham()
+end)
+
+CookSection:AddButton('Auto Chicken Menu',function(v)
+    Chick()
+end)
+
+CookSection:AddButton('Run from Zuboshi',function(v)
+    To(ENdCook)
+end)
+
+
+
+--curse
+CursedSection:AddButton('Skip Teiryu',function(v)
+    to(SKT)
+end)
+
+CursedSection:AddButton('To Puzzle',function(v)
+    to(SKT)
+end)
+
+CursedSection:AddToggle('Safe Mode',false,function(v)
+	if v then
+		connection = RunService.Heartbeat:Connect(function()
+			embedsafe()
+		end)
+    else
+		disconnectEmbedsafe()
+    end
+end)
+
+CursedSection2:AddButton('Enter to Gate',function(v)
+    to(ended)
+end)
+
+
+
+--Kid
+KidSection:AddToggle('Auto Find Kid',false,function(v)
+	if v then
+		_G.kido = true
+		while _G.kido do
+			wait(1.5)
+			kida()
+		end
+    else
+		_G.kido = false
+    end
+end)
+
+KidSection:AddButton('Enter to Gate',function(v)
+    togt()
+end)
+
+KidSection:AddToggle('Auto Find Notes',false,function(v)
+	if v then
+		_G.note = true
+		while _G.note do
+		wait(0)
+		findnote()
+		end
+    else
+		_G.note = false
+    end
+end)
+
+
+
+--boss
+BossSection:AddToggle('Auto Click',false,function(v)
+	if v then
+		_G.EzClick = true
+        autoClickActive = true
+        coroutine.wrap(function()
+            while autoClickActive and _G.EzClick do
+                EquipOrClick()
+                wait(0.1)
+            end
+        end)()
+    else
+		_G.EzClick = false
+		autoClickActive = false
+    end
+end)
+
+BossSection:AddToggle('Auto Collect Bullet',false,function(v)
+	if v then
+		connection1 = RunService.Heartbeat:Connect(function()
+			getbl()
+		end)
+    else
+		disconnectGetbl()
+    end
+end)
+
+local SAFe = Vector3.new()
+
+BossSection:AddButton('Enter to Area',function(v)
+    
+end)
+
+BossSection:AddButton('Enter to Safe',function(v)
+    
+end)
+
 
 VisualSection:AddToggle('ESP Monster - If dont Work, Off and On Again.', false, function(v)
     if v then
