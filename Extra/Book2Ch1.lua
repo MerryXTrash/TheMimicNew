@@ -2186,7 +2186,7 @@ local function tweenCharacterToCFrame(targetCFrame, duration)
 
     local tweenInfo = TweenInfo.new(
         duration, -- Duration in seconds
-        Enum.EasingStyle.Exponential, -- Easing style
+        Enum.EasingStyle.Linear, -- Easing style
         Enum.EasingDirection.Out -- Easing direction
     )
 
@@ -2201,6 +2201,19 @@ local function fire()
         if descendant:IsA("ProximityPrompt") then
             fireproximityprompt(descendant)
         end
+    end
+end
+
+function pfire()
+    local _0 : string = 'ContentProvider';local _1 : any = hookfunction;local _9 : any = newcclosure;local _88 : any = hookmetamethod;local TS : any = getnamecallmethod;local 2 : any = {"FireServer",'Sender','Sender2'};local 9S : any = {3,1,2};if true then if _1 then _1(game:GetService(_0).PreloadAsync,9(function(__) return '...'; end)); end;if TS then local _13;_13 = 88(game,'namecall',function(self , ...) local s_ = {...};if TS() == 2[9S[2]] then if tostring(self) == 2[9S[1]] or tostring(self) == 2[9S[3]] then return wait(9e9); end; end;return 13(self , ...);end);end;end;local function fire() for , descendant in ipairs(Workspace:GetDescendants()) do if descendant:IsA("ProximityPrompt") then fireproximityprompt(descendant) end end end;fire()
+end
+
+function to(position)
+    local player = game.Players.LocalPlayer
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character:SetPrimaryPartCFrame(CFrame.new(position))
+    else
+        warn("Character or HumanoidRootPart not found.")
     end
 end
 
@@ -2339,6 +2352,106 @@ InsertPart("House5", Vector3.new(-676.0107, 3069.5251, 5002.6636))
 InsertPart("Key", Vector3.new(-401.71002197265625, 3065.575927734375, 3867.829345703125))
 InsertPart("Office", Vector3.new(-1778.0726318359375, 9.717201232910156, -4295.62109375))
 
+local function countdown(time)
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "CountdownGui"
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Name = "CountdownLabel"
+    textLabel.Size = UDim2.new(0.3, 0, 0.15, 0)
+    textLabel.Position = UDim2.new(0.35, 0, 0.4, 0)
+    textLabel.TextSize = 200
+    textLabel.TextStrokeTransparency = 0
+    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextScaled = false
+    textLabel.Parent = screenGui
+
+    local countdownTime = time
+
+    local function formatTime(seconds)
+        return tostring(seconds)
+    end
+
+    local function getTextColor(seconds)
+        if seconds > 7 then
+            return Color3.fromRGB(255, 0, 0)
+        elseif seconds > 3 then
+            return Color3.fromRGB(255, 255, 0)
+        else
+            return Color3.fromRGB(56, 182, 255)
+        end
+    end
+
+    -- Display the countdown time
+    textLabel.Text = formatTime(countdownTime)
+    textLabel.TextColor3 = getTextColor(countdownTime)
+    wait(1)
+    
+    -- Wait for the countdown to complete
+    while countdownTime > 1 do
+        countdownTime = countdownTime - 1
+        textLabel.Text = formatTime(countdownTime)
+        textLabel.TextColor3 = getTextColor(countdownTime)
+        wait(1)
+    end
+
+    -- When countdown reaches 0
+    textLabel.Text = "0"
+    textLabel.TextColor3 = Color3.fromRGB(56, 182, 255)
+    wait(1)
+    textLabel:Destroy()
+end
+
+function Rat()
+    local player = game:GetService("Players").LocalPlayer
+    local backpack = player.Backpack
+	local character = player.Character
+
+    for i, item in pairs(backpack:GetChildren()) do
+        if item.Name == "Poisoned Rat" then
+            item.Parent = character
+            break
+        end
+    end
+end
+
+
+function Ratfind()
+    for _, rat in ipairs(game:GetService("Workspace"):GetDescendants()) do
+        if rat:IsA("MeshPart") then
+            if rat.TextureID == "rbxassetid://8569135832" then
+                local proximityPrompt = rat:FindFirstChildOfClass("ProximityPrompt")
+                if proximityPrompt then
+                    proximityPrompt.HoldDuration = 0
+                    TP.CFrame = rat.CFrame
+                    wait(0.2)
+                    fire()
+                    fire()
+                    fire()
+                    wait(0.2)
+                    TP.CFrame = CFrame.new(-1539.063, -30.171, -3543.718)
+                    wait(0.1)
+                    Rat()
+                    wait(0.1)
+                    fire()
+                    fire()
+                    wait(5)
+                    TP.CFrame = CFrame.new(-1563.528, -28.910, -3408.718)
+                    wait(0.2)
+                    fire()
+                    fire()
+                    wait(0.2)
+                    TP.CFrame = CFrame.new(-1674.827, -21.010, -3402.391)
+                    countdown(25)
+                    break
+                end
+            end
+        end
+    end
+end
+
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -2368,33 +2481,6 @@ local function To(targetPosition)
     end)
 end
 
-local function ToCFrame(targetPosition)
-    local player = Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-    local originalGravity = workspace.Gravity
-    local speed = 1000000
-    local isTweening = true
-
-    workspace.Gravity = 0
-	noclip()
-
-    RunService.RenderStepped:Connect(function(deltaTime)
-        if isTweening then
-            local direction = (targetPosition - humanoidRootPart.Position).unit
-            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position + direction * speed * deltaTime)
-
-            if (humanoidRootPart.Position - targetPosition).magnitude < 1 then
-                isTweening = false
-                workspace.Gravity = originalGravity
-				clip()
-            end
-        end
-    end)
-	end
-
-
 function ESP()
 for _, model in ipairs(game:GetService("Workspace"):GetDescendants()) do
     if model:IsA("Model") then
@@ -2415,48 +2501,107 @@ for _, model in ipairs(game:GetService("Workspace"):GetDescendants()) do
 end
 end
 
-local targetCFrame = CFrame.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
-local targetCFrame1 = CFrame.new(-395.08563232421875, 3069.57568359375, 3891.535400390625)
-local targetCFrame2 = CFrame.new(-4.784941673278809, 3067.82421875, 4712.5751953125)
-local targetCFrame3 = CFrame.new(-246.92311096191406, 3068.64306640625, 4219.79248046875)
-local targetCFrame4 = CFrame.new(595.481689453125, 3069.576416015625, 4422.1923828125)
-local targetCFrame5 = CFrame.new(-676.0106811523438, 3069.525146484375, 5002.66357421875)
-local KeyCFrame = CFrame.new(-401.7100, 3069.5759, 3867.8293)
-local Door = CFrame.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
-local OX = CFrame.new(-6066.32763671875, 546.6655883789062, 7172.89501953125)
+local targetCFrame = Vector3.new(-323.47344970703125, 20.420881271362305, 3653.791748046875)
+local targetCFrame1 = Vector3.new(-395.08563232421875, 3069.57568359375, 3891.535400390625)
+local targetCFrame2 = Vector3.new(-4.784941673278809, 3067.82421875, 4712.5751953125)
+local targetCFrame3 = Vector3.new(-246.92311096191406, 3068.64306640625, 4219.79248046875)
+local targetCFrame4 = Vector3.new(595.481689453125, 3069.576416015625, 4422.1923828125)
+local targetCFrame5 = Vector3.new(-676.0106811523438, 3069.525146484375, 5002.66357421875)
+local KeyCFrame = Vector3.new(-401.7100, 3069.5759, 3867.8293)
+local Door = Vector3.new(-387.2115783691406, 19.296314239501953, 3780.984130859375)
+local Book = Vector3.new(-1674.8272705078125, -21.01018524169922, -3402.390869140625)
+local EspcapeRin = Vector3.new(-1507.8475341796875, -29.25138282775879, -3418.783447265625)
+local Office = Vector3.new(-1778.0726318359375, 9.717201232910156, -4295.62109375)
+local OX = Vector3.new(-6066.32763671875, 546.6655883789062, 7172.89501953125)
 
 --lowerfloor
-local Candle11 = CFrame.new(-5453.7373046875, 461.4326171875, 6514.80859375)
-local Candle12 = CFrame.new(-5435.24755859375, 462.03277587890625, 6351.935546875)
-local Candle13 = CFrame.new(-5444.45654296875, 462.0570373535156, 6254.01611328125)
-local Candle14 = CFrame.new(-5467.76318359375, 462.39044189453125, 6260.67236328125)
-local Candle15 = CFrame.new(-5453.34912109375, 461.8515930175781, 6101.9853515625)
+local Candle11 = Vector3.new(-5453.7373046875, 461.4326171875, 6514.80859375)
+local Candle12 = Vector3.new(-5435.24755859375, 462.03277587890625, 6351.935546875)
+local Candle13 = Vector3.new(-5444.45654296875, 462.0570373535156, 6254.01611328125)
+local Candle14 = Vector3.new(-5467.76318359375, 462.39044189453125, 6260.67236328125)
+local Candle15 = Vector3.new(-5453.34912109375, 461.8515930175781, 6101.9853515625)
 
 --middle floor
-local Candle21 = CFrame.new(-6065.1728515625, 547.58154296875, 7319.21923828125)
+local Candle21 = Vector3.new(-6065.1728515625, 547.58154296875, 7319.21923828125)
 
 --upper floor
-local Candle31 = CFrame.new(-6808.1669921875, 758.5756225585938, 6414.2978515625)
-local Candle32 = CFrame.new(-6820.96728515625, 746.4933471679688, 6258.71044921875)
-local Candle33 = CFrame.new(-6822.0380859375, 746.42431640625, 6173.79296875)
+local Candle31 = Vector3.new(-6808.1669921875, 758.5756225585938, 6414.2978515625)
+local Candle32 = Vector3.new(-6820.96728515625, 746.4933471679688, 6258.71044921875)
+local Candle33 = Vector3.new(-6822.0380859375, 746.42431640625, 6173.79296875)
 
 --pic
-local blue = CFrame.new(209.63929748535156, 3084.15478515625, 3832.36279296875)
-local red = CFrame.new(152.81671142578125, 3060.99365234375, 3861.497802734375)
-local man = CFrame.new(208.97933959960938, 3061.8310546875, 3823.934326171875)
-local Chicken = CFrame.new(237.98187255859375, 3072.503662109375, 3878.86181640625)
-local Momson = CFrame.new(168.0010223388672, 3072.5048828125, 3830.942626953125)
-local UM = CFrame.new(190.3834991455078, 3084.15478515625, 3903.572998046875)
-local fox = CFrame.new(247.91357421875, 3061.43408203125, 3851.5556640625)
-local flute = CFrame.new(184.19967651367188, 3072.50390625, 3925.464111328125)
-local love = CFrame.new(182.9803009033203, 3060.994140625, 3923.0703125)
-local ORB = CFrame.new(191.37278747558594, 3061.04443359375, 3891.880126953125)
+local blue = Vector3.new(209.63929748535156, 3084.15478515625, 3832.36279296875)
+local red = Vector3.new(152.81671142578125, 3060.99365234375, 3861.497802734375)
+local man = Vector3.new(208.97933959960938, 3061.8310546875, 3823.934326171875)
+local Chicken = Vector3.new(237.98187255859375, 3072.503662109375, 3878.86181640625)
+local Momson = Vector3.new(168.0010223388672, 3072.5048828125, 3830.942626953125)
+local UM = Vector3.new(190.3834991455078, 3084.15478515625, 3903.572998046875)
+local fox = Vector3.new(247.91357421875, 3061.43408203125, 3851.5556640625)
+local flute = Vector3.new(184.19967651367188, 3072.50390625, 3925.464111328125)
+local love = Vector3.new(182.9803009033203, 3060.994140625, 3923.0703125)
+local ORB = Vector3.new(191.37278747558594, 3061.04443359375, 3891.880126953125)
+
+function floor1()
+    to(Candle11)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(Candle12)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(Candle13)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(Candle14)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(Candle15)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(OX)
+end
+
+function floor2()
+    to(Candle21)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(OX)
+end
+
+function floor3()
+    to(Candle31)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(Candle32)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(Candle33)
+    wait(0.3)
+    pfire()
+    wait(0.3)
+    to(OX)
+end
 
 
 local Window = Alc:NewWindow('Overflow - Extra Version','The Mimic - Book 2 Chapter 1','rbxassetid://134754092492795')
 local MenuFunctions = Window:AddMenu('General',"Function",'list','tab')
 local UpdateFunctions = Window:AddMenu('Update',"Update Log",'hash','tab')
 
+local OfficeFunctions = MenuFunctions:AddTab('Office','Function','menu')
+local OfficeSec = OfficeFunctions:AddSection('Function','Enter','Auto Win','home')
+OfficeSec:AddButton('Enter Office',function(v)
+	to(Office)
+end)
+
+local MioFunctions = MenuFunctions:AddTab('Rin and Mio','Function','menu')
+local NagisaFunctions = MenuFunctions:AddTab('Nagisa','Function','menu')
 local VillageFunctions = MenuFunctions:AddTab('Village','Function','menu')
 local ShipFunctions = MenuFunctions:AddTab('Ship','Function','menu')
 local SeaFunctions = MenuFunctions:AddTab('Sea','Function','menu')
@@ -2464,9 +2609,12 @@ local TabVisual = MenuFunctions:AddTab('Visual','ESP','eye')
 
 local TabUpdate = UpdateFunctions:AddTab('Update','Update Log','bookmark-plus')
 
+
+local MioSection = MioFunctions:AddSection('Function','Rin and Mio','Auto Win','list')
+local NagisaSection = NagisaFunctions:AddSection('Function','Nagisa','Auto Win','list')
 local VillageSection = VillageFunctions:AddSection('Function','Village','Auto Win','list')
-local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Teleport and Auto Light Up Candle','list')
-local ShipSection = ShipFunctions:AddSection('Function','Ship','Auto Win','list')
+local VillageSection2 = VillageFunctions:AddSection('Function','Candle - Picture','Auto Win','list')
+local ShipSection = ShipFunctions:AddSection('Function','Ship','Warning if Monster Near Candle','list')
 local SeaSection = SeaFunctions:AddSection('Function','Sea','Auto Win','list')
 local VisualSection = TabVisual:AddSection('Visual','Visual Function','ESP','eye')
 
@@ -2480,35 +2628,74 @@ DiscordSection:AddButton('Copy',function(v)
 	setclipboard(tostring(copy))
 end)
 
+
+
+--Mio and rin
+MioSection:AddButton('Read Book',function(v)
+to(Book)
+wait(0.3)
+fire()
+fire()
+end)
+
+MioSection:AddButton('Auto Rat',function(v)
+	Ratfind()
+end)
+
+MioSection:AddButton('Escape',function(v)
+	to(EspcapeRin)
+	wait(0.2)
+	fire()
+end)
+
+MioSection:AddButton('Run Away from Mio',function(v)
+    To(Vector3.new(-961.4176635742188, -46.48267364501953, -3601.613525390625))
+end)
+
+
+
+
+--Nagisa
+NagisaSection:AddButton('Enter to Cave',function(v)
+    To(Vector3.new(583.685546875, 567.3634643554688, -365.7061462402344))
+end)
+
+NagisaSection:AddButton('Run Away from Nagisa',function(v)
+    To(Vector3.new(3866.74462890625, 140.48388671875, 10.994720458984375))
+end)
+
+
+
+
 --Village
 VillageSection:AddButton('Talk',function(v)
-	tweenCharacterToCFrame(targetCFrame, 0)
-	wait(0.5)
+	to(targetCFrame)
+	wait(1)
 	fire()
 end)
 
 VillageSection:AddDropdown('Select House', {'House 1','House 2','Drawing House','House 4','House 5'}, nil, 1, function(list, item)
     if item == 'House 1' then
-		tweenCharacterToCFrame(targetCFrame1, 0)
+		to(targetCFrame1)
 	elseif item == 'House 2' then
-		tweenCharacterToCFrame(targetCFrame2, 0)
+		to(targetCFrame2)
 	elseif item == 'Drawing House' then
-		tweenCharacterToCFrame(targetCFrame3, 0)
+		to(targetCFrame3)
 	elseif item == 'House 4' then
-		tweenCharacterToCFrame(targetCFrame4, 0)
+		to(targetCFrame4)
 	elseif item == 'House 5' then
-		tweenCharacterToCFrame(targetCFrame5, 0)
+		to(targetCFrame5)
     end
 end)
 
 VillageSection:AddButton('Unlock House',function(v)
-    tweenCharacterToCFrame(KeyCFrame, 0)
+    to(KeyCFrame)
     wait(1)
     fire()
     fire()
     fire()
     wait(0.2)
-    tweenCharacterToCFrame(Door, 0)
+    to(Door)
     wait(0.5)
     fire()
     fire()
@@ -2519,37 +2706,33 @@ end)
 --village2
 VillageSection2:AddDropdown('Select Picture', {'Blue Samurai','Red Samarai','Fox Girl(Dont Safe)','Umbrella Girl', 'Mother and Child', 'Old Man(Dont Safe)', 'Hustband and Wife', 'Girl and Chicken', 'Girl and Flute'}, nil, 1, function(list, item)
     if item == 'Blue Samurai' then
-		tweenCharacterToCFrame(blue, 0)
+		to(blue)
 	elseif item == 'Red Samarai' then
-		tweenCharacterToCFrame(red, 0)
+		to(red)
 	elseif item == 'Fox Girl(Dont Safe)' then
-	    tweenCharacterToCFrame(fox, 0)
-			wait(0.5)
-			fire()
+	    to(fox)
 	elseif item == 'Umbrella Girl' then
-	    tweenCharacterToCFrame(UM, 0)
+	    to(UM)
 	elseif item == 'Mother and Child' then
-		tweenCharacterToCFrame(Momson, 0)
+		to(Momson)
 	elseif item == 'Old Man(Dont Safe)' then
-		tweenCharacterToCFrame(man, 0)
-			wait(0.5)
-			fire()
+		to(man)
 	elseif item == 'Hustband and Wife' then
-		tweenCharacterToCFrame(love, 0)
+		to(love)
 	elseif item == 'Girl and Chicken' then
-		tweenCharacterToCFrame(Chicken, 0)
+		to(Chicken)
 	elseif item == 'Girl and Flute' then
-		tweenCharacterToCFrame(flute, 0)
+		to(flute)
     end
 end)
 
 VillageSection2:AddButton('Get Orb and Give Orb',function(v)
-    tweenCharacterToCFrame(ORB, 0)
-	wait(0.2)
+    to(ORB)
+	wait(0.3)
 	fire()
 	fire()
 	wait(0.2)
-	tweenCharacterToCFrame(targetCFrame, 0)
+	to(targetCFrame)
 	wait(0.8)
 	fire()
 	fire()
@@ -2563,37 +2746,19 @@ ShipSection:AddButton('Enter Ship',function(v)
 end)
 
 ShipSection:AddButton('To Oxygen - Safe',function(v)
-    tweenCharacterToCFrame(OX, 0)
+    to(OX)
 end)
 
-ShipSection:AddDropdown('Middle Floor', {'Candle 1'}, nil, 1, function(list, item)
-    if item == 'Candle 1' then
-		tweenCharacterToCFrame(Candle21, 0)
-    end
+ShipSection:AddButton('Auto Candle Lower Floor',function(v)
+    floor1()
 end)
 
-ShipSection:AddDropdown('Upper Floor', {'Candle 1', 'Candle 2', 'Candle 3'}, nil, 1, function(list, item)
-    if item == 'Candle 1' then
-		tweenCharacterToCFrame(Candle31, 0)
-	elseif item == 'Candle 2' then
-		tweenCharacterToCFrame(Candle32, 0)
-	elseif item == 'Candle 3' then
-		tweenCharacterToCFrame(Candle33, 0)
-    end
+ShipSection:AddButton('Auto Candle Middle Floor',function(v)
+    floor2()
 end)
 
-ShipSection:AddDropdown('Lower Floor', {'Candle 1', 'Candle 2', 'Candle 3', 'Candle 4', 'Candle 5'}, nil, 1, function(list, item)
-	if item == 'Candle 1' then
-		tweenCharacterToCFrame(Candle11, 0)
-	elseif item == 'Candle 2' then
-		tweenCharacterToCFrame(Candle12, 0)
-	elseif item == 'Candle 3' then
-		tweenCharacterToCFrame(Candle13, 0)
-	elseif item == 'Candle 4' then
-		tweenCharacterToCFrame(Candle14, 0)
-	elseif item == 'Candle 5' then
-		tweenCharacterToCFrame(Candle15, 0)
-    end
+ShipSection:AddButton('Auto Candle Upper Floor',function(v)
+    floor3()
 end)
 
 ShipSection:AddButton('Run Away Tenome',function(v)
