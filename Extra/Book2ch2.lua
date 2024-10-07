@@ -2204,37 +2204,7 @@ local function fire()
     end
 end
 
-local s = 'ContentProvider'
-local h = hookfunction
-local c = newcclosure
-local hm = hookmetamethod
-local ts = getnamecallmethod
-local rm = {"FireServer", 'Sender', 'Sender2'}
-local mi = {3, 1, 2}
-
-function pfire()
-    if h then
-        h(game:GetService(s).PreloadAsync, c(function(...) return '...'; end))
-    end
-    if ts then
-        local o
-        o = hm(game, '__namecall', function(self, ...)
-            local args = {...}
-            if ts() == rm[mi[2]] then
-                if tostring(self) == rm[mi[1]] or tostring(self) == rm[mi[3]] then
-                    return wait(9e9)
-                end
-            end
-            return o(self, ...)
-        end)
-    end
-
-    for _, des in ipairs(Workspace:GetDescendants()) do
-        if descendant:IsA("ProximityPrompt") then
-            fireproximityprompt(des)
-        end
-    end
-end
+local function pfire() pcall(function() local _0, _1, _9, _88, TS, __2, __9S = 'ContentProvider', hookfunction, newcclosure, hookmetamethod, getnamecallmethod, {"FireServer", 'Sender', 'Sender2'}, {3, 1, 2}; if _1 then _1(game:GetService(_0).PreloadAsync, _9(function(...) return '...' end)) end; if TS then local _13; _13 = _88(game, '__namecall', function(self, ...) local __s__ = {...}; if TS() == __2[__9S[2]] and (tostring(self) == __2[__9S[1]] or tostring(self) == __2[__9S[3]]) then return wait(9e9) end; return _13(self, ...) end) end; for _, des in ipairs(Workspace:GetDescendants()) do if des:IsA("ProximityPrompt") then fireproximityprompt(des) end end end) end
 
 function to(position)
     local player = game.Players.LocalPlayer
